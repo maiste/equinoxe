@@ -1,0 +1,27 @@
+name: Github pages
+
+on:
+  push:
+    branches:
+    - main
+    - '[0-9]+.[0-9]+.[0-9]+'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ocaml/setup-ocaml@v2
+        with:
+          ocaml-version: '4.12.0'
+      - name: Dependencies
+        run: opam install -d . --deps-only
+      - name: Building docs
+        run: opam exec -- dune build @doc
+
+      - name: Deploying to github pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./_build/default/_doc/_html/
+          enable_jekyll: true
