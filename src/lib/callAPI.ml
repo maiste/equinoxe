@@ -22,32 +22,44 @@
 (*                                                                           *)
 (*****************************************************************************)
 
-(** The [JSON] module provide helpers to manipulate JSON objects. *)
+open Utils
 
-type t
-(** Abstract type to represent JSON objects. *)
+(** The [S] module gathers all the methodes you need to be able to execute http
+    to contact a API server. It must send application/json request. *)
+module type S = sig
+  type t
+  (** [t] contains the information about the token you are using to identify the
+      client and the adress of the server (url). *)
 
-val of_string : string -> t
-(** [of_string str] takes a string [str] representing a JSON and transform it
-    into an {!t} object you can manipulate with this module. *)
+  val token : t -> string
+  (** [token t] returns the token associated to the data structure. *)
 
-val geto : t -> string -> t
-(** [geto json field_name] returns the {!t} value associated to the field_name. *)
+  val endpoint : t -> string
+  (** [endpoint t] returns the endpoint url to the server. *)
 
-val ( --> ) : t -> string -> t
-(** [json --> field] is an infix operator that executes {!geto}. *)
+  val create :
+    endpoint:string ->
+    ?token:[ `Default | `Str of string | `Path of string ] ->
+    unit ->
+    t
+  (** [create ~endpoint ~token ()] builds the configuration you are going to use
+      to execute the request. If [token] is not provided, it will try to extract
+      the token from the environment variable [EQUINOXE_TOKEN]. *)
 
-val geta : t -> int -> t
-(** [geta json nth]. returns the {!t} value associated to the nth element in the
-    json. *)
+  val get : t -> path:string -> unit -> Json.t
+  (** [get ~path t ()] executes a request to the server as a [GET] call and,
+      returns the result as {!Json.t}. *)
 
-val ( |-> ) : t -> int -> t
-(** [json |-> nth] is an infix operator that executes {!geta}. *)
+  val post : t -> path:string -> Json.t -> Json.t
+  (** [post ~path t json] executes a request to the server as a [POST] call
+      using {!Json.t} to describe the request. It returns the result as
+      {!Json.t}. *)
 
-val to_int_r : t -> (int, string) result
-(** [to_int_r json] transforms the [json] object into an int result with a
-    printable error in case of failure. *)
+  val put : t -> path:string -> Json.t -> Json.t
+  (** [put ~path t json] executes a request to the server as a [PUT] call using
+      {!Json.t} to describe the request. It returns the result as {!Json.t}. *)
 
-val to_string_r : t -> (string, string) result
-(** [to_string json] transforms the [json] into a string result with a printable
-    error in case of failure.*)
+  val delete : t -> path:string -> Json.t
+  (** [delete ~path t] executes a request to the server as a [DELETE] call and,
+      returns the result as {!Json.t}. *)
+end
