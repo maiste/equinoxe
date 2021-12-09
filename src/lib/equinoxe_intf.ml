@@ -22,10 +22,9 @@
 (*                                                                           *)
 (*****************************************************************************)
 
-open Utils
-
-(** [API] provides functionnalities to interface with Equinix. *)
 module type API = sig
+  (** It is the signature of the API of the website. *)
+
   type t
   (** Abstract type [t] represents the information known by the API system. *)
 
@@ -51,17 +50,24 @@ module type API = sig
   module Metal : sig end
 end
 
+module type S = CallAPI.S
+
 module type Sigs = sig
-  module Json : sig
-    (** Utilities for Equinoxe-cli. *)
-    include module type of Json
-    (** @inline *)
-  end
+  (** Equinoxe library interface. *)
 
-  module Ezcurl_api : CallAPI.S
-  (** Provides an {!Ezcurl} api for equinoxe. *)
+  (** {1 Manipulate Results} *)
 
-  (** Factory to build a system to communicate with Equinix API, using the
-      {!CallAPI} communication system. *)
-  module Make (C : CallAPI.S) : API
+  module Json = Json
+
+  module type API = API
+
+  (** {1 Build your own API} *)
+
+  module type S = S
+
+  module Ezcurl_api = Ezcurl_api
+
+  (** Factory to build a system to communicate with Equinix API, using the {!S}
+      communication system. *)
+  module Make (C : S) : API
 end

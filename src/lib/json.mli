@@ -22,22 +22,39 @@
 (*                                                                           *)
 (*****************************************************************************)
 
-module Sys = struct
-  include Sys
+(** The [Json] module provides helpers to manipulate JSON objects. *)
 
-  let path_from_home_dir path =
-    let home = Unix.getenv "HOME" in
-    Filename.concat home path
-end
+type t
+(** Abstract type to represent JSON objects. *)
 
-module Reader = struct
-  let read_token_opt path =
-    if Sys.file_exists path then
-      try
-        let cin = open_in path in
-        let res = input_line cin |> String.trim |> Option.some in
-        close_in cin;
-        res
-      with End_of_file -> None
-    else None
+val error : string -> t
+(** [error msg] produces a type [t] from an error message. *)
+
+val of_string : string -> t
+(** [of_string str] takes a string [str] representing a JSON and transform it
+    into an {!t} object you can manipulate with this module. *)
+
+val geto : t -> string -> t
+(** [geto json field_name] returns the {!t} value associated to the field_name. *)
+
+val geta : t -> int -> t
+(** [geta json nth]. returns the {!t} value associated to the nth element in the
+    json. *)
+
+val to_int_r : t -> (int, string) result
+(** [to_int_r json] transforms the [json] object into an int result with a
+    printable error in case of failure. *)
+
+val to_string_r : t -> (string, string) result
+(** [to_string json] transforms the [json] into a string result with a printable
+    error in case of failure.*)
+
+module Infix : sig
+  (** Infix operator for {!Json.t}. *)
+
+  val ( --> ) : t -> string -> t
+  (** [json --> field] is an infix operator that executes {!geto}. *)
+
+  val ( |-> ) : t -> int -> t
+  (** [json |-> nth] is an infix operator that executes {!geta}. *)
 end
