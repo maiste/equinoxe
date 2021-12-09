@@ -22,5 +22,7 @@
 (*                                                                           *)
 (*****************************************************************************)
 
+(** It provides a API call system relying on Ezcurl. *)
+
 include CallAPI.S
 (** @inline *)

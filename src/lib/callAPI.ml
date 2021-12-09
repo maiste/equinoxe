@@ -22,11 +22,10 @@
 (*                                                                           *)
 (*****************************************************************************)
 
-open Utils
-
-(** The [S] module gathers all the methodes you need to be able to execute http
-    to contact a API server. It must send application/json request. *)
 module type S = sig
+  (** The [S] module gathers all the methodes you need to be able to execute
+      http to contact a API server. It must send application/json request. *)
+
   type t
   (** [t] contains the information about the token you are using to identify the
       client and the adress of the server (url). *)

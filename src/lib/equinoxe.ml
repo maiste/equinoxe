@@ -23,11 +23,7 @@
 (*****************************************************************************)
 
 include Equinoxe_intf
-
-(* Helper to manipulate JSON in Cli. *)
-module Json = Utils.Json
-
-(* Offered call API. *)
+module Json = Json
 module Ezcurl_api = Ezcurl_api
 
 (* Fonctor to build API using a specific call API system. *)
