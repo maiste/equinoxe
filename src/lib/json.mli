@@ -41,11 +41,11 @@ val geta : t -> int -> t
 (** [geta json nth]. returns the {!t} value associated to the nth element in the
     json. *)
 
-val to_int_r : t -> (int, string) result
+val to_int_r : t -> (int, [ `Msg of string ]) result
 (** [to_int_r json] transforms the [json] object into an int result with a
     printable error in case of failure. *)
 
-val to_string_r : t -> (string, string) result
+val to_string_r : t -> (string, [ `Msg of string ]) result
 (** [to_string json] transforms the [json] into a string result with a printable
     error in case of failure.*)
 

@@ -22,7 +22,9 @@
 (*                                                                           *)
 (*****************************************************************************)
 
-type t = (Ezjsonm.value, string) result
+type t = (Ezjsonm.value, [ `Msg of string ]) result
+
+let error msg = Error (`Msg msg)
 
 let ezjsonm_value_to_string = function
   | `Null -> "null"
@@ -38,13 +40,11 @@ let conversion_error got expected =
       (ezjsonm_value_to_string got)
       expected
   in
-  Error error_msg
-
-let error msg = Error msg
+  error error_msg
 
 let of_string content =
   try Ok (Ezjsonm.from_string content)
-  with Ezjsonm.Parse_error (_, str_err) -> Error str_err
+  with Ezjsonm.Parse_error (_, str_err) -> error str_err
 
 let geto json name =
   Result.bind json (fun json ->
@@ -52,14 +52,14 @@ let geto json name =
       | `O fields -> (
           match List.assoc_opt name fields with
           | None ->
-              let error_msg =
+              let msg =
                 Format.sprintf "JSON object doesn't contain the %s field" name
               in
-              Error error_msg
+              error msg
           | Some json -> Ok json)
       | _ ->
-          let error_msg = "Trying to access a non object field in JSON." in
-          Error error_msg)
+          let msg = "Trying to access a non object field in JSON." in
+          error msg)
 
 let geta json nth =
   Result.bind json (fun json ->
@@ -67,14 +67,14 @@ let geta json nth =
       | `A items -> (
           match List.nth_opt items nth with
           | None ->
-              let error_msg =
+              let msg =
                 Format.sprintf "JSON array doesn't contain the %d field." nth
               in
-              Error error_msg
+              error msg
           | Some item -> Ok item)
       | _ ->
-          let error_msg = "Trying to access a non array field in JSON." in
-          Error error_msg)
+          let msg = "Trying to access a non array field in JSON." in
+          error msg)
 
 let to_int_r json =
   Result.bind json (fun json ->
