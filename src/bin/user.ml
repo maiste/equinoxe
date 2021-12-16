@@ -27,21 +27,17 @@ module Json = Utils.Json
 module Equinoxe = Utils.Equinoxe
 open Cmdliner
 open Json.Infix
-open Utils.Func
 
 (* Actions *)
 
 let user_id () =
   let endpoint = Conf.endpoint in
   let e = Equinoxe.create ~endpoint () in
-  Equinoxe.Users.get_current_user e --> "id"
-  |> Json.to_string_r
-  |> (function
-       | Ok str ->
-           Format.printf "> Id is %s@." str;
-           Ok ()
-       | Error e -> Error e)
-  |> to_term_result
+  Equinoxe.Users.get_current_user e --> "id" |> Json.to_string_r |> function
+  | Ok str ->
+      Format.printf "> Id is %s@." str;
+      Ok ()
+  | Error e -> Error e
 
 (* Terms *)
 
