@@ -19,7 +19,7 @@
     (ocaml-lsp-server :dev)
     (odoc :with-doc)
     (ezjsonm (>= 1.3.0))
-    (ezcurl (>= 0.2.1))))
+    http-lwt-client))
 
 (package
   (name equinoxe-bin)
