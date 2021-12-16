@@ -65,7 +65,7 @@ module type Sigs = sig
 
   module type S = S
 
-  module Ezcurl_api = Ezcurl_api
+  module Default_api = Httpaf_api
 
   (** Factory to build a system to communicate with Equinix API, using the {!S}
       communication system. *)
