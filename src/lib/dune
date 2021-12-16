@@ -1,4 +1,6 @@
 (library
   (name equinoxe)
   (public_name equinoxe)
-  (libraries ezcurl ezjsonm))
+  (libraries ezjsonm
+             http-lwt-client
+             lwt))

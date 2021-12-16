@@ -26,7 +26,7 @@ open Cmdliner
 
 (* Import module and create Equinoxe from Ezcurl. *)
 module Json = Equinoxe.Json
-module Equinoxe = Equinoxe.Make (Equinoxe.Ezcurl_api)
+module Equinoxe = Equinoxe.Make (Equinoxe.Default_api)
 
 module Conf = struct
   (* Constantes definitions. *)
@@ -59,8 +59,4 @@ module Conf = struct
       ]
     in
     bug @ contribution @ authors
-end
-
-module Func = struct
-  let to_term_result = function Ok _ -> Ok () | Error e -> Error (`Msg e)
 end

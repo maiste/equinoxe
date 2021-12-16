@@ -45,20 +45,23 @@ module type S = sig
       to execute the request. If [token] is not provided, it will try to extract
       the token from the environment variable [EQUINOXE_TOKEN]. *)
 
-  val get : t -> path:string -> unit -> Json.t
+  val get : t -> path:string -> unit -> Json.t Lwt.t
   (** [get ~path t ()] executes a request to the server as a [GET] call and,
       returns the result as {!Json.t}. *)
 
-  val post : t -> path:string -> Json.t -> Json.t
+  val post : t -> path:string -> Json.t -> Json.t Lwt.t
   (** [post ~path t json] executes a request to the server as a [POST] call
       using {!Json.t} to describe the request. It returns the result as
       {!Json.t}. *)
 
-  val put : t -> path:string -> Json.t -> Json.t
+  val put : t -> path:string -> Json.t -> Json.t Lwt.t
   (** [put ~path t json] executes a request to the server as a [PUT] call using
       {!Json.t} to describe the request. It returns the result as {!Json.t}. *)
 
-  val delete : t -> path:string -> Json.t
+  val delete : t -> path:string -> Json.t -> Json.t Lwt.t
   (** [delete ~path t] executes a request to the server as a [DELETE] call and,
       returns the result as {!Json.t}. *)
+
+  val run : Json.t Lwt.t -> Json.t
+  (** [run json] unwraps the API request and gives a JSON. *)
 end

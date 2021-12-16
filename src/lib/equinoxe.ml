@@ -24,7 +24,7 @@
 
 include Equinoxe_intf
 module Json = Json
-module Ezcurl_api = Ezcurl_api
+module Default_api = Httpaf_api
 
 (* Fonctor to build API using a specific call API system. *)
 module Make (C : CallAPI.S) = struct
@@ -35,11 +35,11 @@ module Make (C : CallAPI.S) = struct
   module Users = struct
     let get_current_user t =
       let path = "user" in
-      C.get ~path t ()
+      C.get ~path t () |> C.run
 
     let get_user_api_keys t =
       let path = "user/api-keys" in
-      C.get ~path t ()
+      C.get ~path t () |> C.run
   end
 
   module Orga = struct end

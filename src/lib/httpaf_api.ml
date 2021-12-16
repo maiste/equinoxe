@@ -23,11 +23,17 @@
 (*****************************************************************************)
 
 open Utils
+open Lwt.Syntax
+module H = Http_lwt_client
 
 type t = { endpoint : string; token : string }
 
 let token t = t.token
 let endpoint t = t.endpoint
+
+let build_header token =
+  [ ("X-Auth-Token", token); ("Content-Type", "application/json") ]
+
 let equinoxe_default_path = Sys.path_from_home_dir ".config/equinoxe/"
 
 let token_from_path token_path =
@@ -49,12 +55,15 @@ let create ~endpoint ?(token = `Default) () =
   { endpoint; token }
 
 let get t ~path () =
-  let headers = [ ("X-Auth-Token", t.token) ] in
+  let headers = build_header t.token in
   let url = Filename.concat t.endpoint path in
-  match Ezcurl.get ~headers ~url () with
-  | Ok res -> Json.of_string res.body
-  | Error (_, msg) -> Json.error msg
+  let* resp = H.one_request ~meth:`GET ~headers url in
+  match resp with
+  | Ok (_, Some body) -> Lwt.return @@ Json.of_string body
+  | Ok (_, None) -> Lwt.return @@ Json.error "Can't parse the empty string"
+  | Error (`Msg e) -> Lwt.return @@ Json.error e
 
 let post _t ~path:_ _json = failwith "TODO"
 let put _t ~path:_ _json = failwith "TODO"
 let delete _t ~path:_ = failwith "TODO"
+let run json = Lwt_main.run json
