@@ -15,7 +15,7 @@ depends: [
   "ocaml-lsp-server" {dev}
   "odoc" {with-doc}
   "ezjsonm" {>= "1.3.0"}
-  "http-lwt-client"
+  "piaf"
 ]
 build: [
   ["dune" "subst"] {dev}
