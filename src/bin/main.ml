@@ -32,5 +32,5 @@ let default =
   ( Term.(ret (const (`Help (`Pager, None)))),
     Term.info name ~version ~doc:Conf.description ~exits ~man:Conf.manpage )
 
-let commands = [ User.user_id_t ]
+let commands = User.t
 let () = Term.(exit @@ eval_choice default commands)

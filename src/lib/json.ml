@@ -22,7 +22,16 @@
 (*                                                                           *)
 (*****************************************************************************)
 
+let ( >>= ) = Result.bind
+let ( >|= ) v f = Result.map f v
+
 type t = (Ezjsonm.value, [ `Msg of string ]) result
+
+let create ?(kind = `Obj) () =
+  match kind with
+  | `Str str -> Ok (`String str)
+  | `Obj -> Ok (`O [])
+  | `Arr -> Ok (`A [])
 
 let error msg = Error (`Msg msg)
 
@@ -47,52 +56,80 @@ let of_string content =
   with Ezjsonm.Parse_error (_, str_err) -> error str_err
 
 let geto json name =
-  Result.bind json (fun json ->
-      match json with
-      | `O fields -> (
-          match List.assoc_opt name fields with
-          | None ->
-              let msg =
-                Format.sprintf "JSON object doesn't contain the %s field" name
-              in
-              error msg
-          | Some json -> Ok json)
-      | _ ->
-          let msg = "Trying to access a non object field in JSON." in
-          error msg)
+  json >>= function
+  | `O fields -> (
+      match List.assoc_opt name fields with
+      | None ->
+          let msg =
+            Format.sprintf "JSON object doesn't contain the %s field" name
+          in
+          error msg
+      | Some json -> Ok json)
+  | _ ->
+      let msg = "Trying to access a non object field in JSON." in
+      error msg
 
 let geta json nth =
-  Result.bind json (fun json ->
-      match json with
-      | `A items -> (
-          match List.nth_opt items nth with
-          | None ->
-              let msg =
-                Format.sprintf "JSON array doesn't contain the %d field." nth
-              in
-              error msg
-          | Some item -> Ok item)
-      | _ ->
-          let msg = "Trying to access a non array field in JSON." in
-          error msg)
+  json >>= function
+  | `A items -> (
+      match List.nth_opt items nth with
+      | None ->
+          let msg =
+            Format.sprintf "JSON array doesn't contain the %d field." nth
+          in
+          error msg
+      | Some item -> Ok item)
+  | _ ->
+      let msg = "Trying to access a non array field in JSON." in
+      error msg
 
 let to_int_r json =
-  Result.bind json (fun json ->
-      match json with
-      | `Float f ->
-          if Float.is_integer f then Ok (int_of_float f)
-          else conversion_error json "integer"
-      | `String s -> (
-          match int_of_string_opt s with
-          | None -> conversion_error json "integer"
-          | Some i -> Ok i)
-      | _ -> conversion_error json "integer")
+  json >>= function
+  | `Float f as json ->
+      if Float.is_integer f then Ok (int_of_float f)
+      else conversion_error json "integer"
+  | `String s as json -> (
+      match int_of_string_opt s with
+      | None -> conversion_error json "integer"
+      | Some i -> Ok i)
+  | json -> conversion_error json "integer"
 
 let to_string_r json =
-  Result.bind json (fun json ->
-      match json with `String s -> Ok s | _ -> conversion_error json "string")
+  json >>= function `String s -> Ok s | json -> conversion_error json "string"
+
+let pp_r json =
+  json >|= fun json ->
+  Ezjsonm.value_to_string ~minify:false json |> Format.printf "%s"
+
+let addo t (k, v) =
+  v >>= fun v ->
+  t >>= function
+  | `O assoc -> Ok (`O ((k, v) :: assoc))
+  | _ ->
+      let msg =
+        Format.sprintf
+          "Trying to add key-value to a non-object json for key %s.)" k
+      in
+      error msg
+
+let adda t v =
+  v >>= fun v ->
+  t >>= function
+  | `A arr -> Ok (`A (v :: arr))
+  | _ ->
+      let msg = Format.sprintf "Trying to add a value to a non-array json." in
+      error msg
+
+let export json = json >|= fun json -> Ezjsonm.value_to_string json
 
 module Infix = struct
+  let ( ~+ ) v = create ~kind:(`Str v) ()
   let ( --> ) json name = geto json name
   let ( |-> ) json nth = geta json nth
+  let ( -+> ) json kv = addo json kv
+  let ( |+> ) json kv = adda json kv
+end
+
+module Private = struct
+  let of_res_str r = Result.bind r (fun str -> Ok (`String str))
 end

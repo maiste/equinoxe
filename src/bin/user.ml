@@ -39,6 +39,11 @@ let user_id () =
       Ok ()
   | Error e -> Error e
 
+let user_api_keys () =
+  let endpoint = Conf.endpoint in
+  let e = Equinoxe.create ~endpoint () in
+  Equinoxe.Users.get_user_api_keys e |> Json.pp_r
+
 (* Terms *)
 
 let user_id_t =
@@ -47,3 +52,13 @@ let user_id_t =
   let exits = Term.default_exits in
   Term.
     (term_result (const user_id $ const ()), info "user-id" ~doc ~sdocs ~exits)
+
+let user_api_keys_t =
+  let doc = "Show the api keys of the user" in
+  let sdocs = Manpage.s_common_options in
+  let exits = Term.default_exits in
+  Term.
+    ( term_result (const user_api_keys $ const ()),
+      info "user-api-keys" ~doc ~sdocs ~exits )
+
+let t = [ user_id_t; user_api_keys_t ]
