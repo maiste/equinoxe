@@ -2,5 +2,5 @@
   (name equinoxe)
   (public_name equinoxe)
   (libraries ezjsonm
-             http-lwt-client
+             piaf
              lwt))

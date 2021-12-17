@@ -24,7 +24,7 @@
 
 include Equinoxe_intf
 module Json = Json
-module Default_api = Httpaf_api
+module Default_api = Piaf_api
 
 (* Fonctor to build API using a specific call API system. *)
 module Make (C : CallAPI.S) = struct

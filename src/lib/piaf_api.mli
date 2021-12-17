@@ -22,48 +22,7 @@
 (*                                                                           *)
 (*****************************************************************************)
 
-open Utils
-open Lwt.Syntax
-module H = Http_lwt_client
+(** It provides a API call system relying on Piaf. *)
 
-type t = { endpoint : string; token : string }
-
-let token t = t.token
-let endpoint t = t.endpoint
-
-let build_header token =
-  [ ("X-Auth-Token", token); ("Content-Type", "application/json") ]
-
-let equinoxe_default_path = Sys.path_from_home_dir ".config/equinoxe/"
-
-let token_from_path token_path =
-  match Reader.read_token_opt token_path with
-  | None -> raise Not_found
-  | Some token -> token
-
-let default_token () =
-  let token_path = Filename.concat equinoxe_default_path "token" in
-  token_from_path token_path
-
-let get_token = function
-  | `Default -> default_token ()
-  | `Path token_path -> token_from_path token_path
-  | `Str token -> token
-
-let create ~endpoint ?(token = `Default) () =
-  let token = get_token token in
-  { endpoint; token }
-
-let get t ~path () =
-  let headers = build_header t.token in
-  let url = Filename.concat t.endpoint path in
-  let* resp = H.one_request ~meth:`GET ~headers url in
-  match resp with
-  | Ok (_, Some body) -> Lwt.return @@ Json.of_string body
-  | Ok (_, None) -> Lwt.return @@ Json.error "Can't parse the empty string"
-  | Error (`Msg e) -> Lwt.return @@ Json.error e
-
-let post _t ~path:_ _json = failwith "TODO"
-let put _t ~path:_ _json = failwith "TODO"
-let delete _t ~path:_ = failwith "TODO"
-let run json = Lwt_main.run json
+include CallAPI.S
+(** @inline *)

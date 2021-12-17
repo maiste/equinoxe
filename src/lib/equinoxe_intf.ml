@@ -65,7 +65,7 @@ module type Sigs = sig
 
   module type S = S
 
-  module Default_api = Httpaf_api
+  module Default_api : S
 
   (** Factory to build a system to communicate with Equinix API, using the {!S}
       communication system. *)
