@@ -27,12 +27,19 @@
 type t
 (** Abstract type to represent JSON objects. *)
 
+(** {1: Creation} *)
+
+val create : ?kind:[ `Str of string | `Obj | `Arr ] -> unit -> t
+(** [create ()] generates a new {!t} object. Default kind value is [`Obj]. *)
+
 val error : string -> t
 (** [error msg] produces a type [t] from an error message. *)
 
 val of_string : string -> t
 (** [of_string str] takes a string [str] representing a JSON and transform it
     into an {!t} object you can manipulate with this module. *)
+
+(** {2: Getters} *)
 
 val geto : t -> string -> t
 (** [geto json field_name] returns the {!t} value associated to the field_name. *)
@@ -49,6 +56,21 @@ val to_string_r : t -> (string, [ `Msg of string ]) result
 (** [to_string json] transforms the [json] into a string result with a printable
     error in case of failure.*)
 
+val pp_r : t -> (unit, [ `Msg of string ]) result
+(** [pp_r json] prints the json if it's a well format json and returns Ok
+    ().contents Otherwise, it returns an error. *)
+
+(** {3: Setters} *)
+
+val addo : t -> string * t -> t
+(** [addo json (key,value)] add a key-value to an object field. *)
+
+val adda : t -> t -> t
+(** [adda json t value] add a value to an array. *)
+
+val export : t -> (string, [ `Msg of string ]) result
+(** [export json] returns a string that represents the json. *)
+
 module Infix : sig
   (** Infix operator for {!Json.t}. *)
 
@@ -57,4 +79,20 @@ module Infix : sig
 
   val ( |-> ) : t -> int -> t
   (** [json |-> nth] is an infix operator that executes {!geta}. *)
+
+  val ( -+> ) : t -> string * t -> t
+  (** [json -+> (key, value)] executes {!addo}. *)
+
+  val ( |+> ) : t -> t -> t
+  (** [json |+> value] executes {!adda}. *)
+
+  val ( ~+ ) : string -> t
+  (** [$ str] is an infix operator that wraps [create ~kind:(`Str str) ()]. *)
+end
+
+module Private : sig
+  (** /!\ Private area, this should not be used while using the API! *)
+
+  val of_res_str : (string, [ `Msg of string ]) result -> t
+  (** [of_res_str r] transforms a result into a {!t}. *)
 end
