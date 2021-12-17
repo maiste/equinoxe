@@ -39,11 +39,15 @@ module type API = sig
   (** This module manages API part related to the user. *)
   module Users : sig
     val get_current_user : t -> Json.t
-    (** [get_current_user] returns informations about the user linked to the API
-        key. *)
+    (** [get_current_user t] returns informations about the user linked to the
+        API key. *)
 
     val get_user_api_keys : t -> Json.t
-    (** [get_user_api_keys] returns the keys available for the current user. *)
+    (** [get_user_api_keys t] returns the keys available for the current user. *)
+
+    val add_user_api_keys : t -> ?read_only:bool -> string -> Json.t
+    (** [add_user_api_keys t ~read_only description] creates a new API key on
+        Equinix. Default value to read_only is true. *)
   end
 
   module Orga : sig end

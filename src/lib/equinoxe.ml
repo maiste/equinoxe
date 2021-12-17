@@ -25,6 +25,7 @@
 include Equinoxe_intf
 module Json = Json
 module Default_api = Piaf_api
+open Json.Infix
 
 (* Fonctor to build API using a specific call API system. *)
 module Make (C : CallAPI.S) = struct
@@ -40,6 +41,13 @@ module Make (C : CallAPI.S) = struct
     let get_user_api_keys t =
       let path = "user/api-keys" in
       C.get ~path t () |> C.run
+
+    let add_user_api_keys t ?(read_only = true) description =
+      let read_only = ("read_only", ~+(string_of_bool read_only)) in
+      let description = ("description", ~+description) in
+      let json = Json.create () -+> read_only -+> description in
+      let path = "user/api-keys" in
+      C.post t ~path json |> C.run
   end
 
   module Orga = struct end
