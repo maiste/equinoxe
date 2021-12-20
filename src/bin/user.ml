@@ -33,7 +33,7 @@ open Json.Infix
 let user_id () =
   let endpoint = Conf.endpoint in
   let e = Equinoxe.create ~endpoint () in
-  Equinoxe.Users.get_current_user e --> "id" |> Json.to_string_r |> function
+  Equinoxe.Users.get_own_id e --> "id" |> Json.to_string_r |> function
   | Ok str ->
       Format.printf "> Id is %s@." str;
       Ok ()
@@ -42,7 +42,7 @@ let user_id () =
 let user_api_keys () =
   let endpoint = Conf.endpoint in
   let e = Equinoxe.create ~endpoint () in
-  Equinoxe.Users.get_user_api_keys e |> Json.pp_r
+  Equinoxe.Users.get_api_keys e |> Json.pp_r
 
 (* Terms *)
 
