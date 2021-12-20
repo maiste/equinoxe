@@ -81,6 +81,11 @@ let post_from t ~path body =
   let body = Body.of_string body in
   Client.post ~headers ~body url
 
+let delete_from t path =
+  let headers = build_header t.token in
+  let url = Filename.concat t.endpoint path |> Uri.of_string in
+  Client.delete ~headers url
+
 (**** API ****)
 
 let create ~endpoint ?(token = `Default) () =
@@ -99,5 +104,9 @@ let post t ~path json =
   | e -> Lwt.return @@ Json.Private.of_res_str e
 
 let put _t ~path:_ _json = failwith "TODO"
-let delete _t ~path:_ = failwith "TODO"
+
+let delete t ~path () =
+  let* resp = delete_from t path in
+  convert_to_json resp
+
 let run json = Lwt_main.run json
