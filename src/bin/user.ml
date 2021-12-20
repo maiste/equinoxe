@@ -30,7 +30,7 @@ open Json.Infix
 
 (* Actions *)
 
-let show_user_id () =
+let show_own_id () =
   let endpoint = Conf.endpoint in
   let e = Equinoxe.create ~endpoint () in
   Equinoxe.Users.get_own_id e --> "id" |> Json.to_string_r |> function
@@ -39,38 +39,44 @@ let show_user_id () =
       Ok ()
   | Error e -> Error e
 
-let show_user_api_keys () =
+let show_api_keys () =
   let endpoint = Conf.endpoint in
   let e = Equinoxe.create ~endpoint () in
   Equinoxe.Users.get_api_keys e |> Json.pp_r
 
-let create_user_api_key write description =
+let create_api_key write description =
   let read_only = not write in
   let endpoint = Conf.endpoint in
   let e = Equinoxe.create ~endpoint () in
   Equinoxe.Users.add_api_key e ~read_only description |> Json.pp_r
 
+let del_api_key key_id =
+  let endpoint = Conf.endpoint in
+  let e = Equinoxe.create ~endpoint () in
+  Equinoxe.Users.del_api_key e key_id |> Json.to_unit_r |> function
+  | Ok () ->
+      Format.printf "Api key %s deleted.@." key_id;
+      Ok ()
+  | e -> e
+
 (* Terms *)
 
-let user_id_t =
+let show_own_id_t =
   let doc = "Show the id of the user." in
-  let sdocs = Manpage.s_common_options in
   let exits = Term.default_exits in
   Term.
-    ( term_result (const show_user_id $ const ()),
-      info "user-show-id" ~doc ~sdocs ~exits )
+    ( term_result (const show_own_id $ const ()),
+      info "user-show-own-id" ~doc ~exits )
 
-let user_api_keys_t =
+let show_api_keys_t =
   let doc = "Show the api keys of the user." in
-  let sdocs = Manpage.s_common_options in
   let exits = Term.default_exits in
   Term.
-    ( term_result (const show_user_api_keys $ const ()),
-      info "user-show-api-keys" ~doc ~sdocs ~exits )
+    ( term_result (const show_api_keys $ const ()),
+      info "user-show-api-keys" ~doc ~exits )
 
-let create_user_api_keys_t =
+let create_api_key_t =
   let doc = "Create a new api key for the user." in
-  let sdocs = Manpage.s_common_options in
   let exits = Term.default_exits in
   let write =
     let doc = "Grant the key with writing rights. Absent means false." in
@@ -82,7 +88,21 @@ let create_user_api_keys_t =
     Arg.(required & pos ~rev:true 0 (some string) None & info [] ~docv ~doc)
   in
   Term.
-    ( term_result (const create_user_api_key $ write $ description),
-      info "user-create-api-key" ~doc ~sdocs ~exits )
+    ( term_result (const create_api_key $ write $ description),
+      info "user-create-api-key" ~doc ~exits )
 
-let t = [ user_id_t; user_api_keys_t; create_user_api_keys_t ]
+let del_api_key_t =
+  let doc = "Delete a user api-key." in
+  let exits = Term.default_exits in
+  let key_id =
+    let docv = "KEY-ID" in
+    let doc =
+      "The ID of the key. It can be obtained with user-show-api-keys."
+    in
+    Arg.(required & pos ~rev:true 0 (some string) None & info [] ~docv ~doc)
+  in
+  Term.
+    ( term_result (const del_api_key $ key_id),
+      info "user-del-api-key" ~doc ~exits )
+
+let t = [ show_own_id_t; show_api_keys_t; create_api_key_t; del_api_key_t ]
