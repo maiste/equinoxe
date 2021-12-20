@@ -45,9 +45,13 @@ module type API = sig
     val get_user_api_keys : t -> Json.t
     (** [get_user_api_keys t] returns the keys available for the current user. *)
 
-    val add_user_api_keys : t -> ?read_only:bool -> string -> Json.t
-    (** [add_user_api_keys t ~read_only description] creates a new API key on
+    val add_user_api_key : t -> ?read_only:bool -> string -> Json.t
+    (** [add_user_api_key t ~read_only description] creates a new API key on
         Equinix. Default value to read_only is true. *)
+
+    val del_user_api_key : t -> string -> Json.t
+    (** [del_user_api_key t key_id ] deletes the key referenced by [key_id] from
+        the user keys. *)
   end
 
   module Orga : sig end

@@ -42,12 +42,16 @@ module Make (C : CallAPI.S) = struct
       let path = "user/api-keys" in
       C.get ~path t () |> C.run
 
-    let add_user_api_keys t ?(read_only = true) description =
+    let add_user_api_key t ?(read_only = true) description =
       let read_only = ("read_only", ~+(string_of_bool read_only)) in
       let description = ("description", ~+description) in
       let json = Json.create () -+> read_only -+> description in
       let path = "user/api-keys" in
       C.post t ~path json |> C.run
+
+    let del_user_api_key t key_id =
+      let path = Filename.concat "user/api-keys/" key_id in
+      C.delete t ~path () |> C.run
   end
 
   module Orga = struct end
