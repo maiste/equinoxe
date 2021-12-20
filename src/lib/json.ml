@@ -97,6 +97,8 @@ let to_int_r json =
 let to_string_r json =
   json >>= function `String s -> Ok s | json -> conversion_error json "string"
 
+let to_unit_r json = json >>= function _ -> Ok ()
+
 let pp_r json =
   json >|= fun json ->
   Ezjsonm.value_to_string ~minify:false json |> Format.printf "%s"
