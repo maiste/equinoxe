@@ -56,6 +56,10 @@ val to_string_r : t -> (string, [ `Msg of string ]) result
 (** [to_string json] transforms the [json] into a string result with a printable
     error in case of failure.*)
 
+val to_unit_r : t -> (unit, [ `Msg of string ]) result
+(** [to_unit_r json] returns a result with a unit value. It unwraps the errors
+    and returns unit if there is no error. *)
+
 val pp_r : t -> (unit, [ `Msg of string ]) result
 (** [pp_r json] prints the json if it's a well format json and returns Ok
     ().contents Otherwise, it returns an error. *)

@@ -51,6 +51,7 @@ let convert_to_json resp =
     | Error e -> Lwt_result.fail e
   in
   match body with
+  | Ok "" -> Json.of_string "{ }"
   | Ok s -> Json.of_string s
   | Error e -> Json.error (Piaf.Error.to_string e)
 
