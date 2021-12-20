@@ -82,6 +82,12 @@ let post_from t ~path body =
   let body = Body.of_string body in
   Client.post ~headers ~body url
 
+let put_from t ~path body =
+  let headers = build_header t.token in
+  let url = Filename.concat t.endpoint path |> Uri.of_string in
+  let body = Body.of_string body in
+  Client.put ~headers ~body url
+
 let delete_from t path =
   let headers = build_header t.token in
   let url = Filename.concat t.endpoint path |> Uri.of_string in
@@ -104,7 +110,12 @@ let post t ~path json =
       convert_to_json resp
   | e -> Lwt.return @@ Json.Private.of_res_str e
 
-let put _t ~path:_ _json = failwith "TODO"
+let put t ~path json =
+  match Json.export json with
+  | Ok body ->
+      let* resp = put_from t ~path body in
+      convert_to_json resp
+  | e -> Lwt.return @@ Json.Private.of_res_str e
 
 let delete t ~path () =
   let* resp = delete_from t path in
