@@ -30,7 +30,7 @@ open Json.Infix
 
 (* Actions *)
 
-let user_id () =
+let show_user_id () =
   let endpoint = Conf.endpoint in
   let e = Equinoxe.create ~endpoint () in
   Equinoxe.Users.get_own_id e --> "id" |> Json.to_string_r |> function
@@ -39,26 +39,50 @@ let user_id () =
       Ok ()
   | Error e -> Error e
 
-let user_api_keys () =
+let show_user_api_keys () =
   let endpoint = Conf.endpoint in
   let e = Equinoxe.create ~endpoint () in
   Equinoxe.Users.get_api_keys e |> Json.pp_r
 
+let create_user_api_key write description =
+  let read_only = not write in
+  let endpoint = Conf.endpoint in
+  let e = Equinoxe.create ~endpoint () in
+  Equinoxe.Users.add_api_key e ~read_only description |> Json.pp_r
+
 (* Terms *)
 
 let user_id_t =
-  let doc = "Show the id of the user" in
+  let doc = "Show the id of the user." in
   let sdocs = Manpage.s_common_options in
   let exits = Term.default_exits in
   Term.
-    (term_result (const user_id $ const ()), info "user-id" ~doc ~sdocs ~exits)
+    ( term_result (const show_user_id $ const ()),
+      info "user-show-id" ~doc ~sdocs ~exits )
 
 let user_api_keys_t =
-  let doc = "Show the api keys of the user" in
+  let doc = "Show the api keys of the user." in
   let sdocs = Manpage.s_common_options in
   let exits = Term.default_exits in
   Term.
-    ( term_result (const user_api_keys $ const ()),
-      info "user-api-keys" ~doc ~sdocs ~exits )
+    ( term_result (const show_user_api_keys $ const ()),
+      info "user-show-api-keys" ~doc ~sdocs ~exits )
 
-let t = [ user_id_t; user_api_keys_t ]
+let create_user_api_keys_t =
+  let doc = "Create a new api key for the user." in
+  let sdocs = Manpage.s_common_options in
+  let exits = Term.default_exits in
+  let write =
+    let doc = "Grant the key with writing rights. Absent means false." in
+    Arg.(value & flag & info [ "w"; "write" ] ~doc)
+  in
+  let description =
+    let docv = "KEY-NAME" in
+    let doc = "Name of the key to create." in
+    Arg.(required & pos ~rev:true 0 (some string) None & info [] ~docv ~doc)
+  in
+  Term.
+    ( term_result (const create_user_api_key $ write $ description),
+      info "user-create-api-key" ~doc ~sdocs ~exits )
+
+let t = [ user_id_t; user_api_keys_t; create_user_api_keys_t ]
