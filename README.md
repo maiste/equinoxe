@@ -6,7 +6,7 @@
 <div align="center">
 <br />
   
-[![License](https://img.shields.io/github/license/maiste/equinoxe.svg?style=flat-square)](LICENSE)
+[![License](https://img.shields.io/github/license/maiste/equinoxe?style=flat-square)](LICENSE)
 [![Documentation](https://img.shields.io/badge/documentation-online-blue?style=flat-square)](https://maiste.github.io/equinoxe)
 </div>
 
