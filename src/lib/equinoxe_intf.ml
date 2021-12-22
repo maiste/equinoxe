@@ -55,7 +55,11 @@ module type API = sig
 
   module Orga : sig
     val get_all : t -> Json.t
-    (** [get_all] returns an all the organizations associated with the token. *)
+    (** [get_all t] returns an all the organizations associated with the token. *)
+
+    val get_specific : t -> string -> Json.t
+    (** [get_specific t id] returns the {!Json.t} that is referenced by the id
+        given in parameter. *)
   end
 
   module Metal : sig end

@@ -58,6 +58,10 @@ module Make (C : CallAPI.S) = struct
     let get_all t =
       let path = "organizations" in
       C.get t ~path () |> C.run
+
+    let get_specific t id =
+      let path = Filename.concat "organizations" id in
+      C.get t ~path () |> C.run
   end
 
   module Metal = struct end
