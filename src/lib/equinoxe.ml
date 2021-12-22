@@ -34,7 +34,7 @@ module Make (C : CallAPI.S) = struct
   let create ~endpoint ?token () = C.create ~endpoint ?token ()
 
   module Users = struct
-    let get_own_id t =
+    let get_me t =
       let path = "user" in
       C.get ~path t () |> C.run
 
@@ -54,6 +54,15 @@ module Make (C : CallAPI.S) = struct
       C.delete t ~path () |> C.run
   end
 
-  module Orga = struct end
+  module Orga = struct
+    let get_all t =
+      let path = "organizations" in
+      C.get t ~path () |> C.run
+
+    let get_specific t id =
+      let path = Filename.concat "organizations" id in
+      C.get t ~path () |> C.run
+  end
+
   module Metal = struct end
 end

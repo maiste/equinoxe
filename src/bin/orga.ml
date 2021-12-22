@@ -22,15 +22,42 @@
 (*                                                                           *)
 (*****************************************************************************)
 
-open Cmdliner
 module Conf = Utils.Conf
+module Json = Utils.Json
+module Equinoxe = Utils.Equinoxe
+open Cmdliner
 
-(* Default command, display help. *)
-let default =
-  let open Conf in
+(* Actions *)
+
+let show_own_orgas () =
+  let endpoint = Conf.endpoint in
+  let e = Equinoxe.create ~endpoint () in
+  Equinoxe.Orga.get_all e |> Json.pp_r
+
+let show_specific_orga id =
+  let endpoint = Conf.endpoint in
+  let e = Equinoxe.create ~endpoint () in
+  Equinoxe.Orga.get_specific e id |> Json.filter_error |> Json.pp_r
+
+(* Terms *)
+
+let show_own_orgas_t =
+  let doc = "Show all the organizations of the user." in
   let exits = Term.default_exits in
-  ( Term.(ret (const (`Help (`Pager, None)))),
-    Term.info name ~version ~doc:Conf.description ~exits ~man:Conf.manpage )
+  Term.
+    ( term_result (const show_own_orgas $ const ()),
+      info "orga-show-all" ~doc ~exits )
 
-let commands = User.t @ Orga.t
-let () = Term.(exit @@ eval_choice default commands)
+let show_specific_orga_t =
+  let doc = "Show the organization of the user referenced by the id." in
+  let exits = Term.default_exits in
+  let id =
+    let docv = "ID" in
+    let doc = "The organization id" in
+    Arg.(required & pos 0 (some string) None & info [] ~docv ~doc)
+  in
+  Term.
+    ( term_result (const show_specific_orga $ id),
+      info "orga-show-specific" ~doc ~exits )
+
+let t = [ show_own_orgas_t; show_specific_orga_t ]
