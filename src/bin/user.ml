@@ -53,7 +53,8 @@ let create_api_key write description =
 let del_api_key key_id =
   let endpoint = Conf.endpoint in
   let e = Equinoxe.create ~endpoint () in
-  Equinoxe.Users.del_api_key e key_id |> Json.to_unit_r |> function
+  Equinoxe.Users.del_api_key e key_id |> Json.filter_error |> Json.to_unit_r
+  |> function
   | Ok () ->
       Format.printf "Api key %s deleted.@." key_id;
       Ok ()
