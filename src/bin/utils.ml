@@ -60,3 +60,56 @@ module Conf = struct
     in
     bug @ contribution @ authors
 end
+
+module Term = struct
+  type meth = GET | POST | DELETE | PUT
+
+  let to_string = function
+    | GET -> "GET"
+    | POST -> "POST"
+    | DELETE -> "DELETE"
+    | PUT -> "PUT"
+
+  let meth_t =
+    let doc =
+      "The HTTP methode you want to use. If not provided, default method is \
+       GET."
+    in
+    let meth =
+      Arg.enum
+        [ ("get", GET); ("post", POST); ("delete", DELETE); ("put", PUT) ]
+    in
+    Arg.(value & opt meth GET & info [ "m"; "meth" ] ~doc)
+
+  let has_requiered opts = List.for_all Option.is_some opts
+
+  let man_meth ?(get = "Not supported.") ?(post = "Not supported.")
+      ?(delete = "Not supported.") ?(put = "Not supported.") () =
+    [
+      `S Manpage.s_description;
+      `P ("GET: " ^ get);
+      `P ("POST: " ^ post);
+      `P ("PUT: " ^ put);
+      `P ("DELETE: " ^ delete);
+    ]
+
+  let default_exits =
+    [
+      Term.exit_info ~doc:"on option parsing and execution error." ~max:125 1;
+      Term.exit_info ~doc:"on success." 0;
+    ]
+
+  let not_supported_r meth case =
+    Error
+      (`Msg
+        (Format.sprintf "Method %s is not supported with %s." (to_string meth)
+           case))
+
+  let not_all_requiered_r opts =
+    let header = "The following options are requiered but not provided:\n" in
+    let opts =
+      List.fold_left (fun acc opt -> "- " ^ opt ^ "\n" ^ acc) "" opts
+    in
+    let msg = header ^ opts in
+    Error (`Msg msg)
+end

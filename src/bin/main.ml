@@ -22,13 +22,14 @@
 (*                                                                           *)
 (*****************************************************************************)
 
-open Cmdliner
 module Conf = Utils.Conf
+open Cmdliner
+open Utils.Term
 
 (* Default command, display help. *)
 let default =
   let open Conf in
-  let exits = Term.default_exits in
+  let exits = default_exits in
   ( Term.(ret (const (`Help (`Pager, None)))),
     Term.info name ~version ~doc:Conf.description ~exits ~man:Conf.manpage )
 
