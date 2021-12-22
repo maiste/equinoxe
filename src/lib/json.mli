@@ -35,6 +35,10 @@ val create : ?kind:[ `Str of string | `Obj | `Arr ] -> unit -> t
 val error : string -> t
 (** [error msg] produces a type [t] from an error message. *)
 
+val filter_error : t -> t
+(** [filter_error json] checks for a possible errors fields in [json]. If it's
+    not the case, the json is not modified. *)
+
 val of_string : string -> t
 (** [of_string str] takes a string [str] representing a JSON and transform it
     into an {!t} object you can manipulate with this module. *)
@@ -47,6 +51,10 @@ val geto : t -> string -> t
 val geta : t -> int -> t
 (** [geta json nth]. returns the {!t} value associated to the nth element in the
     json. *)
+
+val geto_from_a : t -> string * string -> t
+(** [getao json (k,v)] returns the {!t} value object associated with the first
+    element in an array of object which contains the tuple (k,v). *)
 
 val to_int_r : t -> (int, [ `Msg of string ]) result
 (** [to_int_r json] transforms the [json] object into an int result with a
@@ -83,6 +91,9 @@ module Infix : sig
 
   val ( |-> ) : t -> int -> t
   (** [json |-> nth] is an infix operator that executes {!geta}. *)
+
+  val ( |->? ) : t -> string * string -> t
+  (** [json |->? (k,v)] is an infix operator that executes {!geto_from_a}. *)
 
   val ( -+> ) : t -> string * t -> t
   (** [json -+> (key, value)] executes {!addo}. *)

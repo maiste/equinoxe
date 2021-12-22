@@ -51,6 +51,18 @@ let conversion_error got expected =
   in
   error error_msg
 
+let filter_error json =
+  json >>= function
+  | `O fields as json -> (
+      List.assoc_opt "errors" fields |> function
+      | Some (`A [ `String s ]) ->
+          let msg =
+            Format.sprintf "The API returns the following error \"%s\"." s
+          in
+          error msg
+      | _ -> Ok json)
+  | json -> Ok json
+
 let of_string content =
   try Ok (Ezjsonm.from_string content)
   with Ezjsonm.Parse_error (_, str_err) -> error str_err
@@ -79,6 +91,24 @@ let geta json nth =
           in
           error msg
       | Some item -> Ok item)
+  | _ ->
+      let msg = "Trying to access a non array field in JSON." in
+      error msg
+
+let geto_from_a json (k, v) : t =
+  let is_obj_with_field = function
+    | `O fields -> (
+        match List.assoc_opt k fields with
+        | Some (`String v') -> v' = v
+        | _ -> false)
+    | _ -> false
+  in
+  json >>= function
+  | `A objs -> (
+      try Ok (List.find is_obj_with_field objs)
+      with Not_found ->
+        let msg = "Can't find the field into the array." in
+        error msg)
   | _ ->
       let msg = "Trying to access a non array field in JSON." in
       error msg
@@ -128,6 +158,7 @@ module Infix = struct
   let ( ~+ ) v = create ~kind:(`Str v) ()
   let ( --> ) json name = geto json name
   let ( |-> ) json nth = geta json nth
+  let ( |->? ) json kv = geto_from_a json kv
   let ( -+> ) json kv = addo json kv
   let ( |+> ) json kv = adda json kv
 end
