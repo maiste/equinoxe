@@ -50,6 +50,16 @@ module Make (C : CallAPI.S) = struct
       C.delete t ~path () |> C.run
   end
 
+  module Projects = struct
+    let get_projects t =
+      let path = "projects" in
+      C.get t ~path () |> C.run
+
+    let get_projects_id t ~id () =
+      let path = Filename.concat "projects" id in
+      C.get t ~path () |> C.run
+  end
+
   module Users = struct
     let get_user t =
       let path = "user" in
