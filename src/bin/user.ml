@@ -26,37 +26,34 @@ module Conf = Utils.Conf
 module Json = Utils.Json
 module Equinoxe = Utils.Equinoxe
 open Cmdliner
-open Json.Infix
 
 (* Actions *)
 
 let show_own_id () =
   let endpoint = Conf.endpoint in
   let e = Equinoxe.create ~endpoint () in
-  Equinoxe.Users.get_me e --> "id" |> Json.to_string_r |> function
-  | Ok str ->
-      Format.printf "> Id is %s@." str;
-      Ok ()
-  | Error e -> Error e
+  Equinoxe.Users.get_user e |> Json.pp_r
 
 let show_api_keys () =
   let endpoint = Conf.endpoint in
   let e = Equinoxe.create ~endpoint () in
-  Equinoxe.Users.get_api_keys e |> Json.pp_r
+  Equinoxe.Auth.get_user_api_keys e |> Json.pp_r
 
 let create_api_key write description =
   let read_only = not write in
   let endpoint = Conf.endpoint in
   let e = Equinoxe.create ~endpoint () in
-  Equinoxe.Users.add_api_key e ~read_only description |> Json.pp_r
+  Equinoxe.Auth.post_user_api_keys e ~read_only ~description () |> Json.pp_r
 
-let del_api_key key_id =
+let del_api_key id =
   let endpoint = Conf.endpoint in
   let e = Equinoxe.create ~endpoint () in
-  Equinoxe.Users.del_api_key e key_id |> Json.filter_error |> Json.to_unit_r
+  Equinoxe.Auth.del_user_api_keys_id e ~id ()
+  |> Json.filter_error
+  |> Json.to_unit_r
   |> function
   | Ok () ->
-      Format.printf "Api key %s deleted.@." key_id;
+      Format.printf "Api key %s deleted.@." id;
       Ok ()
   | e -> e
 

@@ -33,33 +33,35 @@ module Make (C : CallAPI.S) = struct
 
   let create ~endpoint ?token () = C.create ~endpoint ?token ()
 
-  module Users = struct
-    let get_me t =
-      let path = "user" in
-      C.get ~path t () |> C.run
-
-    let get_api_keys t =
+  module Auth = struct
+    let get_user_api_keys t =
       let path = "user/api-keys" in
       C.get ~path t () |> C.run
 
-    let add_api_key t ?(read_only = true) description =
+    let post_user_api_keys t ?(read_only = true) ~description () =
       let read_only = ("read_only", ~+(string_of_bool read_only)) in
       let description = ("description", ~+description) in
       let json = Json.create () -+> read_only -+> description in
       let path = "user/api-keys" in
       C.post t ~path json |> C.run
 
-    let del_api_key t key_id =
-      let path = Filename.concat "user/api-keys/" key_id in
+    let del_user_api_keys_id t ~id () =
+      let path = Filename.concat "user/api-keys/" id in
       C.delete t ~path () |> C.run
   end
 
+  module Users = struct
+    let get_user t =
+      let path = "user" in
+      C.get ~path t () |> C.run
+  end
+
   module Orga = struct
-    let get_all t =
+    let get_organizations t =
       let path = "organizations" in
       C.get t ~path () |> C.run
 
-    let get_specific t id =
+    let get_organizations_id t ~id () =
       let path = Filename.concat "organizations" id in
       C.get t ~path () |> C.run
   end

@@ -32,12 +32,12 @@ open Cmdliner
 let show_own_orgas () =
   let endpoint = Conf.endpoint in
   let e = Equinoxe.create ~endpoint () in
-  Equinoxe.Orga.get_all e |> Json.pp_r
+  Equinoxe.Orga.get_organizations e |> Json.pp_r
 
 let show_specific_orga id =
   let endpoint = Conf.endpoint in
   let e = Equinoxe.create ~endpoint () in
-  Equinoxe.Orga.get_specific e id |> Json.filter_error |> Json.pp_r
+  Equinoxe.Orga.get_organizations_id e ~id () |> Json.filter_error |> Json.pp_r
 
 (* Terms *)
 
