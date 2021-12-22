@@ -34,7 +34,7 @@ module Make (C : CallAPI.S) = struct
   let create ~endpoint ?token () = C.create ~endpoint ?token ()
 
   module Users = struct
-    let get_own_id t =
+    let get_me t =
       let path = "user" in
       C.get ~path t () |> C.run
 

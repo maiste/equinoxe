@@ -33,7 +33,7 @@ open Json.Infix
 let show_own_id () =
   let endpoint = Conf.endpoint in
   let e = Equinoxe.create ~endpoint () in
-  Equinoxe.Users.get_own_id e --> "id" |> Json.to_string_r |> function
+  Equinoxe.Users.get_me e --> "id" |> Json.to_string_r |> function
   | Ok str ->
       Format.printf "> Id is %s@." str;
       Ok ()

@@ -38,9 +38,8 @@ module type API = sig
 
   (** This module manages API part related to the user. *)
   module Users : sig
-    val get_own_id : t -> Json.t
-    (** [get_own_user t] returns informations about the user linked to the API
-        key. *)
+    val get_me : t -> Json.t
+    (** [get_me t] returns informations about the user linked to the API key. *)
 
     val get_api_keys : t -> Json.t
     (** [get_api__keys t] returns the keys available for the current user. *)
