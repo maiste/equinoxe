@@ -54,6 +54,11 @@ module Make (C : CallAPI.S) = struct
       C.delete t ~path () |> C.run
   end
 
-  module Orga = struct end
+  module Orga = struct
+    let get_all t =
+      let path = "organizations" in
+      C.get t ~path () |> C.run
+  end
+
   module Metal = struct end
 end

@@ -53,7 +53,11 @@ module type API = sig
         user keys. *)
   end
 
-  module Orga : sig end
+  module Orga : sig
+    val get_all : t -> Json.t
+    (** [get_all] returns an all the organizations associated with the token. *)
+  end
+
   module Metal : sig end
 end
 
