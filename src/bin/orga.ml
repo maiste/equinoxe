@@ -26,38 +26,57 @@ module Conf = Utils.Conf
 module Json = Utils.Json
 module Equinoxe = Utils.Equinoxe
 open Cmdliner
+open Utils.Term
 
 (* Actions *)
 
-let show_own_orgas () =
-  let endpoint = Conf.endpoint in
-  let e = Equinoxe.create ~endpoint () in
-  Equinoxe.Orga.get_organizations e |> Json.pp_r
+let organizations = function
+  | GET ->
+      let endpoint = Conf.endpoint in
+      let e = Equinoxe.create ~endpoint () in
+      Equinoxe.Orga.get_organizations e |> Json.pp_r
+  | meth -> not_supported_r meth "/organizations"
 
-let show_specific_orga id =
+let organizations_id meth id =
   let endpoint = Conf.endpoint in
   let e = Equinoxe.create ~endpoint () in
-  Equinoxe.Orga.get_organizations_id e ~id () |> Json.filter_error |> Json.pp_r
+  match meth with
+  | GET ->
+      if has_requiered [ id ] then
+        let id = Option.get id in
+        Equinoxe.Orga.get_organizations_id e ~id ()
+        |> Json.filter_error
+        |> Json.pp_r
+      else not_all_requiered_r [ "id" ]
+  | meth -> not_supported_r meth "/organizations/{id}"
 
 (* Terms *)
 
-let show_own_orgas_t =
+let organizations_t =
   let doc = "Show all the organizations of the user." in
-  let exits = Term.default_exits in
-  Term.
-    ( term_result (const show_own_orgas $ const ()),
-      info "orga-show-all" ~doc ~exits )
+  let exits = default_exits in
+  let man =
+    man_meth
+      ~get:"Retrieve information about organizations related to the user." ()
+  in
 
-let show_specific_orga_t =
+  Term.
+    ( term_result (const organizations $ meth_t),
+      info "/organizations" ~doc ~exits ~man )
+
+let organizations_id_t =
   let doc = "Show the organization of the user referenced by the id." in
-  let exits = Term.default_exits in
-  let id =
-    let docv = "ID" in
+  let exits = default_exits in
+  let man =
+    man_meth ~get:"Retrieve information about a specific organizations" ()
+  in
+
+  let id_t =
     let doc = "The organization id" in
-    Arg.(required & pos 0 (some string) None & info [] ~docv ~doc)
+    Arg.(value & opt (some string) None & info [ "id" ] ~doc)
   in
   Term.
-    ( term_result (const show_specific_orga $ id),
-      info "orga-show-specific" ~doc ~exits )
+    ( term_result (const organizations_id $ meth_t $ id_t),
+      info "/organizations/id" ~doc ~exits ~man )
 
-let t = [ show_own_orgas_t; show_specific_orga_t ]
+let t = [ organizations_t; organizations_id_t ]
