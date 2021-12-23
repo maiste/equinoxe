@@ -36,8 +36,9 @@ module type API = sig
   (** [create opts] returns an {!t} object, you need to manipulate when
       executing requests. *)
 
-  (** This module manages API part related to authentifications. *)
   module Auth : sig
+    (** This module manages API part related to authentifications. *)
+
     val get_user_api_keys : t -> Json.t
     (** [get_user_api_keys t] returns the keys available for the current user. *)
 
@@ -51,19 +52,32 @@ module type API = sig
         the user keys. *)
   end
 
-  (** This module manages API part related to organizations. *)
   module Orga : sig
+    (** This module manages API part related to organizations. *)
+
     val get_organizations : t -> Json.t
-    (** [get_organizations t] returns an all the organizations associated with
-        the token. *)
+    (** [get_organizations t] returns all the organizations associated with the
+        token. *)
 
     val get_organizations_id : t -> id:string -> unit -> Json.t
     (** [get_organizations_id t ~id ()] returns the {!Json.t} that is referenced
-        by the id given in parameter. *)
+        by the [id] given in parameter. *)
   end
 
-  (** This module manages API part related to users. *)
+  module Projects : sig
+    (** This module manages API part related to projects. *)
+
+    val get_projects : t -> Json.t
+    (** [get_projects t] returns all projects associated with the token. *)
+
+    val get_projects_id : t -> id:string -> unit -> Json.t
+    (** [get_projects_id t ~id ()] returns the {!Json.t} that is referenced by
+        the [id] given in parameter. *)
+  end
+
   module Users : sig
+    (** This module manages API part related to users. *)
+
     val get_user : t -> Json.t
     (** [get_user t] returns informations about the user linked to the API key. *)
   end

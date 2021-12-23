@@ -23,15 +23,55 @@
 (*****************************************************************************)
 
 module Conf = Utils.Conf
+module Json = Utils.Json
+module Equinoxe = Utils.Equinoxe
 open Cmdliner
 open Utils.Term
 
-(* Default command, display help. *)
-let default =
-  let open Conf in
-  let exits = default_exits in
-  ( Term.(ret (const (`Help (`Pager, None)))),
-    Term.info name ~version ~doc:Conf.description ~exits ~man:Conf.manpage )
+(* Actions *)
 
-let commands = User.t @ Orga.t @ Project.t
-let () = Term.(exit @@ eval_choice default commands)
+let projects = function
+  | GET ->
+      let endpoint = Conf.endpoint in
+      let e = Equinoxe.create ~endpoint () in
+      Equinoxe.Projects.get_projects e |> Json.pp_r
+  | meth -> not_supported_r meth "/projects"
+
+let projects_id meth id =
+  let endpoint = Conf.endpoint in
+  let e = Equinoxe.create ~endpoint () in
+  match meth with
+  | GET ->
+      if has_requiered [ id ] then
+        let id = Option.get id in
+        Equinoxe.Projects.get_projects_id e ~id ()
+        |> Json.filter_error
+        |> Json.pp_r
+      else not_all_requiered_r [ "id" ]
+  | meth -> not_supported_r meth "/projects/{id}"
+
+(* Terms *)
+
+let projects_t =
+  let doc = "Show all the projects of the user." in
+  let exits = default_exits in
+  let man =
+    man_meth ~get:"Retrieve information about projects related to the user." ()
+  in
+
+  Term.(term_result (const projects $ meth_t), info "/projects" ~doc ~exits ~man)
+
+let projects_id_t =
+  let doc = "Show the project of the user referenced by the id" in
+  let exits = default_exits in
+  let man = man_meth ~get:"Retrieve information about a specific project." () in
+
+  let id_t =
+    let doc = "The project id" in
+    Arg.(value & opt (some string) None & info [ "id" ] ~doc)
+  in
+  Term.
+    ( term_result (const projects_id $ meth_t $ id_t),
+      info "/projects/id" ~doc ~exits ~man )
+
+let t = [ projects_t; projects_id_t ]
