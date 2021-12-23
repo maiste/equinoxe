@@ -68,7 +68,7 @@ let organizations_id_t =
   let doc = "Show the organization of the user referenced by the id." in
   let exits = default_exits in
   let man =
-    man_meth ~get:"Retrieve information about a specific organizations" ()
+    man_meth ~get:"Retrieve information about a specific organization" ()
   in
 
   let id_t =
