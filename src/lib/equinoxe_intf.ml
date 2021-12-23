@@ -52,6 +52,25 @@ module type API = sig
         the user keys. *)
   end
 
+  module Devices : sig
+    (** This module manages API part related to devices. *)
+
+    type config = {
+      facility : string;
+      plan : string;
+      operating_system : string;
+    }
+    (** This type represents the configuration wanted for a device. *)
+
+    val get_devices_id : t -> id:string -> unit -> Json.t
+    (** [get_devices_id t ~id ()] returns a {!Json.t} that contains information
+        about the device specified by [id]. *)
+
+    val del_devices_id : t -> id:string -> unit -> Json.t
+    (** [del_devices_id t ~id ()] deletes a device on Equinix and returns a
+        {!Json.t} with the result. *)
+  end
+
   module Orga : sig
     (** This module manages API part related to organizations. *)
 
@@ -73,6 +92,15 @@ module type API = sig
     val get_projects_id : t -> id:string -> unit -> Json.t
     (** [get_projects_id t ~id ()] returns the {!Json.t} that is referenced by
         the [id] given in parameter. *)
+
+    val get_projects_id_devices : t -> id:string -> unit -> Json.t
+    (** [get_projects_id_devices t ~id ()] returns the {!Json.t} that contains
+        all the devices related to the project [id]. *)
+
+    val post_projects_id_devices :
+      t -> id:string -> config:Devices.config -> unit -> Json.t
+    (** [post_projects_id_devicest ~id ~config ()] creates a machine on the
+        Equinix with the {!Devices.config} specification *)
   end
 
   module Users : sig
@@ -81,8 +109,6 @@ module type API = sig
     val get_user : t -> Json.t
     (** [get_user t] returns informations about the user linked to the API key. *)
   end
-
-  module Metal : sig end
 end
 
 module type S = CallAPI.S

@@ -28,7 +28,7 @@ module Default_api = Piaf_api
 open Json.Infix
 
 (* Fonctor to build API using a specific call API system. *)
-module Make (C : CallAPI.S) = struct
+module Make (C : CallAPI.S) : API = struct
   type t = C.t
 
   let create ~endpoint ?token () = C.create ~endpoint ?token ()
@@ -50,6 +50,20 @@ module Make (C : CallAPI.S) = struct
       C.delete t ~path () |> C.run |> Json.filter_error
   end
 
+  module Devices = struct
+    type config = {
+      facility : string;
+      plan : string;
+      operating_system : string;
+    }
+
+    let get_devices_id t ~id () =
+      let path = Filename.concat "devices" id in
+      C.get t ~path () |> C.run |> Json.filter_error
+
+    let del_devices_id _t ~id:_ () = failwith "TODO"
+  end
+
   module Projects = struct
     let get_projects t =
       let path = "projects" in
@@ -58,6 +72,12 @@ module Make (C : CallAPI.S) = struct
     let get_projects_id t ~id () =
       let path = Filename.concat "projects" id in
       C.get t ~path () |> C.run |> Json.filter_error
+
+    let get_projects_id_devices t ~id () =
+      let path = Format.sprintf "projects/%s/devices" id in
+      C.get t ~path () |> C.run |> Json.filter_error
+
+    let post_projects_id_devices _t ~id:_ ~config:_ () = failwith "TODO"
   end
 
   module Users = struct
@@ -75,6 +95,4 @@ module Make (C : CallAPI.S) = struct
       let path = Filename.concat "organizations" id in
       C.get t ~path () |> C.run |> Json.filter_error
   end
-
-  module Metal = struct end
 end
