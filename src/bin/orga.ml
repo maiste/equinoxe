@@ -44,9 +44,7 @@ let organizations_id meth id =
   | GET ->
       if has_requiered [ id ] then
         let id = Option.get id in
-        Equinoxe.Orga.get_organizations_id e ~id ()
-        |> Json.filter_error
-        |> Json.pp_r
+        Equinoxe.Orga.get_organizations_id e ~id () |> Json.pp_r
       else not_all_requiered_r [ "id" ]
   | meth -> not_supported_r meth "/organizations/{id}"
 

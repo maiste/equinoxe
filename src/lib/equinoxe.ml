@@ -47,7 +47,7 @@ module Make (C : CallAPI.S) = struct
 
     let del_user_api_keys_id t ~id () =
       let path = Filename.concat "user/api-keys/" id in
-      C.delete t ~path () |> C.run
+      C.delete t ~path () |> C.run |> Json.filter_error
   end
 
   module Projects = struct
@@ -57,7 +57,7 @@ module Make (C : CallAPI.S) = struct
 
     let get_projects_id t ~id () =
       let path = Filename.concat "projects" id in
-      C.get t ~path () |> C.run
+      C.get t ~path () |> C.run |> Json.filter_error
   end
 
   module Users = struct
@@ -73,7 +73,7 @@ module Make (C : CallAPI.S) = struct
 
     let get_organizations_id t ~id () =
       let path = Filename.concat "organizations" id in
-      C.get t ~path () |> C.run
+      C.get t ~path () |> C.run |> Json.filter_error
   end
 
   module Metal = struct end
