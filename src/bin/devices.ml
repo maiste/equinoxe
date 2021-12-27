@@ -46,6 +46,17 @@ let device_id meth id =
       else not_all_requiered_r [ "id" ]
   | meth -> not_supported_r meth "/devices/{id}"
 
+let device_id_events meth id =
+  let endpoint = Conf.endpoint in
+  let e = Equinoxe.create ~endpoint () in
+  match meth with
+  | GET ->
+      if has_requiered [ id ] then
+        let id = Option.get id in
+        Equinoxe.Devices.get_devices_id_events e ~id () |> Json.pp_r
+      else not_all_requiered_r [ "id" ]
+  | meth -> not_supported_r meth "/devices/{id}/events"
+
 (* Terms *)
 
 let devices_id_t =
@@ -64,4 +75,18 @@ let devices_id_t =
     ( term_result (const device_id $ meth_t $ id_t),
       info "/devices/id" ~doc ~exits ~man )
 
-let t = [ devices_id_t ]
+let devices_id_events_t =
+  let doc = "Show events on a specific device" in
+  let exits = default_exits in
+  let man =
+    man_meth ~get:("Retrieve events on a specific device", [ "id" ], []) ()
+  in
+  let id_t =
+    let doc = "The device id" in
+    Arg.(value & opt (some string) None & info [ "id" ] ~doc)
+  in
+  Term.
+    ( term_result (const device_id $ meth_t $ id_t),
+      info "/devices/id/events" ~doc ~exits ~man )
+
+let t = [ devices_id_t; devices_id_events_t ]
