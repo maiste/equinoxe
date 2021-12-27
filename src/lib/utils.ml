@@ -1,6 +1,6 @@
 (*****************************************************************************)
 (* Open Source License                                                       *)
-(* Copyright (c) 2021 Étienne Marais <etienne@maiste.fr>                     *)
+(* Copyright (c) 2021-present Étienne Marais <etienne@maiste.fr>             *)
 (*                                                                           *)
 (* Permission is hereby granted, free of charge, to any person obtaining a   *)
 (* copy of this software and associated documentation files (the "Software"),*)

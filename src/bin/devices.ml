@@ -1,6 +1,6 @@
 (*****************************************************************************)
 (* Open Source License                                                       *)
-(* Copyright (c) 2021 Étienne Marais <etienne@maiste.fr>                     *)
+(* Copyright (c) 2021-present Étienne Marais <etienne@maiste.fr>             *)
 (*                                                                           *)
 (* Permission is hereby granted, free of charge, to any person obtaining a   *)
 (* copy of this software and associated documentation files (the "Software"),*)
@@ -129,7 +129,7 @@ let devices_id_events_t =
     Arg.(value & opt (some string) None & info [ "id" ] ~doc)
   in
   Term.
-    ( term_result (const devices_id $ meth_t $ id_t),
+    ( term_result (const devices_id_events $ meth_t $ id_t),
       info "/devices/id/events" ~doc ~exits ~man )
 
 let t = [ devices_id_t; devices_id_events_t; devices_id_actions_t ]

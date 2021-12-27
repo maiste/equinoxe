@@ -1,6 +1,6 @@
 (*****************************************************************************)
 (* Open Source License                                                       *)
-(* Copyright (c) 2021 Étienne Marais <etienne@maiste.fr>                     *)
+(* Copyright (c) 2021-present Étienne Marais <etienne@maiste.fr>             *)
 (*                                                                           *)
 (* Permission is hereby granted, free of charge, to any person obtaining a   *)
 (* copy of this software and associated documentation files (the "Software"),*)
@@ -30,9 +30,7 @@ open Utils.Term
 
 (* Helpers *)
 
-type config = Equinoxe.Devices.config
-
-let config hostname location plan os =
+zsh:1: command not found: :wq
   if
     has_requiered hostname
     && has_requiered location
@@ -48,10 +46,6 @@ let config hostname location plan os =
           os = Option.get os;
         }
   else None
-
-let create_devices e id config =
-  if has_requiered id && has_requiered config then e
-  else not_all_requiered_r [ "id"; "hostname"; "plan"; "facility"; "os" ]
 
 (* Actions *)
 
