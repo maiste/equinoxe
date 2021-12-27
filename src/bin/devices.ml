@@ -23,15 +23,45 @@
 (*****************************************************************************)
 
 module Conf = Utils.Conf
+module Json = Utils.Json
+module Equinoxe = Utils.Equinoxe
 open Cmdliner
 open Utils.Term
 
-(* Default command, display help. *)
-let default =
-  let open Conf in
-  let exits = default_exits in
-  ( Term.(ret (const (`Help (`Pager, None)))),
-    Term.info name ~version ~doc:Conf.description ~exits ~man:Conf.manpage )
+(* Actions *)
 
-let commands = User.t @ Orga.t @ Projects.t @ Devices.t
-let () = Term.(exit @@ eval_choice default commands)
+let device_id meth id =
+  let endpoint = Conf.endpoint in
+  let e = Equinoxe.create ~endpoint () in
+  match meth with
+  | GET ->
+      if has_requiered [ id ] then
+        let id = Option.get id in
+        Equinoxe.Devices.get_devices_id e ~id () |> Json.pp_r
+      else not_all_requiered_r [ "id" ]
+  | DELETE ->
+      if has_requiered [ id ] then
+        let id = Option.get id in
+        Equinoxe.Devices.del_devices_id e ~id () |> Json.pp_r
+      else not_all_requiered_r [ "id" ]
+  | meth -> not_supported_r meth "/devices/{id}"
+
+(* Terms *)
+
+let devices_id_t =
+  let doc = "Show the device, referenced by the id" in
+  let exits = default_exits in
+  let man =
+    man_meth
+      ~get:("Retrieve information about a specific device", [ "id" ], [])
+      ()
+  in
+  let id_t =
+    let doc = "The device id" in
+    Arg.(value & opt (some string) None & info [ "id" ] ~doc)
+  in
+  Term.
+    ( term_result (const device_id $ meth_t $ id_t),
+      info "/devices/id" ~doc ~exits ~man )
+
+let t = [ devices_id_t ]
