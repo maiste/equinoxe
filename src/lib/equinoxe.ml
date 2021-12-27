@@ -53,11 +53,58 @@ module Make (C : CallAPI.S) : API = struct
   module Devices = struct
     type action = Power_on | Power_off | Reboot | Reinstall | Rescue
 
+    type os =
+      | Debian_9
+      | Debian_10
+      | NixOs_21_05
+      | Ubuntu_18_04
+      | Ubuntu_20_04
+      | Ubuntu_21_04
+      | FreeBSD_11_2
+      | Centos_8
+
+    type location =
+      | Washington
+      | Dallas
+      | Silicon_valley
+      | Sao_paulo
+      | Amsterdam
+      | Frankfurt
+      | Singapore
+      | Sydney
+
+    type plan = C3_small_x86 | C3_medium_x86
+
     type config = {
-      facility : string;
-      plan : string;
-      operating_system : string;
+      hostname : string;
+      location : location;
+      plan : plan;
+      os : os;
     }
+
+    let os_to_string = function
+      | Debian_9 -> "debian_9"
+      | Debian_10 -> "debian_10"
+      | NixOs_21_05 -> "nixos_21_05"
+      | Ubuntu_18_04 -> "ubuntu_18_04"
+      | Ubuntu_20_04 -> "ubuntu_20_04"
+      | Ubuntu_21_04 -> "ubuntu_21_04"
+      | FreeBSD_11_2 -> "freebsd_11_2"
+      | Centos_8 -> "centos_8"
+
+    let location_to_string = function
+      | Washington -> "DC"
+      | Dallas -> "DA"
+      | Silicon_valley -> "SV"
+      | Sao_paulo -> "SP"
+      | Amsterdam -> "AM"
+      | Frankfurt -> "FR"
+      | Singapore -> "SG"
+      | Sydney -> "SY"
+
+    let plan_to_string = function
+      | C3_small_x86 -> "c3.small.x86"
+      | C3_medium_x86 -> "c3.medium.x86"
 
     let get_devices_id t ~id () =
       let path = Filename.concat "devices" id in
@@ -98,7 +145,17 @@ module Make (C : CallAPI.S) : API = struct
       let path = Format.sprintf "projects/%s/devices" id in
       C.get t ~path () |> C.run |> Json.Private.filter_error
 
-    let post_projects_id_devices _t ~id:_ ~config:_ () = failwith "TODO"
+    let post_projects_id_devices t ~id ~config () =
+      let path = Format.sprintf "projects/%s/devices" id in
+      let json =
+        Devices.(
+          Json.create ()
+          -+> ("metro", ~+(location_to_string config.location))
+          -+> ("plan", ~+(plan_to_string config.plan))
+          -+> ("operating_system", ~+(os_to_string config.os))
+          -+> ("hostname", ~+(config.hostname)))
+      in
+      C.post t ~path json |> C.run |> Json.Private.filter_error
   end
 
   module Users = struct

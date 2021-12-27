@@ -55,14 +55,53 @@ module type API = sig
   module Devices : sig
     (** This module manages API part related to devices. *)
 
+    (** Actions executable with a device. *)
     type action = Power_on | Power_off | Reboot | Reinstall | Rescue
 
+    (** Os available when creating a new device. *)
+    type os =
+      | Debian_9
+      | Debian_10
+      | NixOs_21_05
+      | Ubuntu_18_04
+      | Ubuntu_20_04
+      | Ubuntu_21_04
+      | FreeBSD_11_2
+      | Centos_8
+
+    (** Locations available when deploying a new device. *)
+    type location =
+      | Washington
+      | Dallas
+      | Silicon_valley
+      | Sao_paulo
+      | Amsterdam
+      | Frankfurt
+      | Singapore
+      | Sydney
+
+    (** Server type when deploying a new device. *)
+    type plan = C3_small_x86 | C3_medium_x86
+
     type config = {
-      facility : string;
-      plan : string;
-      operating_system : string;
+      hostname : string;
+      location : location;
+      plan : plan;
+      os : os;
     }
     (** This type represents the configuration wanted for a device. *)
+
+    val os_to_string : os -> string
+    (** [os_to_string os] converts an os into a string understandable by the
+        API. *)
+
+    val location_to_string : location -> string
+    (** [location_to_string facility] convert a facility into a string
+        understandable by the API. *)
+
+    val plan_to_string : plan -> string
+    (** [plan_to_string plan] convert a plan into a string understandable by the
+        API. *)
 
     val get_devices_id : t -> id:string -> unit -> Json.t
     (** [get_devices_id t ~id ()] returns a {!Json.t} that contains information
