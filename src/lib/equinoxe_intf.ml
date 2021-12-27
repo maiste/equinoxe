@@ -47,9 +47,78 @@ module type API = sig
     (** [post_user_api_keys ~read_only ~description ()] creates a new API key on
         Equinix. Default value to read_only is true. *)
 
-    val del_user_api_keys_id : t -> id:string -> unit -> Json.t
-    (** [del_user_api_keys_id t ~id () ] deletes the key referenced by [id] from
-        the user keys. *)
+    val delete_user_api_keys_id : t -> id:string -> unit -> Json.t
+    (** [delete_user_api_keys_id t ~id () ] deletes the key referenced by [id]
+        from the user keys. *)
+  end
+
+  module Devices : sig
+    (** This module manages API part related to devices. *)
+
+    (** Actions executable with a device. *)
+    type action = Power_on | Power_off | Reboot | Reinstall | Rescue
+
+    (** Os available when creating a new device. *)
+    type os =
+      | Debian_9
+      | Debian_10
+      | NixOs_21_05
+      | Ubuntu_18_04
+      | Ubuntu_20_04
+      | Ubuntu_21_04
+      | FreeBSD_11_2
+      | Centos_8
+
+    (** Locations available when deploying a new device. *)
+    type location =
+      | Washington
+      | Dallas
+      | Silicon_valley
+      | Sao_paulo
+      | Amsterdam
+      | Frankfurt
+      | Singapore
+      | Sydney
+
+    (** Server type when deploying a new device. *)
+    type plan = C3_small_x86 | C3_medium_x86
+
+    type config = {
+      hostname : string;
+      location : location;
+      plan : plan;
+      os : os;
+    }
+    (** This type represents the configuration wanted for a device. *)
+
+    val os_to_string : os -> string
+    (** [os_to_string os] converts an os into a string understandable by the
+        API. *)
+
+    val location_to_string : location -> string
+    (** [location_to_string facility] convert a facility into a string
+        understandable by the API. *)
+
+    val plan_to_string : plan -> string
+    (** [plan_to_string plan] convert a plan into a string understandable by the
+        API. *)
+
+    val get_devices_id : t -> id:string -> unit -> Json.t
+    (** [get_devices_id t ~id ()] returns a {!Json.t} that contains information
+        about the device specified by [id]. *)
+
+    val get_devices_id_events : t -> id:string -> unit -> Json.t
+    (** [get_device_id_events t ~id ()] retrieves information about the device
+        events. *)
+
+    val post_devices_id_actions :
+      t -> id:string -> action:action -> unit -> Json.t
+    (** [post_devices_id_actions t ~id ~action ()] executes an action on the
+        device specified by its id. *)
+
+    val delete_devices_id : t -> id:string -> unit -> Json.t
+    (** [delete_devices_id t ~id ()] deletes a device on Equinix and returns a
+        {!Json.t} with the result. *)
   end
 
   module Orga : sig
@@ -73,6 +142,15 @@ module type API = sig
     val get_projects_id : t -> id:string -> unit -> Json.t
     (** [get_projects_id t ~id ()] returns the {!Json.t} that is referenced by
         the [id] given in parameter. *)
+
+    val get_projects_id_devices : t -> id:string -> unit -> Json.t
+    (** [get_projects_id_devices t ~id ()] returns the {!Json.t} that contains
+        all the devices related to the project [id]. *)
+
+    val post_projects_id_devices :
+      t -> id:string -> config:Devices.config -> unit -> Json.t
+    (** [post_projects_id_devicest ~id ~config ()] creates a machine on the
+        Equinix with the {!Devices.config} specification *)
   end
 
   module Users : sig
@@ -81,8 +159,6 @@ module type API = sig
     val get_user : t -> Json.t
     (** [get_user t] returns informations about the user linked to the API key. *)
   end
-
-  module Metal : sig end
 end
 
 module type S = CallAPI.S

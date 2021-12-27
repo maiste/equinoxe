@@ -28,7 +28,7 @@ module Default_api = Piaf_api
 open Json.Infix
 
 (* Fonctor to build API using a specific call API system. *)
-module Make (C : CallAPI.S) = struct
+module Make (C : CallAPI.S) : API = struct
   type t = C.t
 
   let create ~endpoint ?token () = C.create ~endpoint ?token ()
@@ -45,9 +45,91 @@ module Make (C : CallAPI.S) = struct
       let path = "user/api-keys" in
       C.post t ~path json |> C.run
 
-    let del_user_api_keys_id t ~id () =
+    let delete_user_api_keys_id t ~id () =
       let path = Filename.concat "user/api-keys/" id in
-      C.delete t ~path () |> C.run
+      C.delete t ~path () |> C.run |> Json.Private.filter_error
+  end
+
+  module Devices = struct
+    type action = Power_on | Power_off | Reboot | Reinstall | Rescue
+
+    type os =
+      | Debian_9
+      | Debian_10
+      | NixOs_21_05
+      | Ubuntu_18_04
+      | Ubuntu_20_04
+      | Ubuntu_21_04
+      | FreeBSD_11_2
+      | Centos_8
+
+    type location =
+      | Washington
+      | Dallas
+      | Silicon_valley
+      | Sao_paulo
+      | Amsterdam
+      | Frankfurt
+      | Singapore
+      | Sydney
+
+    type plan = C3_small_x86 | C3_medium_x86
+
+    type config = {
+      hostname : string;
+      location : location;
+      plan : plan;
+      os : os;
+    }
+
+    let os_to_string = function
+      | Debian_9 -> "debian_9"
+      | Debian_10 -> "debian_10"
+      | NixOs_21_05 -> "nixos_21_05"
+      | Ubuntu_18_04 -> "ubuntu_18_04"
+      | Ubuntu_20_04 -> "ubuntu_20_04"
+      | Ubuntu_21_04 -> "ubuntu_21_04"
+      | FreeBSD_11_2 -> "freebsd_11_2"
+      | Centos_8 -> "centos_8"
+
+    let location_to_string = function
+      | Washington -> "DC"
+      | Dallas -> "DA"
+      | Silicon_valley -> "SV"
+      | Sao_paulo -> "SP"
+      | Amsterdam -> "AM"
+      | Frankfurt -> "FR"
+      | Singapore -> "SG"
+      | Sydney -> "SY"
+
+    let plan_to_string = function
+      | C3_small_x86 -> "c3.small.x86"
+      | C3_medium_x86 -> "c3.medium.x86"
+
+    let get_devices_id t ~id () =
+      let path = Filename.concat "devices" id in
+      C.get t ~path () |> C.run |> Json.Private.filter_error
+
+    let get_devices_id_events t ~id () =
+      let path = Format.sprintf "devices/%s/events" id in
+      C.get t ~path () |> C.run |> Json.Private.filter_error
+
+    let post_devices_id_actions t ~id ~action () =
+      let action =
+        match action with
+        | Power_on -> "power_on"
+        | Power_off -> "power_off"
+        | Reboot -> "reboot"
+        | Reinstall -> "reinstall"
+        | Rescue -> "rescue"
+      in
+      let path = Format.sprintf "devices/%s/actions?type=%s" id action in
+      let json = Json.create () in
+      C.post t ~path json |> C.run |> Json.Private.filter_error
+
+    let delete_devices_id t ~id () =
+      let path = Filename.concat "devices" id in
+      C.delete t ~path () |> C.run |> Json.Private.filter_error
   end
 
   module Projects = struct
@@ -57,7 +139,23 @@ module Make (C : CallAPI.S) = struct
 
     let get_projects_id t ~id () =
       let path = Filename.concat "projects" id in
-      C.get t ~path () |> C.run
+      C.get t ~path () |> C.run |> Json.Private.filter_error
+
+    let get_projects_id_devices t ~id () =
+      let path = Format.sprintf "projects/%s/devices" id in
+      C.get t ~path () |> C.run |> Json.Private.filter_error
+
+    let post_projects_id_devices t ~id ~config () =
+      let path = Format.sprintf "projects/%s/devices" id in
+      let json =
+        Devices.(
+          Json.create ()
+          -+> ("metro", ~+(location_to_string config.location))
+          -+> ("plan", ~+(plan_to_string config.plan))
+          -+> ("operating_system", ~+(os_to_string config.os))
+          -+> ("hostname", ~+(config.hostname)))
+      in
+      C.post t ~path json |> C.run |> Json.Private.filter_error
   end
 
   module Users = struct
@@ -73,8 +171,6 @@ module Make (C : CallAPI.S) = struct
 
     let get_organizations_id t ~id () =
       let path = Filename.concat "organizations" id in
-      C.get t ~path () |> C.run
+      C.get t ~path () |> C.run |> Json.Private.filter_error
   end
-
-  module Metal = struct end
 end

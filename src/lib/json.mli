@@ -35,10 +35,6 @@ val create : ?kind:[ `Str of string | `Obj | `Arr ] -> unit -> t
 val error : string -> t
 (** [error msg] produces a type [t] from an error message. *)
 
-val filter_error : t -> t
-(** [filter_error json] checks for a possible errors fields in [json]. If it's
-    not the case, the json is not modified. *)
-
 val of_string : string -> t
 (** [of_string str] takes a string [str] representing a JSON and transform it
     into an {!t} object you can manipulate with this module. *)
@@ -108,6 +104,7 @@ end
 module Private : sig
   (** /!\ Private area, this should not be used while using the API! *)
 
-  val of_res_str : (string, [ `Msg of string ]) result -> t
-  (** [of_res_str r] transforms a result into a {!t}. *)
+  val filter_error : t -> t
+  (** [filter_error json] checks for a possible errors fields in [json]. If it's
+      not the case, the json is not modified. *)
 end

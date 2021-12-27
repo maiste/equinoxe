@@ -81,16 +81,32 @@ module Term = struct
     in
     Arg.(value & opt meth GET & info [ "m"; "meth" ] ~doc)
 
-  let has_requiered opts = List.for_all Option.is_some opts
+  let has_requiered opts = Option.is_some opts
 
-  let man_meth ?(get = "Not supported.") ?(post = "Not supported.")
-      ?(delete = "Not supported.") ?(put = "Not supported.") () =
+  let format_info (description, args, opt_args) =
+    let arguments =
+      match (args, opt_args) with
+      | [], [] -> ""
+      | args, [] -> "Argument(s): " ^ String.concat ", " args ^ "."
+      | [], opt_args -> "Opt argument(s): " ^ String.concat ", " opt_args ^ "."
+      | args, opt_args ->
+          "Argument(s): "
+          ^ String.concat ", " args
+          ^ " - Opt argument(s): "
+          ^ String.concat ", " opt_args
+          ^ "."
+    in
+    description ^ ". " ^ arguments
+
+  let man_meth ?(get = ("Not supported", [], []))
+      ?(post = ("Not supported", [], [])) ?(delete = ("Not supported", [], []))
+      ?(put = ("Not supported", [], [])) () =
     [
       `S Manpage.s_description;
-      `P ("GET: " ^ get);
-      `P ("POST: " ^ post);
-      `P ("PUT: " ^ put);
-      `P ("DELETE: " ^ delete);
+      `P ("GET: " ^ format_info get);
+      `P ("POST: " ^ format_info post);
+      `P ("PUT: " ^ format_info put);
+      `P ("DELETE: " ^ format_info delete);
     ]
 
   let default_exits =

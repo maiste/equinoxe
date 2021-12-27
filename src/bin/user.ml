@@ -44,7 +44,7 @@ let user_api_keys meth description write =
   | GET -> Equinoxe.Users.get_user e |> Json.pp_r
   | POST ->
       let read_only = not write in
-      let has_requiered = has_requiered [ description ] in
+      let has_requiered = has_requiered description in
       let description = Option.get description in
       if has_requiered then
         Equinoxe.Auth.post_user_api_keys e ~read_only ~description ()
@@ -57,11 +57,9 @@ let user_api_keys_id meth id =
   let e = Equinoxe.create ~endpoint () in
   match meth with
   | DELETE ->
-      if has_requiered [ id ] then
+      if has_requiered id then
         let id = Option.get id in
-        Equinoxe.Auth.del_user_api_keys_id e ~id ()
-        |> Json.filter_error
-        |> Json.to_unit_r
+        Equinoxe.Auth.delete_user_api_keys_id e ~id () |> Json.to_unit_r
         |> function
         | Ok () ->
             Format.printf "Api key %s deleted.@." id;
@@ -75,14 +73,18 @@ let user_api_keys_id meth id =
 let user_t =
   let doc = " Manage user." in
   let exits = default_exits in
-  let man = man_meth ~get:"Retrieve informations about the current user." () in
+  let man =
+    man_meth ~get:("Retrieve informations about the current user.", [], []) ()
+  in
   Term.(term_result (const user $ meth_t), info "/user" ~doc ~exits ~man)
 
 let user_api_keys_t =
   let doc = "Manage user api-keys." in
   let man =
-    man_meth ~get:"Retrieve the all the api keys."
-      ~post:"Create a new api key. Argument(s): ?read_only, description." ()
+    man_meth
+      ~get:("Retrieve the all the api keys", [], [])
+      ~post:("Create a new api key", [ "description" ], [ "write" ])
+      ()
   in
   let exits = default_exits in
   let write_t =
@@ -100,7 +102,7 @@ let user_api_keys_t =
 let user_api_keys_id_t =
   let doc = "Manage user api-keys with an id." in
   let exits = default_exits in
-  let man = man_meth ~delete:"Delete an api key. Argument(s): id." () in
+  let man = man_meth ~delete:("Delete an api key", [ "id" ], []) () in
   let id_t =
     let doc = "The ID of the key. It can be obtained with GET /user/api-keys" in
     Arg.(value & opt (some string) None & info [ "id" ] ~doc)
