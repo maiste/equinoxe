@@ -61,6 +61,10 @@ module Make (C : CallAPI.S) : API = struct
       let path = Filename.concat "devices" id in
       C.get t ~path () |> C.run |> Json.Private.filter_error
 
+    let get_devices_id_events t ~id () =
+      let path = Format.sprintf "devices/%s/events" id in
+      C.get t ~path () |> C.run |> Json.Private.filter_error
+
     let delete_devices_id t ~id () =
       let path = Filename.concat "devices" id in
       C.delete t ~path () |> C.run |> Json.Private.filter_error
