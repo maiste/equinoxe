@@ -55,7 +55,9 @@ let organizations_t =
   let exits = default_exits in
   let man =
     man_meth
-      ~get:"Retrieve information about organizations related to the user." ()
+      ~get:
+        ("Retrieve information about organizations related to the user", [], [])
+      ()
   in
 
   Term.
@@ -66,9 +68,10 @@ let organizations_id_t =
   let doc = "Show the organization of the user referenced by the id." in
   let exits = default_exits in
   let man =
-    man_meth ~get:"Retrieve information about a specific organization" ()
+    man_meth
+      ~get:("Retrieve information about a specific organization", [ "id" ], [])
+      ()
   in
-
   let id_t =
     let doc = "The organization id" in
     Arg.(value & opt (some string) None & info [ "id" ] ~doc)

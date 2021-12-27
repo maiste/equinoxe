@@ -73,14 +73,18 @@ let user_api_keys_id meth id =
 let user_t =
   let doc = " Manage user." in
   let exits = default_exits in
-  let man = man_meth ~get:"Retrieve informations about the current user." () in
+  let man =
+    man_meth ~get:("Retrieve informations about the current user.", [], []) ()
+  in
   Term.(term_result (const user $ meth_t), info "/user" ~doc ~exits ~man)
 
 let user_api_keys_t =
   let doc = "Manage user api-keys." in
   let man =
-    man_meth ~get:"Retrieve the all the api keys."
-      ~post:"Create a new api key. Argument(s): ?read_only, description." ()
+    man_meth
+      ~get:("Retrieve the all the api keys", [], [])
+      ~post:("Create a new api key", [ "description" ], [ "write" ])
+      ()
   in
   let exits = default_exits in
   let write_t =
@@ -98,7 +102,7 @@ let user_api_keys_t =
 let user_api_keys_id_t =
   let doc = "Manage user api-keys with an id." in
   let exits = default_exits in
-  let man = man_meth ~delete:"Delete an api key. Argument(s): id." () in
+  let man = man_meth ~delete:("Delete an api key", [ "id" ], []) () in
   let id_t =
     let doc = "The ID of the key. It can be obtained with GET /user/api-keys" in
     Arg.(value & opt (some string) None & info [ "id" ] ~doc)

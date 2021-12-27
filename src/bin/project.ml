@@ -65,7 +65,9 @@ let projects_t =
   let doc = "Show all the projects of the user." in
   let exits = default_exits in
   let man =
-    man_meth ~get:"Retrieve information about projects related to the user." ()
+    man_meth
+      ~get:("Retrieve information about projects related to the user", [], [])
+      ()
   in
 
   Term.(term_result (const projects $ meth_t), info "/projects" ~doc ~exits ~man)
@@ -75,7 +77,8 @@ let projects_id_t =
   let exits = default_exits in
   let man =
     man_meth
-      ~get:"Retrieve information about a specific project. Argument(s): id" ()
+      ~get:("Retrieve information about a specific project", [ "id" ], [])
+      ()
   in
   let id_t =
     let doc = "The project id" in
@@ -93,8 +96,10 @@ let projects_id_devices_t =
   let man =
     man_meth
       ~get:
-        "Retrieve information about about devices associated with a specific \
-         project. Argument(s): id."
+        ( "Retrieve information about about devices associated with a specific \
+           project",
+          [ "id" ],
+          [] )
       ()
   in
   let id_t =
