@@ -55,6 +55,8 @@ module type API = sig
   module Devices : sig
     (** This module manages API part related to devices. *)
 
+    type action = Power_on | Power_off | Reboot | Reinstall | Rescue
+
     type config = {
       facility : string;
       plan : string;
@@ -69,6 +71,11 @@ module type API = sig
     val get_devices_id_events : t -> id:string -> unit -> Json.t
     (** [get_device_id_events t ~id ()] retrieves information about the device
         events. *)
+
+    val post_devices_id_actions :
+      t -> id:string -> action:action -> unit -> Json.t
+    (** [post_devices_id_actions t ~id ~action ()] executes an action on the
+        device specified by its id. *)
 
     val delete_devices_id : t -> id:string -> unit -> Json.t
     (** [delete_devices_id t ~id ()] deletes a device on Equinix and returns a

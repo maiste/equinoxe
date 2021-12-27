@@ -51,6 +51,8 @@ module Make (C : CallAPI.S) : API = struct
   end
 
   module Devices = struct
+    type action = Power_on | Power_off | Reboot | Reinstall | Rescue
+
     type config = {
       facility : string;
       plan : string;
@@ -64,6 +66,19 @@ module Make (C : CallAPI.S) : API = struct
     let get_devices_id_events t ~id () =
       let path = Format.sprintf "devices/%s/events" id in
       C.get t ~path () |> C.run |> Json.Private.filter_error
+
+    let post_devices_id_actions t ~id ~action () =
+      let action =
+        match action with
+        | Power_on -> "power_on"
+        | Power_off -> "power_off"
+        | Reboot -> "reboot"
+        | Reinstall -> "reinstall"
+        | Rescue -> "rescue"
+      in
+      let path = Format.sprintf "devices/%s/actions?type=%s" id action in
+      let json = Json.create () in
+      C.post t ~path json |> C.run |> Json.Private.filter_error
 
     let delete_devices_id t ~id () =
       let path = Filename.concat "devices" id in
