@@ -44,7 +44,7 @@ let user_api_keys meth description write =
   | GET -> Equinoxe.Users.get_user e |> Json.pp_r
   | POST ->
       let read_only = not write in
-      let has_requiered = has_requiered [ description ] in
+      let has_requiered = has_requiered description in
       let description = Option.get description in
       if has_requiered then
         Equinoxe.Auth.post_user_api_keys e ~read_only ~description ()
@@ -57,7 +57,7 @@ let user_api_keys_id meth id =
   let e = Equinoxe.create ~endpoint () in
   match meth with
   | DELETE ->
-      if has_requiered [ id ] then
+      if has_requiered id then
         let id = Option.get id in
         Equinoxe.Auth.delete_user_api_keys_id e ~id () |> Json.to_unit_r
         |> function

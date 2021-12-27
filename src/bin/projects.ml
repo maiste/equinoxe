@@ -42,7 +42,7 @@ let projects_id meth id =
   let e = Equinoxe.create ~endpoint () in
   match meth with
   | GET ->
-      if has_requiered [ id ] then
+      if has_requiered id then
         let id = Option.get id in
         Equinoxe.Projects.get_projects_id e ~id () |> Json.pp_r
       else not_all_requiered_r [ "id" ]
@@ -53,7 +53,7 @@ let projects_id_devices meth id =
   let e = Equinoxe.create ~endpoint () in
   match meth with
   | GET ->
-      if has_requiered [ id ] then
+      if has_requiered id then
         let id = Option.get id in
         Equinoxe.Projects.get_projects_id_devices e ~id () |> Json.pp_r
       else not_all_requiered_r [ "id" ]

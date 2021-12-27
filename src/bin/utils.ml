@@ -81,7 +81,7 @@ module Term = struct
     in
     Arg.(value & opt meth GET & info [ "m"; "meth" ] ~doc)
 
-  let has_requiered opts = List.for_all Option.is_some opts
+  let has_requiered opts = Option.is_some opts
 
   let format_info (description, args, opt_args) =
     let arguments =

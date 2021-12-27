@@ -35,12 +35,12 @@ let devices_id meth id =
   let e = Equinoxe.create ~endpoint () in
   match meth with
   | GET ->
-      if has_requiered [ id ] then
+      if has_requiered id then
         let id = Option.get id in
         Equinoxe.Devices.get_devices_id e ~id () |> Json.pp_r
       else not_all_requiered_r [ "id" ]
   | DELETE ->
-      if has_requiered [ id ] then
+      if has_requiered id then
         let id = Option.get id in
         Equinoxe.Devices.delete_devices_id e ~id () |> Json.pp_r
       else not_all_requiered_r [ "id" ]
@@ -51,7 +51,7 @@ let devices_id_actions meth id action =
   let e = Equinoxe.create ~endpoint () in
   match meth with
   | POST ->
-      if has_requiered [ id ] then
+      if has_requiered id then
         let id = Option.get id in
         Equinoxe.Devices.post_devices_id_actions e ~id ~action () |> Json.pp_r
       else not_all_requiered_r [ "id"; "actions" ]
@@ -62,7 +62,7 @@ let devices_id_events meth id =
   let e = Equinoxe.create ~endpoint () in
   match meth with
   | GET ->
-      if has_requiered [ id ] then
+      if has_requiered id then
         let id = Option.get id in
         Equinoxe.Devices.get_devices_id_events e ~id () |> Json.pp_r
       else not_all_requiered_r [ "id" ]
