@@ -42,7 +42,7 @@ let device_id meth id =
   | DELETE ->
       if has_requiered [ id ] then
         let id = Option.get id in
-        Equinoxe.Devices.del_devices_id e ~id () |> Json.pp_r
+        Equinoxe.Devices.delete_devices_id e ~id () |> Json.pp_r
       else not_all_requiered_r [ "id" ]
   | meth -> not_supported_r meth "/devices/{id}"
 

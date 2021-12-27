@@ -45,7 +45,7 @@ module Make (C : CallAPI.S) : API = struct
       let path = "user/api-keys" in
       C.post t ~path json |> C.run
 
-    let del_user_api_keys_id t ~id () =
+    let delete_user_api_keys_id t ~id () =
       let path = Filename.concat "user/api-keys/" id in
       C.delete t ~path () |> C.run |> Json.Private.filter_error
   end
@@ -61,7 +61,7 @@ module Make (C : CallAPI.S) : API = struct
       let path = Filename.concat "devices" id in
       C.get t ~path () |> C.run |> Json.Private.filter_error
 
-    let del_devices_id t ~id () =
+    let delete_devices_id t ~id () =
       let path = Filename.concat "devices" id in
       C.delete t ~path () |> C.run |> Json.Private.filter_error
   end

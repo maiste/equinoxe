@@ -47,9 +47,9 @@ module type API = sig
     (** [post_user_api_keys ~read_only ~description ()] creates a new API key on
         Equinix. Default value to read_only is true. *)
 
-    val del_user_api_keys_id : t -> id:string -> unit -> Json.t
-    (** [del_user_api_keys_id t ~id () ] deletes the key referenced by [id] from
-        the user keys. *)
+    val delete_user_api_keys_id : t -> id:string -> unit -> Json.t
+    (** [delete_user_api_keys_id t ~id () ] deleteetes the key referenced by
+        [id] from the user keys. *)
   end
 
   module Devices : sig
@@ -66,9 +66,9 @@ module type API = sig
     (** [get_devices_id t ~id ()] returns a {!Json.t} that contains information
         about the device specified by [id]. *)
 
-    val del_devices_id : t -> id:string -> unit -> Json.t
-    (** [del_devices_id t ~id ()] deletes a device on Equinix and returns a
-        {!Json.t} with the result. *)
+    val delete_devices_id : t -> id:string -> unit -> Json.t
+    (** [delete_devices_id t ~id ()] deleteetes a device on Equinix and returns
+        a {!Json.t} with the result. *)
   end
 
   module Orga : sig

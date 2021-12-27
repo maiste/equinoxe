@@ -59,7 +59,7 @@ let user_api_keys_id meth id =
   | DELETE ->
       if has_requiered [ id ] then
         let id = Option.get id in
-        Equinoxe.Auth.del_user_api_keys_id e ~id () |> Json.to_unit_r
+        Equinoxe.Auth.delete_user_api_keys_id e ~id () |> Json.to_unit_r
         |> function
         | Ok () ->
             Format.printf "Api key %s deleted.@." id;
