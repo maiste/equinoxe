@@ -30,9 +30,7 @@ open Utils.Term
 
 (* Helpers *)
 
-type config = Equinoxe.Devices.config
-
-let config hostname location plan os =
+zsh:1: command not found: :wq
   if
     has_requiered hostname
     && has_requiered location
@@ -48,10 +46,6 @@ let config hostname location plan os =
           os = Option.get os;
         }
   else None
-
-let create_devices e id config =
-  if has_requiered id && has_requiered config then e
-  else not_all_requiered_r [ "id"; "hostname"; "plan"; "facility"; "os" ]
 
 (* Actions *)
 
