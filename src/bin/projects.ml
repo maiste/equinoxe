@@ -107,7 +107,7 @@ let projects_id_devices_t =
     Arg.(value & opt (some string) None & info [ "id" ] ~doc)
   in
   Term.
-    ( term_result (const projects_id $ meth_t $ id_t),
+    ( term_result (const projects_id_devices $ meth_t $ id_t),
       info "/projects/id/devices" ~doc ~exits ~man )
 
 let t = [ projects_t; projects_id_t; projects_id_devices_t ]
