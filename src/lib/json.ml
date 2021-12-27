@@ -51,18 +51,6 @@ let conversion_error got expected =
   in
   error error_msg
 
-let filter_error json =
-  json >>= function
-  | `O fields as json -> (
-      List.assoc_opt "errors" fields |> function
-      | Some (`A [ `String s ]) ->
-          let msg =
-            Format.sprintf "The API returns the following error \"%s\"." s
-          in
-          error msg
-      | _ -> Ok json)
-  | json -> Ok json
-
 let of_string content =
   try Ok (Ezjsonm.from_string content)
   with Ezjsonm.Parse_error (_, str_err) -> error str_err
@@ -164,5 +152,15 @@ module Infix = struct
 end
 
 module Private = struct
-  let of_res_str r = Result.bind r (fun str -> Ok (`String str))
+  let filter_error json =
+    json >>= function
+    | `O fields as json -> (
+        List.assoc_opt "errors" fields |> function
+        | Some (`A [ `String s ]) ->
+            let msg =
+              Format.sprintf "The API returns the following error \"%s\"." s
+            in
+            error msg
+        | _ -> Ok json)
+    | json -> Ok json
 end

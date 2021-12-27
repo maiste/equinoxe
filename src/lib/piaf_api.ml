@@ -108,14 +108,14 @@ let post t ~path json =
   | Ok body ->
       let* resp = post_from t ~path body in
       convert_to_json resp
-  | e -> Lwt.return @@ Json.Private.of_res_str e
+  | Error (`Msg e) -> Lwt.return @@ Json.error e
 
 let put t ~path json =
   match Json.export json with
   | Ok body ->
       let* resp = put_from t ~path body in
       convert_to_json resp
-  | e -> Lwt.return @@ Json.Private.of_res_str e
+  | Error (`Msg e) -> Lwt.return @@ Json.error e
 
 let delete t ~path () =
   let* resp = delete_from t path in

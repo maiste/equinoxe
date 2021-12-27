@@ -47,7 +47,7 @@ module Make (C : CallAPI.S) : API = struct
 
     let del_user_api_keys_id t ~id () =
       let path = Filename.concat "user/api-keys/" id in
-      C.delete t ~path () |> C.run |> Json.filter_error
+      C.delete t ~path () |> C.run |> Json.Private.filter_error
   end
 
   module Devices = struct
@@ -59,7 +59,7 @@ module Make (C : CallAPI.S) : API = struct
 
     let get_devices_id t ~id () =
       let path = Filename.concat "devices" id in
-      C.get t ~path () |> C.run |> Json.filter_error
+      C.get t ~path () |> C.run |> Json.Private.filter_error
 
     let del_devices_id _t ~id:_ () = failwith "TODO"
   end
@@ -71,11 +71,11 @@ module Make (C : CallAPI.S) : API = struct
 
     let get_projects_id t ~id () =
       let path = Filename.concat "projects" id in
-      C.get t ~path () |> C.run |> Json.filter_error
+      C.get t ~path () |> C.run |> Json.Private.filter_error
 
     let get_projects_id_devices t ~id () =
       let path = Format.sprintf "projects/%s/devices" id in
-      C.get t ~path () |> C.run |> Json.filter_error
+      C.get t ~path () |> C.run |> Json.Private.filter_error
 
     let post_projects_id_devices _t ~id:_ ~config:_ () = failwith "TODO"
   end
@@ -93,6 +93,6 @@ module Make (C : CallAPI.S) : API = struct
 
     let get_organizations_id t ~id () =
       let path = Filename.concat "organizations" id in
-      C.get t ~path () |> C.run |> Json.filter_error
+      C.get t ~path () |> C.run |> Json.Private.filter_error
   end
 end
