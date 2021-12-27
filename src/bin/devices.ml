@@ -30,7 +30,7 @@ open Utils.Term
 
 (* Actions *)
 
-let device_id meth id =
+let devices_id meth id =
   let endpoint = Conf.endpoint in
   let e = Equinoxe.create ~endpoint () in
   match meth with
@@ -46,7 +46,18 @@ let device_id meth id =
       else not_all_requiered_r [ "id" ]
   | meth -> not_supported_r meth "/devices/{id}"
 
-let device_id_events meth id =
+let devices_id_actions meth id action =
+  let endpoint = Conf.endpoint in
+  let e = Equinoxe.create ~endpoint () in
+  match meth with
+  | POST ->
+      if has_requiered [ id ] then
+        let id = Option.get id in
+        Equinoxe.Devices.post_devices_id_actions e ~id ~action () |> Json.pp_r
+      else not_all_requiered_r [ "id"; "actions" ]
+  | meth -> not_supported_r meth "/devices/{id}/actions"
+
+let devices_id_events meth id =
   let endpoint = Conf.endpoint in
   let e = Equinoxe.create ~endpoint () in
   match meth with
@@ -72,8 +83,40 @@ let devices_id_t =
     Arg.(value & opt (some string) None & info [ "id" ] ~doc)
   in
   Term.
-    ( term_result (const device_id $ meth_t $ id_t),
+    ( term_result (const devices_id $ meth_t $ id_t),
       info "/devices/id" ~doc ~exits ~man )
+
+let devices_id_actions_t =
+  let doc = "Execute an action on a specific device" in
+  let exits = default_exits in
+  let man =
+    man_meth
+      ~post:("Execute an action on a specific device", [ "id"; "action" ], [])
+      ()
+  in
+  let id_t =
+    let doc = "The device id" in
+    Arg.(value & opt (some string) None & info [ "id" ] ~doc)
+  in
+  let action_t =
+    let doc =
+      "The action to execute: power_on, power_off, reboot, reinstall, rescue"
+    in
+    let action =
+      Arg.enum
+        [
+          ("power_on", Equinoxe.Devices.Power_on);
+          ("power_off", Equinoxe.Devices.Power_off);
+          ("reboot", Equinoxe.Devices.Reboot);
+          ("reinstall", Equinoxe.Devices.Reinstall);
+          ("rescue", Equinoxe.Devices.Rescue);
+        ]
+    in
+    Arg.(required & opt (some action) None & info [ "a"; "actions" ] ~doc)
+  in
+  Term.
+    ( term_result (const devices_id_actions $ meth_t $ id_t $ action_t),
+      info "/devices/id/actions" ~doc ~exits ~man )
 
 let devices_id_events_t =
   let doc = "Show events on a specific device" in
@@ -86,7 +129,7 @@ let devices_id_events_t =
     Arg.(value & opt (some string) None & info [ "id" ] ~doc)
   in
   Term.
-    ( term_result (const device_id $ meth_t $ id_t),
+    ( term_result (const devices_id $ meth_t $ id_t),
       info "/devices/id/events" ~doc ~exits ~man )
 
-let t = [ devices_id_t; devices_id_events_t ]
+let t = [ devices_id_t; devices_id_events_t; devices_id_actions_t ]
