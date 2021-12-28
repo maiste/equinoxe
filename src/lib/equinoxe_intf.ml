@@ -29,12 +29,12 @@ module type API = sig
   (** Abstract type [t] represents the information known by the API system. *)
 
   val create :
-    endpoint:string ->
+    address:string ->
     ?token:[ `Default | `Str of string | `Path of string ] ->
     unit ->
     t
-  (** [create opts] returns an {!t} object, you need to manipulate when
-      executing requests. *)
+  (** [create ~address ~token ()] returns an {!t} object, you need to manipulate
+      when executing requests. *)
 
   module Auth : sig
     (** This module manages API part related to authentifications. *)

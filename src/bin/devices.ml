@@ -31,8 +31,8 @@ open Utils.Term
 (* Actions *)
 
 let devices_id meth id =
-  let endpoint = Conf.endpoint in
-  let e = Equinoxe.create ~endpoint () in
+  let address = Conf.address in
+  let e = Equinoxe.create ~address () in
   match meth with
   | GET ->
       if has_requiered id then
@@ -47,8 +47,8 @@ let devices_id meth id =
   | meth -> not_supported_r meth "/devices/{id}"
 
 let devices_id_actions meth id action =
-  let endpoint = Conf.endpoint in
-  let e = Equinoxe.create ~endpoint () in
+  let address = Conf.address in
+  let e = Equinoxe.create ~address () in
   match meth with
   | POST ->
       if has_requiered id then
@@ -58,8 +58,8 @@ let devices_id_actions meth id action =
   | meth -> not_supported_r meth "/devices/{id}/actions"
 
 let devices_id_events meth id =
-  let endpoint = Conf.endpoint in
-  let e = Equinoxe.create ~endpoint () in
+  let address = Conf.address in
+  let e = Equinoxe.create ~address () in
   match meth with
   | GET ->
       if has_requiered id then

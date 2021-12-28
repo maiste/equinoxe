@@ -31,7 +31,7 @@ open Json.Infix
 module Make (C : CallAPI.S) : API = struct
   type t = C.t
 
-  let create ~endpoint ?token () = C.create ~endpoint ?token ()
+  let create ~address ?token () = C.create ~address ?token ()
 
   module Auth = struct
     let get_user_api_keys t =

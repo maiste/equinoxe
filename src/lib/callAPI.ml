@@ -33,11 +33,11 @@ module type S = sig
   val token : t -> string
   (** [token t] returns the token associated to the data structure. *)
 
-  val endpoint : t -> string
-  (** [endpoint t] returns the endpoint url to the server. *)
+  val address : t -> string
+  (** [address t] returns the endpoint url to the server. *)
 
   val create :
-    endpoint:string ->
+    address:string ->
     ?token:[ `Default | `Str of string | `Path of string ] ->
     unit ->
     t

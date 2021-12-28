@@ -40,7 +40,7 @@ module Conf = struct
   let dev_repo = "git://github.com/maiste/equinoxe.git"
 
   (* API constantes. *)
-  let endpoint = "https://api.equinix.com/metal/v1/"
+  let address = "https://api.equinix.com/metal/v1/"
 
   (* General man page. *)
   let manpage =

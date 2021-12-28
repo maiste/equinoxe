@@ -30,7 +30,7 @@ open Utils.Term
 
 (* Helpers *)
 
-zsh:1: command not found: :wq
+let config hostname location plan os =
   if
     has_requiered hostname
     && has_requiered location
@@ -51,14 +51,14 @@ zsh:1: command not found: :wq
 
 let projects = function
   | GET ->
-      let endpoint = Conf.endpoint in
-      let e = Equinoxe.create ~endpoint () in
+      let address = Conf.address in
+      let e = Equinoxe.create ~address () in
       Equinoxe.Projects.get_projects e |> Json.pp_r
   | meth -> not_supported_r meth "/projects"
 
 let projects_id meth id =
-  let endpoint = Conf.endpoint in
-  let e = Equinoxe.create ~endpoint () in
+  let address = Conf.address in
+  let e = Equinoxe.create ~address () in
   match meth with
   | GET ->
       if has_requiered id then
@@ -68,8 +68,8 @@ let projects_id meth id =
   | meth -> not_supported_r meth "/projects/{id}"
 
 let projects_id_devices meth id config =
-  let endpoint = Conf.endpoint in
-  let e = Equinoxe.create ~endpoint () in
+  let address = Conf.address in
+  let e = Equinoxe.create ~address () in
   match meth with
   | GET ->
       if has_requiered id then

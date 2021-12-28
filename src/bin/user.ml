@@ -32,14 +32,14 @@ open Utils.Term
 
 let user = function
   | GET ->
-      let endpoint = Conf.endpoint in
-      let e = Equinoxe.create ~endpoint () in
+      let address = Conf.address in
+      let e = Equinoxe.create ~address () in
       Equinoxe.Users.get_user e |> Json.pp_r
   | meth -> not_supported_r meth "/user"
 
 let user_api_keys meth description write =
-  let endpoint = Conf.endpoint in
-  let e = Equinoxe.create ~endpoint () in
+  let address = Conf.address in
+  let e = Equinoxe.create ~address () in
   match meth with
   | GET -> Equinoxe.Users.get_user e |> Json.pp_r
   | POST ->
@@ -53,8 +53,8 @@ let user_api_keys meth description write =
   | meth -> not_supported_r meth "/user/api-keys"
 
 let user_api_keys_id meth id =
-  let endpoint = Conf.endpoint in
-  let e = Equinoxe.create ~endpoint () in
+  let address = Conf.address in
+  let e = Equinoxe.create ~address () in
   match meth with
   | DELETE ->
       if has_requiered id then
