@@ -38,7 +38,8 @@ let address t = t.address
 (**** Default values ****)
 
 let build_header token =
-  [ ("X-Auth-Token", token); ("Content-Type", "application/json") ]
+  let token = if token = "" then [] else [ ("X-Auth-Token", token) ] in
+  token @ [ ("Content-Type", "application/json") ]
 
 let equinoxe_default_path = Sys.path_from_home_dir ".config/equinoxe/"
 
