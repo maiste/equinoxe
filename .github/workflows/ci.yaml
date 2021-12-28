@@ -1,0 +1,41 @@
+# Inspired from mirage/alcotest
+name: Continuous Integration
+
+on:
+  pull_request:
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+        packages: [ '.' ]
+        ocaml-compiler:
+          - 4.08.x
+          - 4.09.x
+          - 4.10.x
+          - 4.11.x
+          - 4.12.x
+          - 4.13.x
+        include:
+          - os: macos-latest
+            ocaml-compiler: 4.13.x
+            packages: '.'
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout on branch
+        uses: actions/checkout@v2
+      - name: Use OCaml ${{ matrix.ocaml-compiler }}
+        uses: ocaml/setup-ocaml@v2
+        with:
+          ocaml-compiler: ${{ matrix.ocaml-compiler }}
+          opam-local-packages: $${ matrix.opam-local-packages }}
+          opam-depext-flags: --with-test
+      - name: Install opam packages
+        run: opam install ${{ matrix.packages }} --with-test --deps-only
+      - name: Run install - check - test
+        run: opam exec -- dune build @install @check @runtest
