@@ -65,8 +65,8 @@ val to_unit_r : t -> (unit, [ `Msg of string ]) result
     and returns unit if there is no error. *)
 
 val pp_r : t -> (unit, [ `Msg of string ]) result
-(** [pp_r json] prints the json if it's a well format json and returns Ok
-    ().contents Otherwise, it returns an error. *)
+(** [pp_r json] prints the json if it's a well format json and returns Ok ().
+    Otherwise, it returns an error. *)
 
 (** {3: Setters} *)
 

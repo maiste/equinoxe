@@ -61,7 +61,7 @@ let geto json name =
       match List.assoc_opt name fields with
       | None ->
           let msg =
-            Format.sprintf "JSON object doesn't contain the %s field" name
+            Format.sprintf "JSON object doesn't contain the %s field." name
           in
           error msg
       | Some json -> Ok json)
