@@ -32,14 +32,14 @@ open Utils.Term
 
 let organizations = function
   | GET ->
-      let endpoint = Conf.endpoint in
-      let e = Equinoxe.create ~endpoint () in
+      let address = Conf.address in
+      let e = Equinoxe.create ~address () in
       Equinoxe.Orga.get_organizations e |> Json.pp_r
   | meth -> not_supported_r meth "/organizations"
 
 let organizations_id meth id =
-  let endpoint = Conf.endpoint in
-  let e = Equinoxe.create ~endpoint () in
+  let address = Conf.address in
+  let e = Equinoxe.create ~address () in
   match meth with
   | GET ->
       if has_requiered id then

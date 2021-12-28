@@ -30,10 +30,10 @@ module Resp = Piaf.Response
 
 (**** Type definitions ****)
 
-type t = { endpoint : string; token : string }
+type t = { address : string; token : string }
 
 let token t = t.token
-let endpoint t = t.endpoint
+let address t = t.address
 
 (**** Default values ****)
 
@@ -73,31 +73,31 @@ let get_token = function
 
 let get_from t path =
   let headers = build_header t.token in
-  let url = Filename.concat t.endpoint path |> Uri.of_string in
+  let url = Filename.concat t.address path |> Uri.of_string in
   Client.get ~headers url
 
 let post_from t ~path body =
   let headers = build_header t.token in
-  let url = Filename.concat t.endpoint path |> Uri.of_string in
+  let url = Filename.concat t.address path |> Uri.of_string in
   let body = Body.of_string body in
   Client.post ~headers ~body url
 
 let put_from t ~path body =
   let headers = build_header t.token in
-  let url = Filename.concat t.endpoint path |> Uri.of_string in
+  let url = Filename.concat t.address path |> Uri.of_string in
   let body = Body.of_string body in
   Client.put ~headers ~body url
 
 let delete_from t path =
   let headers = build_header t.token in
-  let url = Filename.concat t.endpoint path |> Uri.of_string in
+  let url = Filename.concat t.address path |> Uri.of_string in
   Client.delete ~headers url
 
 (**** API ****)
 
-let create ~endpoint ?(token = `Default) () =
+let create ~address ?(token = `Default) () =
   let token = get_token token in
-  { endpoint; token }
+  { address; token }
 
 let get t ~path () =
   let* resp = get_from t path in
