@@ -29,7 +29,8 @@ type t
 
 (** {1: Creation} *)
 
-val create : ?kind:[ `Str of string | `Obj | `Arr ] -> unit -> t
+val create :
+  ?kind:[ `Str of string | `Float of float | `Obj | `Arr ] -> unit -> t
 (** [create ()] generates a new {!t} object. Default kind value is [`Obj]. *)
 
 val error : string -> t
@@ -98,7 +99,10 @@ module Infix : sig
   (** [json |+> value] executes {!adda}. *)
 
   val ( ~+ ) : string -> t
-  (** [$ str] is an infix operator that wraps [create ~kind:(`Str str) ()]. *)
+  (** [~+ str] is an infix operator that wraps [create ~kind:(`Str str) ()]. *)
+
+  val ( ~$ ) : float -> t
+  (** [~$ num] is an infix operator that wraps [create ~kind:(`Float f) ()]. *)
 end
 
 module Private : sig
