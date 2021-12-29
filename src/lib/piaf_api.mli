@@ -22,7 +22,7 @@
 (*                                                                           *)
 (*****************************************************************************)
 
-(** It provides a API call system relying on Piaf. *)
+(** It provides an API call system relying on Piaf. *)
 
 include CallAPI.S
 (** @inline *)

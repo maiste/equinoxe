@@ -27,7 +27,7 @@ module Json = Json
 module Default_api = Piaf_api
 open Json.Infix
 
-(* Fonctor to build API using a specific call API system. *)
+(* Functor to build API using a specific call API system. *)
 module Make (C : CallAPI.S) : API = struct
   type t = C.t
 

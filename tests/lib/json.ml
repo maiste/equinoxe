@@ -134,7 +134,7 @@ let test_geto () =
   let j_str = Json.export j in
   Alcotest.(
     check (result string error_msg) "get a field not from an object" j_str
-      (Error (`Msg "Trying to access a non object field in JSON.")))
+      (Error (`Msg "Trying to access a non-object field in JSON.")))
 
 let test_geto_infix () =
   let open Json.Infix in
@@ -150,7 +150,7 @@ let test_geto_infix () =
   let j_str = Json.export j in
   Alcotest.(
     check (result string error_msg) "get a field not from an object" j_str
-      (Error (`Msg "Trying to access a non object field in JSON.")))
+      (Error (`Msg "Trying to access a non-object field in JSON.")))
 
 let test_geta () =
   let open Json.Infix in
@@ -168,7 +168,7 @@ let test_geta () =
   let j_str = Json.export j in
   Alcotest.(
     check (result string error_msg) "get a nth not from array" j_str
-      (Error (`Msg "Trying to access a non array field in JSON.")))
+      (Error (`Msg "Trying to access a non-array field in JSON.")))
 
 let test_geta_infix () =
   let open Json.Infix in
@@ -184,7 +184,7 @@ let test_geta_infix () =
   let j_str = Json.export j in
   Alcotest.(
     check (result string error_msg) "get a nth not from array" j_str
-      (Error (`Msg "Trying to access a non array field in JSON.")))
+      (Error (`Msg "Trying to access a non-array field in JSON.")))
 
 let test_geto_from_a () =
   let open Json.Infix in
@@ -205,7 +205,7 @@ let test_geto_from_a () =
   let j_str = Json.export j in
   Alcotest.(
     check (result string error_msg) "get object in array" j_str
-      (Error (`Msg "Trying to access a non array field in JSON.")))
+      (Error (`Msg "Trying to access a non-array field in JSON.")))
 
 let test_geto_from_a_infix () =
   let open Json.Infix in
@@ -223,7 +223,7 @@ let test_geto_from_a_infix () =
   let j_str = Json.export j in
   Alcotest.(
     check (result string error_msg) "get object in array" j_str
-      (Error (`Msg "Trying to access a non array field in JSON.")))
+      (Error (`Msg "Trying to access a non-array field in JSON.")))
 
 let test_to_int_r () =
   let open Json.Infix in

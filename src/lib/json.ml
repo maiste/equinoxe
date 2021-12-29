@@ -67,7 +67,7 @@ let geto json name =
           error msg
       | Some json -> Ok json)
   | _ ->
-      let msg = "Trying to access a non object field in JSON." in
+      let msg = "Trying to access a non-object field in JSON." in
       error msg
 
 let geta json nth =
@@ -81,7 +81,7 @@ let geta json nth =
           error msg
       | Some item -> Ok item)
   | _ ->
-      let msg = "Trying to access a non array field in JSON." in
+      let msg = "Trying to access a non-array field in JSON." in
       error msg
 
 let geto_from_a json (k, v) : t =
@@ -99,7 +99,7 @@ let geto_from_a json (k, v) : t =
         let msg = "Can't find the field into the array." in
         error msg)
   | _ ->
-      let msg = "Trying to access a non array field in JSON." in
+      let msg = "Trying to access a non-array field in JSON." in
       error msg
 
 let to_int_r json =

@@ -23,27 +23,27 @@
 (*****************************************************************************)
 
 module type S = sig
-  (** The [S] module gathers all the methodes you need to be able to execute
-      http to contact a API server. It must send application/json request. *)
+  (** The [S] module gathers all the methods you need to be able to execute HTTP
+      requests to contact an API server. It must send application/json request. *)
 
   type t
   (** [t] contains the information about the token you are using to identify the
-      client and the adress of the server (url). *)
+      client and the address of the server (URL). *)
 
   val token : t -> string
-  (** [token t] returns the token associated to the data structure. *)
+  (** [token t] returns the token associated with the data structure. *)
 
   val address : t -> string
-  (** [address t] returns the endpoint url to the server. *)
+  (** [address t] returns the address of the server. *)
 
   val create :
     address:string ->
     ?token:[ `Default | `Str of string | `Path of string ] ->
     unit ->
     t
-  (** [create ~endpoint ~token ()] builds the configuration you are going to use
-      to execute the request. If [token] is not provided, it will try to extract
-      the token from the environment variable [EQUINOXE_TOKEN]. *)
+  (** [create ~address ~token ()] builds the configuration you are going to use
+      to execute the request. If [token] is not provided, it will extract the
+      token from the environment variable [EQUINOXE_TOKEN]. *)
 
   val get : t -> path:string -> unit -> Json.t Lwt.t
   (** [get t ~path ()] executes a request to the server as a [GET] call and,
