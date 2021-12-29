@@ -19,5 +19,6 @@
     (odoc :with-doc)
     (ezjsonm (>= 1.3.0))
     (alcotest :with-test)
+    (alcotest-lwt :with-test)
     cmdliner
     piaf))

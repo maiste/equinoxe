@@ -1,3 +1,7 @@
 (tests
   (names json callapi)
-  (libraries alcotest equinoxe))
+  (libraries alcotest
+             alcotest-lwt
+             lwt
+             piaf
+             equinoxe))
