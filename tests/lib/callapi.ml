@@ -25,69 +25,78 @@
 module Json = Equinoxe.Json
 module Http = Equinoxe.Default_api
 open Json.Infix
+open Lwt.Syntax
 open Utils
 
-let http =
-  Http.create ~address:"https://jsonplaceholder.typicode.com" ~token:(`Str "")
-    ()
+let http = Http.create ~address:"http://localhost:8080" ~token:(`Str "") ()
 
-let test_address () =
+let test_address _ () =
   let address = Http.address http in
-  Alcotest.(
-    check string "same address" address "https://jsonplaceholder.typicode.com")
+  Alcotest.(check string "same address" address "http://localhost:8080");
+  Lwt.return_unit
 
-let test_token_empty () =
+let test_token_empty _ () =
   let token = Http.token http in
-  Alcotest.(check string "empty token" token "")
+  Alcotest.(check string "empty token" token "");
+  Lwt.return_unit
 
-let test_get () =
-  let json = Http.get http ~path:"posts/1" () |> Http.run in
+let test_get _ () =
+  let* server = Helper_server.listen 8080 in
+  let* json = Http.get http ~path:"" () in
   let id = json --> "id" |> Json.to_int_r in
-  Alcotest.(check (result int error_msg) "gather id from get" id (Ok 1))
+  Alcotest.(check (result int error_msg) "gather id from get" id (Ok 1));
+  Helper_server.close server
 
-let test_post () =
+let test_post _ () =
+  let* server = Helper_server.listen 8080 in
   let body =
     Json.create ()
     -+> ("title", ~+"foo")
     -+> ("body", ~+"bar")
     -+> ("userId", ~$1.0)
   in
-  let json = Http.post http ~path:"posts" body |> Http.run in
+  let* json = Http.post http ~path:"" body in
   let id = json --> "userId" |> Json.to_int_r in
-  Alcotest.(check (result int error_msg) "gather id from post" id (Ok 1))
+  Alcotest.(check (result int error_msg) "gather id from post" id (Ok 1));
+  Helper_server.close server
 
-let test_put () =
+let test_put _ () =
+  let* server = Helper_server.listen 8080 in
   let body =
     Json.create ()
     -+> ("title", ~+"foo")
     -+> ("body", ~+"bar")
     -+> ("userId", ~$1.0)
   in
-  let json = Http.put http ~path:"posts/1" body |> Http.run in
+  let* json = Http.put http ~path:"" body in
   let id = json --> "userId" |> Json.to_int_r in
-  Alcotest.(check (result int error_msg) "gather userId from put" id (Ok 1))
+  Alcotest.(check (result int error_msg) "gather userId from put" id (Ok 1));
+  Helper_server.close server
 
-let test_delete () =
-  let json = Http.get http ~path:"posts/1" () |> Http.run in
+let test_delete _ () =
+  let* server = Helper_server.listen 8080 in
+  let* json = Http.get http ~path:"" () in
   let id = json |> Json.to_unit_r in
-  Alcotest.(check (result unit error_msg) "delete a resource" id (Ok ()))
+  Alcotest.(check (result unit error_msg) "delete a resource" id (Ok ()));
+  Helper_server.close server
 
 (* Main *)
 
 let () =
-  Alcotest.(
-    run "Http default module"
-      [
-        ( "getters",
-          [
-            test_case "Get right address" `Quick test_address;
-            test_case "Get right token" `Quick test_token_empty;
-          ] );
-        ( "call",
-          [
-            test_case "GET Method" `Quick test_get;
-            test_case "POST Method" `Quick test_post;
-            test_case "PUT Method" `Quick test_put;
-            test_case "DELETE Method" `Quick test_delete;
-          ] );
-      ])
+  Lwt_main.run
+  @@ Alcotest_lwt.(
+       run "Http default module"
+         [
+           ( "getters",
+             [
+               test_case "Get right address" `Quick test_address;
+               test_case "Get right token" `Quick test_token_empty;
+             ] );
+           ( "call",
+             [
+               test_case "GET Method" `Quick test_get;
+               test_case "POST Method" `Quick test_post;
+               test_case "PUT Method" `Quick test_put;
+               test_case "DELETE Method" `Quick test_delete;
+             ] );
+         ])
