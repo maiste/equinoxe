@@ -23,7 +23,7 @@
 (*****************************************************************************)
 
 module type API = sig
-  (** It is the signature of the API of the website. *)
+  (** It is the signature that matches the API of the website. *)
 
   type t
   (** Abstract type [t] represents the information known by the API system. *)
@@ -37,15 +37,15 @@ module type API = sig
       when executing requests. *)
 
   module Auth : sig
-    (** This module manages API part related to authentifications. *)
+    (** This module manages API parts related to authentification. *)
 
     val get_user_api_keys : t -> Json.t
     (** [get_user_api_keys t] returns the keys available for the current user. *)
 
     val post_user_api_keys :
       t -> ?read_only:bool -> description:string -> unit -> Json.t
-    (** [post_user_api_keys ~read_only ~description ()] creates a new API key on
-        Equinix. Default value to read_only is true. *)
+    (** [post_user_api_keys t ~read_only ~description ()] creates a new API key
+        on Equinix. Default value to read_only is true. *)
 
     val delete_user_api_keys_id : t -> id:string -> unit -> Json.t
     (** [delete_user_api_keys_id t ~id () ] deletes the key referenced by [id]
@@ -53,7 +53,7 @@ module type API = sig
   end
 
   module Devices : sig
-    (** This module manages API part related to devices. *)
+    (** This module manages API parts related to devices. *)
 
     (** Actions executable with a device. *)
     type action = Power_on | Power_off | Reboot | Reinstall | Rescue
@@ -122,7 +122,7 @@ module type API = sig
   end
 
   module Orga : sig
-    (** This module manages API part related to organizations. *)
+    (** This module manages API parts related to organizations. *)
 
     val get_organizations : t -> Json.t
     (** [get_organizations t] returns all the organizations associated with the
@@ -134,7 +134,7 @@ module type API = sig
   end
 
   module Projects : sig
-    (** This module manages API part related to projects. *)
+    (** This module manages API parts related to projects. *)
 
     val get_projects : t -> Json.t
     (** [get_projects t] returns all projects associated with the token. *)
@@ -154,10 +154,10 @@ module type API = sig
   end
 
   module Users : sig
-    (** This module manages API part related to users. *)
+    (** This module manages API parts related to users. *)
 
     val get_user : t -> Json.t
-    (** [get_user t] returns informations about the user linked to the API key. *)
+    (** [get_user t] returns information about the user linked to the API key. *)
   end
 end
 

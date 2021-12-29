@@ -31,7 +31,7 @@ type t
 
 val create :
   ?kind:[ `Str of string | `Float of float | `Obj | `Arr ] -> unit -> t
-(** [create ()] generates a new {!t} object. Default kind value is [`Obj]. *)
+(** [create ~kind ()] generates a new {!t} object. Default kind value is [`Obj]. *)
 
 val error : string -> t
 (** [error msg] produces a type [t] from an error message. *)
@@ -110,7 +110,7 @@ module Infix : sig
 end
 
 module Private : sig
-  (** /!\ Private area, this should not be used while using the API! *)
+  (** /!\ Private area should not be used while using the API! *)
 
   val filter_error : t -> t
   (** [filter_error json] checks for a possible errors fields in [json]. If it's

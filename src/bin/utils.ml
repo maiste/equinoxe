@@ -72,7 +72,7 @@ module Term = struct
 
   let meth_t =
     let doc =
-      "The HTTP methode you want to use. If not provided, default method is \
+      "The HTTP method you want to use. If not provided, the default method is \
        GET."
     in
     let meth =
