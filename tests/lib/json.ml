@@ -237,6 +237,20 @@ let test_to_int_r () =
       (Error
          (`Msg "Conversion error: trying to convert string (foo) into integer.")))
 
+let test_to_float_r () =
+  let open Json.Infix in
+  let j = json --> "k2" in
+  let f = Json.to_float_r j in
+  Alcotest.(check (result (float 1.0) error_msg) "get a float" f (Ok 1.0));
+  let j = json --> "k1" in
+  let f = Json.to_float_r j in
+  Alcotest.(
+    check
+      (result (float 1.0) error_msg)
+      "get a float from string" f
+      (Error
+         (`Msg "Conversion error: trying to convert string (foo) into float.")))
+
 let test_to_string_r () =
   let open Json.Infix in
   let j = json --> "k1" in
@@ -295,6 +309,7 @@ let () =
             test_case "Get object from array - Infix" `Quick
               test_geto_from_a_infix;
             test_case "Get an int" `Quick test_to_int_r;
+            test_case "Get a float" `Quick test_to_float_r;
             test_case "Get a string" `Quick test_to_string_r;
             test_case "Get a unit" `Quick test_to_unit_r;
             test_case "Get a unit from pp" `Quick test_pp_r;
