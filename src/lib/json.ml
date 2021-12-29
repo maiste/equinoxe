@@ -113,6 +113,15 @@ let to_int_r json =
       | Some i -> Ok i)
   | json -> conversion_error json "integer"
 
+let to_float_r json =
+  json >>= function
+  | `Float f -> Ok f
+  | `String s as json -> (
+      match float_of_string_opt s with
+      | None -> conversion_error json "float"
+      | Some f -> Ok f)
+  | json -> conversion_error json "float"
+
 let to_string_r json =
   json >>= function `String s -> Ok s | json -> conversion_error json "string"
 
