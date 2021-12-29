@@ -12,27 +12,33 @@
 
 ## About
 
-**Equinoxe** is a library to interact with the Equinix [API](https://metal.equinix.com/developers/api/) in *OCaml*. It can be used to gather information, deploy machines or manage your organization within an *OCaml* program. It comes with a CLI, `equinoxe-cli`, that packs most of the functionalities of the API.
+**Equinoxe** is a library to interact with the Equinix [API](https://metal.equinix.com/developers/api/) (formerly known as Packet) in *OCaml*. Users can use it to gather information, deploy machines or manage your organization within an *OCaml* program. It comes with a CLI, `equinoxe-cli`, that packs most of the functionalities of the API.
 
- :warning: This repository is based on the official API but is not an official work from Equinix. 
+ :warning: This repository is based on the official API but is not an official work from Equinix. This work is still in active development.
 
 ## Getting started
 
 ### Installation
 
-To install the **Equinoxe** library, you have to install it via pinning:
+To install the **Equinoxe** via `opam`:
+```sh
+$ opam install equinoxe
+```
 
+To install the `dev` version of **Equinoxe**, you have to install it via pinning:
 ```sh
 $ opam pin add equinoxe.dev git@github.com:maiste/equinoxe
 $ opam install equinoxe
 ```
 
-<!-- TODO: ### Usage -->
+### Usage
+
+The goal is to provide a minimal set of functions to interact with Equinix API:
 
 ## Issues
 
-Report any issue using the [GitHub bugtracker](https://github.com/maiste/equinoxe/issues)
+Report issues using the [GitHub bugtracker](https://github.com/maiste/equinoxe/issues)
 
 ## License
 
-This project is under the [MIT License](LICENSE).
+This project is under the [MIT License](LICENSE)
