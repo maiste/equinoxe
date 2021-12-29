@@ -16,8 +16,6 @@
   (description "Equinoxe is an OCaml wrapper for the Equinix API.")
   (depends
     (ocaml (>= 4.08.0))
-    (ocamlformat :dev)
-    (ocaml-lsp-server :dev)
     (odoc :with-doc)
     (ezjsonm (>= 1.3.0))
     (alcotest :with-test)
