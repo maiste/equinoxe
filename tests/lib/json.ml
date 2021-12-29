@@ -46,6 +46,11 @@ let test_create_str () =
   Alcotest.(
     check (result string error_msg) "create string" s_str (Ok "\"Hello\""))
 
+let test_create_float () =
+  let s = Json.create ~kind:(`Float 1.0) () in
+  let s_str = Json.export s in
+  Alcotest.(check (result string error_msg) "create string" s_str (Ok "1"))
+
 let test_create_error () =
   let e = Json.error "Nope!" in
   let e_str = Json.export e in
@@ -268,6 +273,7 @@ let () =
             test_case "Create array" `Quick test_create_array;
             test_case "Create object" `Quick test_create_object;
             test_case "Create string" `Quick test_create_str;
+            test_case "Create float" `Quick test_create_float;
             test_case "Create error" `Quick test_create_error;
             test_case "Create from string" `Quick test_of_string;
           ] );

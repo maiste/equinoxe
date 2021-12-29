@@ -30,6 +30,7 @@ type t = (Ezjsonm.value, [ `Msg of string ]) result
 let create ?(kind = `Obj) () =
   match kind with
   | `Str str -> Ok (`String str)
+  | `Float n -> Ok (`Float n)
   | `Obj -> Ok (`O [])
   | `Arr -> Ok (`A [])
 
@@ -144,6 +145,7 @@ let export json = json >|= fun json -> Ezjsonm.value_to_string json
 
 module Infix = struct
   let ( ~+ ) v = create ~kind:(`Str v) ()
+  let ( ~$ ) v = create ~kind:(`Float v) ()
   let ( --> ) json name = geto json name
   let ( |-> ) json nth = geta json nth
   let ( |->? ) json kv = geto_from_a json kv
