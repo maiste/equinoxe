@@ -1,6 +1,7 @@
 (lang dune 2.9)
 (generate_opam_files true)
 
+(name equinoxe)
 (source (github maiste/equinoxe))
 (license MIT)
 (authors
@@ -20,12 +21,5 @@
     (odoc :with-doc)
     (ezjsonm (>= 1.3.0))
     (alcotest :with-test)
+    cmdliner
     piaf))
-
-(package
-  (name equinoxe-bin)
-  (synopsis "A CLI for Equinix (ex Packet)")
-  (description "Equinoxe is a CLI for Equinix you can use to interact with.")
-  (depends
-    equinoxe
-    cmdliner))

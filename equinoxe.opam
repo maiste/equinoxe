@@ -16,6 +16,7 @@ depends: [
   "odoc" {with-doc}
   "ezjsonm" {>= "1.3.0"}
   "alcotest" {with-test}
+  "cmdliner"
   "piaf"
 ]
 build: [

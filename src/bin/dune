@@ -1,5 +1,5 @@
 (executable
   (name main)
   (public_name equinoxe-cli)
-  (package equinoxe-bin)
+  (package equinoxe)
   (libraries cmdliner equinoxe))
