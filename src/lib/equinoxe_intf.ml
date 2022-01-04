@@ -120,6 +120,18 @@ module type API = sig
     val delete_devices_id : t -> id:string -> unit -> Json.t
     (** [delete_devices_id t ~id ()] deletes a device on Equinix and returns a
         {!Json.t} with the result. *)
+
+    val get_devices_id_ips : t -> id:string -> unit -> Json.t
+    (** [get_devices_id_ips t ~id ()] retrieves information about the device
+        ips. *)
+  end
+
+  module Ip : sig
+    (** This module manages API parts related to ips. *)
+
+    val get_ips_id : t -> id:string -> unit -> Json.t
+    (** [get_ips_id t ~id ()] returns informations about an ip referenced by its
+        [id]. *)
   end
 
   module Orga : sig
