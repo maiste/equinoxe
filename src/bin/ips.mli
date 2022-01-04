@@ -22,16 +22,6 @@
 (*                                                                           *)
 (*****************************************************************************)
 
-module Conf = Utils.Conf
 open Cmdliner
-open Utils.Term
 
-(* Default command, display help. *)
-let default =
-  let open Conf in
-  let exits = default_exits in
-  ( Term.(ret (const (`Help (`Pager, None)))),
-    Term.info name ~version ~doc:Conf.description ~exits ~man:Conf.manpage )
-
-let commands = User.t @ Orga.t @ Projects.t @ Devices.t @ Ips.t
-let () = Term.(exit @@ eval_choice default commands)
+val t : (unit Term.t * Term.info) list

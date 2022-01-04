@@ -23,15 +23,38 @@
 (*****************************************************************************)
 
 module Conf = Utils.Conf
+module Json = Utils.Json
+module Equinoxe = Utils.Equinoxe
 open Cmdliner
 open Utils.Term
 
-(* Default command, display help. *)
-let default =
-  let open Conf in
-  let exits = default_exits in
-  ( Term.(ret (const (`Help (`Pager, None)))),
-    Term.info name ~version ~doc:Conf.description ~exits ~man:Conf.manpage )
+(* Actions *)
 
-let commands = User.t @ Orga.t @ Projects.t @ Devices.t @ Ips.t
-let () = Term.(exit @@ eval_choice default commands)
+let ips_id meth id =
+  let address = Conf.address in
+  let e = Equinoxe.create ~address () in
+  match meth with
+  | GET ->
+      if has_requiered id then
+        let id = Option.get id in
+        Equinoxe.Ip.get_ips_id e ~id () |> Json.pp_r
+      else not_all_requiered_r [ "id" ]
+  | meth -> not_supported_r meth "/ips/{id}"
+
+(* Terms *)
+let ips_id_t =
+  let doc = "Show information about a specific IP." in
+  let exits = default_exits in
+  let man =
+    man_meth
+      ~get:("Retrieve information about about an ip from its id", [ "id" ], [])
+      ()
+  in
+  let id_t =
+    let doc = "The ip id" in
+    Arg.(value & opt (some string) None & info [ "id" ] ~doc)
+  in
+  Term.
+    (term_result (const ips_id $ meth_t $ id_t), info "/ips/id" ~doc ~exits ~man)
+
+let t = [ ips_id_t ]
