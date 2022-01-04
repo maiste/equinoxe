@@ -29,12 +29,13 @@ module type API = sig
   (** Abstract type [t] represents the information known by the API system. *)
 
   val create :
-    address:string ->
+    ?address:string ->
     ?token:[ `Default | `Str of string | `Path of string ] ->
     unit ->
     t
   (** [create ~address ~token ()] returns an {!t} object, you need to manipulate
-      when executing requests. *)
+      when executing requests. Default address is
+      [https://api.equinix.com/metal/v1/]. *)
 
   module Auth : sig
     (** This module manages API parts related to authentification. *)
