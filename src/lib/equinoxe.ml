@@ -23,32 +23,31 @@
 (*****************************************************************************)
 
 include Equinoxe_intf
-module Json = Json
-module Default_api = Http_api
-open Json.Infix
 
 (* Functor to build API using a specific call API system. *)
-module Make (C : CallAPI.S) : API = struct
-  type t = C.t
+module Make (B : Backend) : API = struct
+  open Json.Infix
+
+  type t = B.t
 
   let create ?(address = "https://api.equinix.com/metal/v1/") ?token () =
-    C.create ~address ?token ()
+    B.create ~address ?token ()
 
   module Auth = struct
     let get_user_api_keys t =
       let path = "user/api-keys" in
-      C.get ~path t () |> C.run
+      B.get ~path t () |> B.run
 
     let post_user_api_keys t ?(read_only = true) ~description () =
       let read_only = ("read_only", ~+(string_of_bool read_only)) in
       let description = ("description", ~+description) in
       let json = Json.create () -+> read_only -+> description in
       let path = "user/api-keys" in
-      C.post t ~path json |> C.run
+      B.post t ~path json |> B.run
 
     let delete_user_api_keys_id t ~id () =
       let path = Filename.concat "user/api-keys/" id in
-      C.delete t ~path () |> C.run |> Json.Private.filter_error
+      B.delete t ~path () |> B.run |> Json.Private.filter_error
   end
 
   module Devices = struct
@@ -109,11 +108,11 @@ module Make (C : CallAPI.S) : API = struct
 
     let get_devices_id t ~id () =
       let path = Filename.concat "devices" id in
-      C.get t ~path () |> C.run |> Json.Private.filter_error
+      B.get t ~path () |> B.run |> Json.Private.filter_error
 
     let get_devices_id_events t ~id () =
       let path = Format.sprintf "devices/%s/events" id in
-      C.get t ~path () |> C.run |> Json.Private.filter_error
+      B.get t ~path () |> B.run |> Json.Private.filter_error
 
     let post_devices_id_actions t ~id ~action () =
       let action =
@@ -126,29 +125,29 @@ module Make (C : CallAPI.S) : API = struct
       in
       let path = Format.sprintf "devices/%s/actions?type=%s" id action in
       let json = Json.create () in
-      C.post t ~path json |> C.run |> Json.Private.filter_error
+      B.post t ~path json |> B.run |> Json.Private.filter_error
 
     let delete_devices_id t ~id () =
       let path = Filename.concat "devices" id in
-      C.delete t ~path () |> C.run |> Json.Private.filter_error
+      B.delete t ~path () |> B.run |> Json.Private.filter_error
 
     let get_devices_id_ips t ~id () =
       let path = Format.sprintf "devices/%s/ips" id in
-      C.get t ~path () |> C.run |> Json.Private.filter_error
+      B.get t ~path () |> B.run |> Json.Private.filter_error
   end
 
   module Projects = struct
     let get_projects t =
       let path = "projects" in
-      C.get t ~path () |> C.run
+      B.get t ~path () |> B.run
 
     let get_projects_id t ~id () =
       let path = Filename.concat "projects" id in
-      C.get t ~path () |> C.run |> Json.Private.filter_error
+      B.get t ~path () |> B.run |> Json.Private.filter_error
 
     let get_projects_id_devices t ~id () =
       let path = Format.sprintf "projects/%s/devices" id in
-      C.get t ~path () |> C.run |> Json.Private.filter_error
+      B.get t ~path () |> B.run |> Json.Private.filter_error
 
     let post_projects_id_devices t ~id ~config () =
       let path = Format.sprintf "projects/%s/devices" id in
@@ -160,28 +159,28 @@ module Make (C : CallAPI.S) : API = struct
           -+> ("operating_system", ~+(os_to_string config.os))
           -+> ("hostname", ~+(config.hostname)))
       in
-      C.post t ~path json |> C.run |> Json.Private.filter_error
+      B.post t ~path json |> B.run |> Json.Private.filter_error
   end
 
   module Users = struct
     let get_user t =
       let path = "user" in
-      C.get ~path t () |> C.run
+      B.get ~path t () |> B.run
   end
 
   module Orga = struct
     let get_organizations t =
       let path = "organizations" in
-      C.get t ~path () |> C.run
+      B.get t ~path () |> B.run
 
     let get_organizations_id t ~id () =
       let path = Filename.concat "organizations" id in
-      C.get t ~path () |> C.run |> Json.Private.filter_error
+      B.get t ~path () |> B.run |> Json.Private.filter_error
   end
 
   module Ip = struct
     let get_ips_id t ~id () =
       let path = Filename.concat "ips" id in
-      C.get t ~path () |> C.run |> Json.Private.filter_error
+      B.get t ~path () |> B.run |> Json.Private.filter_error
   end
 end

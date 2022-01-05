@@ -2,5 +2,18 @@
   (name equinoxe)
   (public_name equinoxe)
   (libraries ezjsonm
-             http-lwt-client
-             lwt))
+             unix
+             lwt)
+  (modules callapi
+           equinoxe
+           equinoxe_intf
+           json
+           utils))
+
+(library
+  (name equinoxe_hlc)
+  (public_name equinoxe.hlc)
+  (optional)
+  (libraries equinoxe
+             http-lwt-client)
+  (modules equinoxe_hlc))

@@ -2,4 +2,6 @@
   (name main)
   (public_name equinoxe-cli)
   (package equinoxe)
-  (libraries cmdliner equinoxe))
+  (libraries cmdliner
+             equinoxe
+             equinoxe.hlc))

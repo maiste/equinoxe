@@ -21,5 +21,9 @@
     (alcotest :with-test)
     (alcotest-lwt :with-test)
     (httpaf-lwt-unix :with-test)
+    (http-lwt-client :with-test)
     cmdliner
-    http-lwt-client))
+    )
+  (depopts
+    http-lwt-client
+    piaf))
