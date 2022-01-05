@@ -22,24 +22,34 @@
 (*                                                                           *)
 (*****************************************************************************)
 module Json = Equinoxe.Json
-open Piaf
-open Lwt.Syntax
 open Json.Infix
+
+let extract_body body =
+  let open Httpaf in
+  let buffer = Buffer.create 1024 in
+  let on_read str ~off:_ ~len:_ =
+    Bigstringaf.to_string str |> Buffer.add_string buffer
+  in
+  let on_eof () = () in
+  Body.schedule_read body ~on_eof ~on_read;
+  Buffer.contents buffer
 
 (* Many assert false as this is not supposed to test the web server but
    the API *)
-let request_handler { Server.request; _ } =
-  let* body = Body.to_string request.body in
-  let body = match body with Ok b -> b | _ -> assert false in
-  match request.meth with
-  | `GET ->
+let request_handler _ reqd =
+  let open Httpaf in
+  let request = Reqd.request reqd in
+  let request_body = Reqd.request_body reqd in
+  let body = extract_body request_body in
+  match request with
+  | { Request.meth = `GET; _ } ->
       let body =
         Json.create () -+> ("id", ~$1.0) |> Json.export |> function
         | Ok body -> body
         | _ -> assert false
       in
-      Lwt.wrap1 (Response.of_string ~body) `OK
-  | `POST | `PUT ->
+      Reqd.respond_with_string reqd (Response.create `OK) body
+  | { Request.meth = `POST | `PUT; _ } ->
       let json = Json.of_string body in
       let userId =
         json --> "userId" |> Json.to_float_r |> function
@@ -51,11 +61,25 @@ let request_handler { Server.request; _ } =
         | Ok b -> b
         | _ -> assert false
       in
-      Lwt.wrap1 (Response.of_string ~body) `OK
-  | `DELETE -> Lwt.wrap1 (Response.of_string ~body:"{}") `OK
+      Reqd.respond_with_string reqd (Response.create `OK) body
+  | { Request.meth = `DELETE; _ } ->
+      Reqd.respond_with_string reqd (Response.create `OK) "{}"
   | _ -> assert false
 
-let connection_handler = Server.create request_handler
+let error_handler (_ : Unix.sockaddr) ?request:_ error start_response =
+  let open Httpaf in
+  let response_body = start_response Headers.empty in
+  (match error with
+  | `Exn exn ->
+      Body.write_string response_body (Printexc.to_string exn);
+      Body.write_string response_body "\n"
+  | #Status.standard as error ->
+      Body.write_string response_body (Status.default_reason_phrase error));
+  Body.close_writer response_body
+
+let connection_handler =
+  let open Httpaf_lwt_unix in
+  Server.create_connection_handler ~request_handler ~error_handler
 
 let listen port =
   let address = Unix.(ADDR_INET (inet_addr_loopback, port)) in

@@ -3,5 +3,7 @@
   (libraries alcotest
              alcotest-lwt
              lwt
-             piaf
+             httpaf
+             httpaf-lwt-unix
+             bigstringaf
              equinoxe))
