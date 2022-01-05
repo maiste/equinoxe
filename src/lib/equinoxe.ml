@@ -24,7 +24,7 @@
 
 include Equinoxe_intf
 module Json = Json
-module Default_api = Piaf_api
+module Default_api = Http_api
 open Json.Infix
 
 (* Functor to build API using a specific call API system. *)
