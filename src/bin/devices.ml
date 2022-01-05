@@ -68,6 +68,17 @@ let devices_id_events meth id =
       else not_all_requiered_r [ "id" ]
   | meth -> not_supported_r meth "/devices/{id}/events"
 
+let devices_id_ips meth id =
+  let address = Conf.address in
+  let e = Equinoxe.create ~address () in
+  match meth with
+  | GET ->
+      if has_requiered id then
+        let id = Option.get id in
+        Equinoxe.Devices.get_devices_id_ips e ~id () |> Json.pp_r
+      else not_all_requiered_r [ "id" ]
+  | meth -> not_supported_r meth "/devices/{id}/ips"
+
 (* Terms *)
 
 let devices_id_t =
@@ -132,4 +143,19 @@ let devices_id_events_t =
     ( term_result (const devices_id_events $ meth_t $ id_t),
       info "/devices/id/events" ~doc ~exits ~man )
 
-let t = [ devices_id_t; devices_id_events_t; devices_id_actions_t ]
+let devices_id_ips_t =
+  let doc = "Show ips on a specific device" in
+  let exits = default_exits in
+  let man =
+    man_meth ~get:("Retrieve ips on a specific device", [ "id" ], []) ()
+  in
+  let id_t =
+    let doc = "The device id" in
+    Arg.(value & opt (some string) None & info [ "id" ] ~doc)
+  in
+  Term.
+    ( term_result (const devices_id_ips $ meth_t $ id_t),
+      info "/devices/id/ips" ~doc ~exits ~man )
+
+let t =
+  [ devices_id_t; devices_id_events_t; devices_id_actions_t; devices_id_ips_t ]

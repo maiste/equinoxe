@@ -31,7 +31,8 @@ open Json.Infix
 module Make (C : CallAPI.S) : API = struct
   type t = C.t
 
-  let create ~address ?token () = C.create ~address ?token ()
+  let create ?(address = "https://api.equinix.com/metal/v1/") ?token () =
+    C.create ~address ?token ()
 
   module Auth = struct
     let get_user_api_keys t =
@@ -130,6 +131,10 @@ module Make (C : CallAPI.S) : API = struct
     let delete_devices_id t ~id () =
       let path = Filename.concat "devices" id in
       C.delete t ~path () |> C.run |> Json.Private.filter_error
+
+    let get_devices_id_ips t ~id () =
+      let path = Format.sprintf "devices/%s/ips" id in
+      C.get t ~path () |> C.run |> Json.Private.filter_error
   end
 
   module Projects = struct
@@ -171,6 +176,12 @@ module Make (C : CallAPI.S) : API = struct
 
     let get_organizations_id t ~id () =
       let path = Filename.concat "organizations" id in
+      C.get t ~path () |> C.run |> Json.Private.filter_error
+  end
+
+  module Ip = struct
+    let get_ips_id t ~id () =
+      let path = Filename.concat "ips" id in
       C.get t ~path () |> C.run |> Json.Private.filter_error
   end
 end
