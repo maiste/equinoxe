@@ -8,5 +8,6 @@
 - Add some projects commands (#36, #37, @maiste)
 - Add some devices commands (#37, @maiste)
 - JSON manager module (#6, @maiste)
+- IP module (#47, @maiste)
 - Generate a test system (#42, @maiste)
 - Add a README (#26, #27, @maiste)
