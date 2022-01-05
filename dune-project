@@ -20,5 +20,6 @@
     (ezjsonm (>= 1.3.0))
     (alcotest :with-test)
     (alcotest-lwt :with-test)
+    (httpaf-lwt-unix :with-test)
     cmdliner
-    piaf))
+    http-lwt-client))
