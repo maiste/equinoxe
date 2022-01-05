@@ -174,7 +174,13 @@ module type API = sig
   end
 end
 
-module type S = CallAPI.S
+module type Backend = Callapi.S
+
+module Json = Json
+
+module Private = struct
+  module Utils = Utils
+end
 
 module type Sigs = sig
   (** Equinoxe library interface. *)
@@ -187,11 +193,15 @@ module type Sigs = sig
 
   (** {1 Build your own API} *)
 
-  module type S = S
-
-  module Default_api : S
+  module type Backend = Backend
 
   (** Factory to build a system to communicate with Equinix API, using the {!S}
       communication system. *)
-  module Make (C : S) : API
+  module Make (B : Backend) : API
+
+  module Private : sig
+    (** This module holds modules that should not be used. *)
+
+    module Utils = Utils
+  end
 end

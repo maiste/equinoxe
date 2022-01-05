@@ -22,8 +22,9 @@
 (*                                                                           *)
 (*****************************************************************************)
 
-open Utils
 open Lwt.Syntax
+module Json = Equinoxe.Json
+module Utils = Equinoxe.Private.Utils
 module Client = Http_lwt_client
 
 (**** Type definitions ****)
@@ -39,7 +40,7 @@ let build_header token =
   let token = if token = "" then [] else [ ("X-Auth-Token", token) ] in
   token @ [ ("Content-Type", "application/json") ]
 
-let equinoxe_default_path = Sys.path_from_home_dir ".config/equinoxe/"
+let equinoxe_default_path = Utils.Sys.path_from_home_dir ".config/equinoxe/"
 
 (***** Helpers *****)
 
@@ -51,7 +52,7 @@ let convert_to_json resp =
   | Error (`Msg e) -> Json.error e
 
 let token_from_path token_path =
-  match Reader.read_token_opt token_path with
+  match Utils.Reader.read_token_opt token_path with
   | None -> raise Not_found
   | Some token -> token
 
