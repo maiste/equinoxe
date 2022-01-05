@@ -1,0 +1,3 @@
+(executable
+  (name example_1)
+  (libraries cmdliner equinoxe))
