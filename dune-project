@@ -22,6 +22,7 @@
     (alcotest-lwt :with-test)
     (httpaf-lwt-unix :with-test)
     (http-lwt-client :with-test)
+    lwt
     cmdliner
     )
   (depopts
