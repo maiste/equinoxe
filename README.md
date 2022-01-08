@@ -14,7 +14,7 @@
 
 **Equinoxe** is a library to interact with the Equinix [API](https://metal.equinix.com/developers/api/) (formerly known as Packet) in *OCaml*. Users can use it to gather information, deploy machines or manage your organization within an *OCaml* program. It comes with a CLI, `equinoxe-cli`, that packs most of the functionalities of the API.
 
- :warning: This repository is based on the official API but is not an official work from Equinix. This work is still in active development.
+ :warning: This repository is based on the official API but is not an official work from Equinix. This work is still in active development so the API **might not be stable**.
 
 ## Getting started
 
