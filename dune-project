@@ -24,8 +24,26 @@
     (http-lwt-client :with-test)
     (lwt (>= 5.3.0))
     cmdliner)
-  (depopts
-    http-lwt-client
-    piaf)
+  (conflicts
+    (result (< 1.5))))
+
+(package
+  (name equinoxe-hlc)
+  (synopsis "Equinoxe with the http-lwt-client request handler")
+  (description
+    "Equinoxe-hlc is an implementation of the Equinoxe library using http-lwt-client.")
+  (depends
+    equinoxe
+    httpaf-lwt-unix)
+  (conflicts
+    (result (< 1.5))))
+
+(package
+  (name equinoxe-bin)
+  (synopsis "An unofficial executable for Equinix")
+  (description
+    "Equinoxe-bin is a CLI tool to interact with the Equinix API.")
+  (depends
+    equinoxe-hlc)
   (conflicts
     (result (< 1.5))))

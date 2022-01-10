@@ -1,15 +1,6 @@
 (library
   (name equinoxe_hlc)
-  (public_name equinoxe.hlc)
-  (optional)
+  (public_name equinoxe-hlc)
   (libraries equinoxe
              http-lwt-client)
   (modules equinoxe_hlc))
-
-(library
-  (name equinoxe_piaf)
-  (public_name equinoxe.piaf)
-  (optional)
-  (libraries equinoxe
-             piaf)
-  (modules equinoxe_piaf))
