@@ -22,9 +22,11 @@
     (alcotest-lwt :with-test)
     (httpaf-lwt-unix :with-test)
     (http-lwt-client :with-test)
-    lwt
+    (lwt (>= 5.3.0))
     cmdliner
-    )
+    http-lwt-client)
   (depopts
     http-lwt-client
-    piaf))
+    piaf)
+  (conflicts
+    (result (< 1.5))))
