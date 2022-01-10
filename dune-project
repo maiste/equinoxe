@@ -16,14 +16,11 @@
   (description "Equinoxe is an OCaml wrapper for the Equinix API.")
   (depends
     (ocaml (>= 4.08.0))
-    (odoc :with-doc)
     (ezjsonm (>= 1.3.0))
+    (lwt (>= 5.3.0))
     (alcotest :with-test)
     (alcotest-lwt :with-test)
-    (httpaf-lwt-unix :with-test)
-    (http-lwt-client :with-test)
-    (lwt (>= 5.3.0))
-    cmdliner)
+    (odoc :with-doc))
   (conflicts
     (result (< 1.5))))
 
@@ -34,7 +31,11 @@
     "Equinoxe-hlc is an implementation of the Equinoxe library using http-lwt-client.")
   (depends
     equinoxe
-    httpaf-lwt-unix)
+    http-lwt-client
+    (httpaf-lwt-unix :with-test)
+    (alcotest :with-test)
+    (alcotest-lwt :with-test)
+    (odoc :with-doc))
   (conflicts
     (result (< 1.5))))
 
@@ -44,6 +45,7 @@
   (description
     "Equinoxe-bin is a CLI tool to interact with the Equinix API.")
   (depends
+    cmdliner
     equinoxe-hlc)
   (conflicts
     (result (< 1.5))))

@@ -10,6 +10,7 @@ doc: "maiste.github.io/equinoxe"
 bug-reports: "https://github.com/maiste/equinoxe/issues"
 depends: [
   "dune" {>= "2.9"}
+  "cmdliner"
   "equinoxe-hlc"
   "odoc" {with-doc}
 ]

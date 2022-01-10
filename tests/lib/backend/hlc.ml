@@ -23,6 +23,7 @@
 (*****************************************************************************)
 
 module Json = Equinoxe.Json
+module Helper_server = Helper_server_hcl
 open Json.Infix
 open Lwt.Syntax
 open Utils
@@ -103,5 +104,5 @@ module MakeTest (Http : Equinoxe.Backend) = struct
 end
 
 let () =
-  let module Test = MakeTest (Equinoxe_hlc) in
+  let module Test = MakeTest (Equinoxe_hlc.Backend) in
   Lwt_main.run @@ Test.run "Http-lwt-client"
