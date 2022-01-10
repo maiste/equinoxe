@@ -23,8 +23,7 @@
     (httpaf-lwt-unix :with-test)
     (http-lwt-client :with-test)
     (lwt (>= 5.3.0))
-    cmdliner
-    http-lwt-client)
+    cmdliner)
   (depopts
     http-lwt-client
     piaf)
