@@ -19,7 +19,6 @@ depends: [
   "http-lwt-client" {with-test}
   "lwt" {>= "5.3.0"}
   "cmdliner"
-  "http-lwt-client"
 ]
 depopts: ["http-lwt-client" "piaf"]
 conflicts: [
