@@ -1,16 +1,4 @@
 (library
-  (name equinoxe)
-  (public_name equinoxe)
-  (libraries ezjsonm
-             unix
-             lwt)
-  (modules callapi
-           equinoxe
-           equinoxe_intf
-           json
-           utils))
-
-(library
   (name equinoxe_hlc)
   (public_name equinoxe.hlc)
   (optional)
