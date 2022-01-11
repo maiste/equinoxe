@@ -27,6 +27,8 @@ module Json = Equinoxe.Json
 module Utils = Equinoxe.Private.Utils
 module Client = Http_lwt_client
 
+module Backend = struct
+
 (**** Type definitions ****)
 
 type t = { address : string; token : string }
@@ -116,3 +118,7 @@ let delete t ~path () =
   convert_to_json resp
 
 let run json = Lwt_main.run json
+
+end
+
+module Api = Equinoxe.Make(Backend)

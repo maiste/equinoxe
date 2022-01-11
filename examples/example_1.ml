@@ -22,7 +22,7 @@
 (*                                                                           *)
 
 module Json = Equinoxe.Json
-module E = Equinoxe.Make (Equinoxe_hlc)
+module E = Equinoxe_hlc.Api
 open Json.Infix
 
 let ( let* ) = Result.bind

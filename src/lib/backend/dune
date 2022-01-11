@@ -1,0 +1,6 @@
+(library
+  (name equinoxe_hlc)
+  (public_name equinoxe-hlc)
+  (libraries equinoxe
+             http-lwt-client)
+  (modules equinoxe_hlc))

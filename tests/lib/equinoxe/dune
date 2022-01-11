@@ -1,0 +1,7 @@
+(test
+  (package equinoxe)
+  (name json)
+  (libraries alcotest
+             alcotest-lwt
+             lwt
+             equinoxe))

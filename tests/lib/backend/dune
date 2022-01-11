@@ -1,5 +1,6 @@
-(tests
-  (names json backend)
+(test
+  (package equinoxe-hlc)
+  (name hlc)
   (libraries alcotest
              alcotest-lwt
              lwt
@@ -7,4 +8,4 @@
              httpaf-lwt-unix
              bigstringaf
              equinoxe
-             equinoxe.hlc))
+             equinoxe-hlc))

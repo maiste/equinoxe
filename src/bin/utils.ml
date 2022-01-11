@@ -26,7 +26,7 @@ open Cmdliner
 
 (* Import module and create Equinoxe from Ezcurl. *)
 module Json = Equinoxe.Json
-module Equinoxe = Equinoxe.Make (Equinoxe_hlc)
+module Equinoxe = Equinoxe_hlc.Api
 
 module Conf = struct
   (* Constantes definitions. *)

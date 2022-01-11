@@ -22,7 +22,8 @@
 (*                                                                           *)
 (*****************************************************************************)
 
-(** It provides an API call system relying on Piaf. *)
-
-include Equinoxe.Backend
-(** @inline *)
+(* Error type *)
+let error_msg : [ `Msg of string ] Alcotest.testable =
+  let fmt ppf (`Msg str) = Format.fprintf ppf "Msg: %s" str in
+  let equal (`Msg s1) (`Msg s2) = s1 = s2 in
+  Alcotest.testable fmt equal

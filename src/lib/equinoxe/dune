@@ -1,0 +1,11 @@
+(library
+  (name equinoxe)
+  (public_name equinoxe)
+  (libraries ezjsonm
+             unix
+             lwt)
+  (modules backend
+           equinoxe
+           equinoxe_intf
+           json
+           utils))

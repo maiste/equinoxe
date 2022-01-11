@@ -174,10 +174,8 @@ module type API = sig
   end
 end
 
-module type Backend = Callapi.S
-
+module type Backend = Backend.S
 module Json = Json
-
 module Private = struct
   module Utils = Utils
 end
