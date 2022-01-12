@@ -97,11 +97,11 @@ module type API = sig
         API. *)
 
     val location_to_string : location -> string
-    (** [location_to_string facility] convert a facility into a string
+    (** [location_to_string facility] converts a facility into a string
         understandable by the API. *)
 
     val plan_to_string : plan -> string
-    (** [plan_to_string plan] convert a plan into a string understandable by the
+    (** [plan_to_string plan] converts a plan into a string understandable by the
         API. *)
 
     val get_devices_id : t -> id:string -> unit -> Json.t
@@ -196,6 +196,8 @@ module type Sigs = sig
   (** Factory to build a system to communicate with Equinix API, using the {!S}
       communication system. *)
   module Make (B : Backend) : API
+
+  (**/**)
 
   module Private : sig
     (** This module holds modules that should not be used. *)
