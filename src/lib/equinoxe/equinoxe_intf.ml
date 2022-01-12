@@ -197,6 +197,8 @@ module type Sigs = sig
       communication system. *)
   module Make (B : Backend) : API
 
+  (**/**)
+
   module Private : sig
     (** This module holds modules that should not be used. *)
 
