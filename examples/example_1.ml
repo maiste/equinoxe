@@ -22,11 +22,11 @@
 (*                                                                           *)
 
 module Json = Equinoxe.Json
-module E = Equinoxe_hlc.Api
+module E = Equinoxe_cohttp.Api
 open Json.Infix
 
 let ( let* ) = Result.bind
-let api = E.create ~address:"https://api.equinix.com/metal/v1/" ()
+let api = E.create ()
 
 let get_project_id_from name =
   (E.Projects.get_projects api --> "projects" |->? ("name", name)) --> "id"
@@ -76,7 +76,7 @@ let destroy_machine machine_id =
   E.Devices.delete_devices_id api ~id:machine_id () |> Json.to_unit_r
 
 let deploy_wait_stop () =
-  let* id = get_project_id_from "Experimental" in
+  let* id = get_project_id_from "testing" in
   let* machine_id = create_device id in
   let () = Format.printf "Machine created.@." in
   let* _state = wait_for_ready machine_id in
