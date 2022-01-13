@@ -24,5 +24,8 @@
 
 (** It provides an API call system relying on Piaf. *)
 
-include Equinoxe.Backend
+module Backend : Equinoxe.Backend
+(** @inline *)
+
+module Api : Equinoxe.API
 (** @inline *)
