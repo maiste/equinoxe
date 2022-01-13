@@ -1,5 +1,9 @@
 ## Unreleased
 
+### Added
+
+- Add a Cohttp client version, with a specific package (#60, @maiste)
+
 ## 0.1.0
 
 ### Added
