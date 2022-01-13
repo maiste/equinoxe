@@ -22,7 +22,7 @@
 (*                                                                           *)
 (*****************************************************************************)
 
-open Utils
+open Helpers.Utils
 module Json = Equinoxe.Json
 
 (* Creation *)

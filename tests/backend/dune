@@ -1,0 +1,6 @@
+(test
+  (package equinoxe-hlc)
+  (name hlc_test)
+  (modules hlc_test)
+  (libraries helpers
+             equinoxe-hlc))
