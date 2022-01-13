@@ -4,3 +4,9 @@
   (modules hlc_test)
   (libraries helpers
              equinoxe-hlc))
+(test
+  (package equinoxe-cohttp)
+  (name cohttp_test)
+  (modules cohttp_test)
+  (libraries helpers
+             equinoxe-cohttp))
