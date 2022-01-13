@@ -23,7 +23,7 @@
 (*****************************************************************************)
 
 module type S = sig
-  (** The [S] module gathers all the methods you need to be able to execute HTTP
+  (** This module gathers all the methods you need to be able to execute HTTP
       requests to contact an API server. It must send application/json request. *)
 
   type t
