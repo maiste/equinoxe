@@ -81,6 +81,10 @@ module Term = struct
     in
     Arg.(value & opt meth GET & info [ "m"; "meth" ] ~doc)
 
+  let token_t =
+    let doc = "The Equinix token required to execute actions" in
+    Arg.(required & opt (some string) None & info [ "t"; "token" ] ~doc)
+
   let has_requiered opts = Option.is_some opts
 
   let format_info (description, args, opt_args) =

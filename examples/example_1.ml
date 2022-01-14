@@ -26,7 +26,8 @@ module E = Equinoxe_cohttp.Api
 open Json.Infix
 
 let ( let* ) = Result.bind
-let api = E.create ()
+let token = "YOUR TOKEN"
+let api = E.create ~token ()
 
 let get_project_id_from name =
   (E.Projects.get_projects api --> "projects" |->? ("name", name)) --> "id"

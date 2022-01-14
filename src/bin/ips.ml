@@ -30,9 +30,9 @@ open Utils.Term
 
 (* Actions *)
 
-let ips_id meth id =
+let ips_id token meth id =
   let address = Conf.address in
-  let e = Equinoxe.create ~address () in
+  let e = Equinoxe.create ~address ~token () in
   match meth with
   | GET ->
       if has_requiered id then
@@ -55,6 +55,7 @@ let ips_id_t =
     Arg.(value & opt (some string) None & info [ "id" ] ~doc)
   in
   Term.
-    (term_result (const ips_id $ meth_t $ id_t), info "/ips/id" ~doc ~exits ~man)
+    ( term_result (const ips_id $ token_t $ meth_t $ id_t),
+      info "/ips/id" ~doc ~exits ~man )
 
 let t = [ ips_id_t ]

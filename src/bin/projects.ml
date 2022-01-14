@@ -49,16 +49,16 @@ let config hostname location plan os =
 
 (* Actions *)
 
-let projects = function
+let projects token = function
   | GET ->
       let address = Conf.address in
-      let e = Equinoxe.create ~address () in
+      let e = Equinoxe.create ~address ~token () in
       Equinoxe.Projects.get_projects e |> Json.pp_r
   | meth -> not_supported_r meth "/projects"
 
-let projects_id meth id =
+let projects_id token meth id =
   let address = Conf.address in
-  let e = Equinoxe.create ~address () in
+  let e = Equinoxe.create ~address ~token () in
   match meth with
   | GET ->
       if has_requiered id then
@@ -67,9 +67,9 @@ let projects_id meth id =
       else not_all_requiered_r [ "id" ]
   | meth -> not_supported_r meth "/projects/{id}"
 
-let projects_id_devices meth id config =
+let projects_id_devices token meth id config =
   let address = Conf.address in
-  let e = Equinoxe.create ~address () in
+  let e = Equinoxe.create ~address ~token () in
   match meth with
   | GET ->
       if has_requiered id then
@@ -94,7 +94,9 @@ let projects_t =
       ~get:("Retrieve information about projects related to the user", [], [])
       ()
   in
-  Term.(term_result (const projects $ meth_t), info "/projects" ~doc ~exits ~man)
+  Term.
+    ( term_result (const projects $ token_t $ meth_t),
+      info "/projects" ~doc ~exits ~man )
 
 let projects_id_t =
   let doc = "Show the project of the user referenced by the id" in
@@ -109,7 +111,7 @@ let projects_id_t =
     Arg.(value & opt (some string) None & info [ "id" ] ~doc)
   in
   Term.
-    ( term_result (const projects_id $ meth_t $ id_t),
+    ( term_result (const projects_id $ token_t $ meth_t $ id_t),
       info "/projects/id" ~doc ~exits ~man )
 
 let config_t =
@@ -190,7 +192,8 @@ let projects_id_devices_t =
     Arg.(value & opt (some string) None & info [ "id" ] ~doc)
   in
   Term.
-    ( term_result (const projects_id_devices $ meth_t $ id_t $ config_t),
+    ( term_result
+        (const projects_id_devices $ token_t $ meth_t $ id_t $ config_t),
       info "/projects/id/devices" ~doc ~exits ~man )
 
 let t = [ projects_t; projects_id_t; projects_id_devices_t ]

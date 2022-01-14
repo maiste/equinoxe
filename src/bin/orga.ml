@@ -30,16 +30,16 @@ open Utils.Term
 
 (* Actions *)
 
-let organizations = function
+let organizations token = function
   | GET ->
       let address = Conf.address in
-      let e = Equinoxe.create ~address () in
+      let e = Equinoxe.create ~address ~token () in
       Equinoxe.Orga.get_organizations e |> Json.pp_r
   | meth -> not_supported_r meth "/organizations"
 
-let organizations_id meth id =
+let organizations_id token meth id =
   let address = Conf.address in
-  let e = Equinoxe.create ~address () in
+  let e = Equinoxe.create ~address ~token () in
   match meth with
   | GET ->
       if has_requiered id then
@@ -61,7 +61,7 @@ let organizations_t =
   in
 
   Term.
-    ( term_result (const organizations $ meth_t),
+    ( term_result (const organizations $ token_t $ meth_t),
       info "/organizations" ~doc ~exits ~man )
 
 let organizations_id_t =
@@ -77,7 +77,7 @@ let organizations_id_t =
     Arg.(value & opt (some string) None & info [ "id" ] ~doc)
   in
   Term.
-    ( term_result (const organizations_id $ meth_t $ id_t),
+    ( term_result (const organizations_id $ token_t $ meth_t $ id_t),
       info "/organizations/id" ~doc ~exits ~man )
 
 let t = [ organizations_t; organizations_id_t ]
