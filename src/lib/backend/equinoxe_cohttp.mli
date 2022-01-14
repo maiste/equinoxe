@@ -22,7 +22,7 @@
 (*                                                                           *)
 (*****************************************************************************)
 
-(** It provides an API call system relying on Piaf. *)
+(** It provides an API call system relying on Cohttp. *)
 
 module Backend : Equinoxe.Backend
 (** @inline *)
