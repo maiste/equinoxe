@@ -30,7 +30,10 @@ module Backend = struct
 
   type 'a io = 'a Lwt.t
 
+  let return = Lwt.return
   let map = Lwt.map
+  let bind f m = Lwt.bind m f
+  let fail (`Msg e) = Lwt.fail_with e
 
   (***** Helpers *****)
 

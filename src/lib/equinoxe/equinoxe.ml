@@ -31,13 +31,10 @@ module Make (B : Backend) : API = struct
 
   type 'a io = 'a B.io
 
-  let ( let+ ) m f = B.map f m
-
-  (*
-  let ( let* ) m f = B.bind f m
   let return x = B.return x
+  let ( let+ ) m f = B.map f m
+  let ( let* ) m f = B.bind f m
   let fail = B.fail
-  *)
 
   type t = { address : string ; token : string }
 

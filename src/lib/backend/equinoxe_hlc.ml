@@ -28,14 +28,17 @@ module Backend = struct
 
   type 'a io = 'a Lwt.t
 
+  let return = Lwt.return
   let map = Lwt.map
+  let bind f m = Lwt.bind m f
+  let fail (`Msg e) = Lwt.fail_with e
 
   (***** Helpers *****)
 
   let get_body = function
-    | Ok (_, None) -> Lwt.return ""
-    | Ok (_, Some body) -> Lwt.return body
-    | Error (`Msg e) -> Lwt.fail_with e
+    | Ok (_, None) -> return ""
+    | Ok (_, Some body) -> return body
+    | Error e -> fail e
 
   let ( =<< ) f m = Lwt.bind m f
 

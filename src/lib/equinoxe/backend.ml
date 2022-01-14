@@ -22,6 +22,8 @@
 (*                                                                           *)
 (*****************************************************************************)
 
+type error = [ `Msg of string ]
+
 type headers = (string * string) list
 
 module type S = sig
@@ -31,7 +33,10 @@ module type S = sig
   type 'a io
   (** The I/O monad used to execute HTTP request. *)
 
+  val return : 'a -> 'a io
   val map : ('a -> 'b) -> 'a io -> 'b io
+  val bind : ('a -> 'b io) -> 'a io -> 'b io
+  val fail : error -> 'a io
 
   val get : headers:headers -> url:string -> string io
   (** [get t ~url ()] executes a request to the server as a [GET] call and,
