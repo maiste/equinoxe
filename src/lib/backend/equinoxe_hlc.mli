@@ -24,8 +24,10 @@
 
 (** It provides an API call system relying on Piaf. *)
 
-module Backend : Equinoxe.Backend
+type 'a io = ('a, [ `Msg of string ]) Lwt_result.t
+
+module Backend : Equinoxe.Backend with type 'a io = 'a io
 (** @inline *)
 
-module Api : Equinoxe.API
+module Api : Equinoxe.API with type 'a io = 'a io
 (** @inline *)
