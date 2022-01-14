@@ -25,7 +25,7 @@
 include Equinoxe_intf
 
 (* Functor to build API using a specific call API system. *)
-module Make (B : Backend) : API = struct
+module Make (B : Backend) : API with type 'a io = 'a B.io = struct
 
   type json = Ezjsonm.value
 
@@ -34,12 +34,61 @@ module Make (B : Backend) : API = struct
   let return x = B.return x
   let ( let+ ) m f = B.map f m
   let ( let* ) m f = B.bind f m
-  let fail = B.fail
+  let fail msg = B.fail (`Msg msg)
 
   type t = { address : string ; token : string }
 
   let create ?(address = "https://api.equinix.com/metal/v1/") ~token () =
     { address ; token }
+
+  module Json = struct
+
+    let ( --> ) m field =
+      let* obj = m in
+      try return (Ezjsonm.find obj [field])
+      with Not_found -> fail (Format.sprintf "JSON missing field %S" field)
+
+    let ( |-> ) m index =
+      let* arr = m in
+      match arr with
+      | `A lst ->
+          begin match List.nth_opt lst index with
+          | Some x -> return x
+          | None -> fail (Format.sprintf "JSON array missing %d index" index)
+          end
+      | _ ->
+          fail "JSON access to index on a non-array"
+
+    let to_list f m =
+      let* m = m in
+      match m with
+      | `A lst ->
+          let+ lst =
+            List.fold_left
+              (fun acc x ->
+                let* acc = acc in
+                let+ x = f x in
+                x :: acc)
+              (return [])
+              lst
+          in
+          List.rev lst
+      | _ ->
+          fail "JSON is not a list"
+
+    let to_string =
+      B.bind
+        (function
+          | `String s -> return s
+          | _ -> fail "JSON is not a string")
+
+    let to_unit =
+      B.map (fun _ -> ())
+
+    let pp_r json =
+      let+ json = json in
+      Format.printf "%s" (Ezjsonm.value_to_string ~minify:false json)
+  end
 
   module Http = struct
 

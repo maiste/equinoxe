@@ -6,5 +6,4 @@
              lwt)
   (modules backend
            equinoxe
-           equinoxe_intf
-           json))
+           equinoxe_intf))

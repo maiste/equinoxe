@@ -172,18 +172,29 @@ module type API = sig
     val get_user : t -> json io
     (** [get_user t] returns information about the user linked to the API key. *)
   end
+
+  module Json : sig
+    (** Helper functions to manipulate Json *)
+
+    val ( --> ) : json io -> string -> json io
+
+    val ( |-> ) : json io -> int -> json io
+
+    val to_list : (json -> 'a io) -> json io -> 'a list io
+
+    val to_string : json io -> string io
+
+    val to_unit : json io -> unit io
+
+    val pp_r : json io -> unit io
+
+  end
 end
 
 module type Backend = Backend.S
 
-module Json = Json
-
 module type Sigs = sig
   (** Equinoxe library interface. *)
-
-  (** {1 Manipulate Results} *)
-
-  module Json = Json
 
   module type API = API
 
@@ -193,5 +204,5 @@ module type Sigs = sig
 
   (** Factory to build a system to communicate with Equinix API, using the {!S}
       communication system. *)
-  module Make (B : Backend) : API
+  module Make (B : Backend) : API with type 'a io = 'a B.io
 end
