@@ -22,56 +22,36 @@
 (*                                                                           *)
 (*****************************************************************************)
 
-open Lwt.Syntax
-module Json = Equinoxe.Json
 module Client = Http_lwt_client
 
 module Backend = struct
 
   type 'a io = 'a Lwt.t
 
+  let map = Lwt.map
+
   (***** Helpers *****)
 
-  let convert_to_json resp =
-    match resp with
-    | Ok (_, Some "") -> Lwt.return (`O [])
-    | Ok (_, Some s) -> Lwt.return (Ezjsonm.from_string s)
-    | Ok (_, None) -> Lwt.fail_with "?"
+  let get_body = function
+    | Ok (_, None) -> Lwt.return ""
+    | Ok (_, Some body) -> Lwt.return body
     | Error (`Msg e) -> Lwt.fail_with e
 
-  (**** Http methode ****)
+  let ( =<< ) f m = Lwt.bind m f
 
-  let get_from ~headers ~url =
-    Client.one_request ~meth:`GET ~headers url
-
-  let post_from ~headers ~url body =
-    Client.one_request ~meth:`POST ~headers ~body url
-
-  let put_from ~headers ~url body =
-    Client.one_request ~meth:`PUT ~headers ~body url
-
-  let delete_from ~headers ~url =
-    Client.one_request ~meth:`DELETE ~headers url
-
-  (**** API ****)
+  (**** Http methods ****)
 
   let get ~headers ~url =
-    let* resp = get_from ~headers ~url in
-    convert_to_json resp
+    get_body =<< Client.one_request ~meth:`GET ~headers url
 
-  let post ~headers ~url json =
-    let body = Ezjsonm.value_to_string json in
-    let* resp = post_from ~headers ~url body in
-    convert_to_json resp
+  let post ~headers ~url body =
+    get_body =<< Client.one_request ~meth:`POST ~headers ~body url
 
-  let put ~headers ~url json =
-    let body = Ezjsonm.value_to_string json in
-    let* resp = put_from ~headers ~url body in
-    convert_to_json resp
+  let put ~headers ~url body =
+    get_body =<< Client.one_request ~meth:`PUT ~headers ~body url
 
   let delete ~headers ~url =
-    let* resp = delete_from ~headers ~url in
-    convert_to_json resp
+    get_body =<< Client.one_request ~meth:`DELETE ~headers url
 end
 
 module Api = Equinoxe.Make (Backend)

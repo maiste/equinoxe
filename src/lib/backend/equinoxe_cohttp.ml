@@ -25,17 +25,16 @@
 open Lwt.Syntax
 open Lwt.Infix
 module Client = Cohttp_lwt_unix.Client
-module Json = Equinoxe.Json
 
 module Backend = struct
 
   type 'a io = 'a Lwt.t
 
-  (**** Default values ****)
-
-  let build_headers headers = Cohttp.Header.of_list headers
+  let map = Lwt.map
 
   (***** Helpers *****)
+
+  let build_headers headers = Cohttp.Header.of_list headers
 
   let compute ~time ~f =
     let* status =
@@ -49,64 +48,44 @@ module Backend = struct
     | `Done v -> Lwt.return v
     | `Timeout -> Lwt.fail_with "Http request timeout"
 
-  let convert_to_json (resp, body) =
+  let get_body (resp, body) =
     let code = Cohttp.(Response.status resp |> Code.code_of_status) in
     if code >= 200 && code < 300 then
-      let+ body = Cohttp_lwt.Body.to_string body in
-      (match body with "" -> `O [] | s -> Ezjsonm.from_string s)
+      Cohttp_lwt.Body.to_string body
     else
       let msg = Format.sprintf "Cohttp exits with HTTP code %d" code in
       Lwt.fail_with msg
 
-  (**** Http methode ****)
+  (**** Http methods ****)
 
-  let compute = compute ~time:10.0
+  let compute ~f =
+    compute ~time:10.0 ~f >>= get_body
 
-  let get_from ~headers ~url =
+  let get ~headers ~url =
     let headers = build_headers headers in
     let url = Uri.of_string url in
     let f () = Client.get ~headers url in
     compute ~f
 
-  let post_from ~headers ~url body =
+  let post ~headers ~url body =
     let headers = build_headers headers in
     let url = Uri.of_string url in
     let body = Cohttp_lwt.Body.of_string body in
     let f () = Client.post ~headers ~body url in
     compute ~f
 
-  let put_from ~headers ~url body =
+  let put ~headers ~url body =
     let headers = build_headers headers in
     let url = Uri.of_string url in
     let body = Cohttp_lwt.Body.of_string body in
     let f () = Client.put ~headers ~body url in
     compute ~f
 
-  let delete_from ~headers ~url =
+  let delete ~headers ~url =
     let headers = build_headers headers in
     let url = Uri.of_string url in
     let f () = Client.delete ~headers url in
     compute ~f
-
-  (**** API ****)
-
-  let get ~headers ~url =
-    let* resp = get_from ~headers ~url in
-    convert_to_json resp
-
-  let post ~headers ~url json =
-    let body = Ezjsonm.value_to_string json in
-    let* resp = post_from ~headers ~url body in
-    convert_to_json resp
-
-  let put ~headers ~url json =
-    let body = Ezjsonm.value_to_string json in
-    let* resp = put_from ~headers ~url body in
-    convert_to_json resp
-
-  let delete ~headers ~url =
-    let* resp = delete_from ~headers ~url in
-    convert_to_json resp
 end
 
 module Api = Equinoxe.Make (Backend)

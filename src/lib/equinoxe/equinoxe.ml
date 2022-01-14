@@ -31,9 +31,10 @@ module Make (B : Backend) : API = struct
 
   type 'a io = 'a B.io
 
+  let ( let+ ) m f = B.map f m
+
   (*
   let ( let* ) m f = B.bind f m
-  let ( let+ ) m f = B.map f m
   let return x = B.return x
   let fail = B.fail
   *)
@@ -51,16 +52,29 @@ module Make (B : Backend) : API = struct
       let token = if token = "" then [] else [ ("X-Auth-Token", token) ] in
       token @ [ ("Content-Type", "application/json") ]
 
-    let run ~t ~path http_request =
+    let get_json = function
+      | "" -> `O [ ]
+      | str -> Ezjsonm.from_string str
+
+    let request ~t ~path http_request =
       http_request
         ~headers: (headers ~token:t.token)
         ~url: (url ~t ~path)
 
+    let run ~t ~path http_request =
+      let+ body = request ~t ~path http_request in
+      get_json body
+
+    let run_with_body ~t ~path http_request json =
+      let body = Ezjsonm.value_to_string json in
+      let+ body = request ~t ~path http_request body in
+      get_json body
+
     let get = run B.get
 
-    let post body = run B.post body
+    let post json = run_with_body B.post json
 
-    (* let put body = run B.put body *)
+    (* let put json = run_with_body B.put json *)
 
     let delete = run B.delete
   end
