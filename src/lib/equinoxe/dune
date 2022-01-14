@@ -7,5 +7,4 @@
   (modules backend
            equinoxe
            equinoxe_intf
-           json
-           utils))
+           json))

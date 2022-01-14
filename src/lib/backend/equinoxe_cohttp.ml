@@ -26,7 +26,6 @@ open Lwt.Syntax
 open Lwt.Infix
 module Client = Cohttp_lwt_unix.Client
 module Json = Equinoxe.Json
-module Utils = Equinoxe.Private.Utils
 
 module Backend = struct
   (**** Type definitions ****)
@@ -41,8 +40,6 @@ module Backend = struct
   let build_header token =
     let token = if token = "" then [] else [ ("X-Auth-Token", token) ] in
     token @ [ ("Content-Type", "application/json") ] |> Cohttp.Header.of_list
-
-  let equinoxe_default_path = Utils.Sys.path_from_home_dir ".config/equinoxe/"
 
   (***** Helpers *****)
 
@@ -69,20 +66,6 @@ module Backend = struct
     else
       let msg = Format.sprintf "Cohttp exits with HTTP code %d" code in
       Lwt.return @@ Json.error msg
-
-  let token_from_path token_path =
-    match Utils.Reader.read_token_opt token_path with
-    | None -> raise Not_found
-    | Some token -> token
-
-  let default_token () =
-    let token_path = Filename.concat equinoxe_default_path "token" in
-    token_from_path token_path
-
-  let get_token = function
-    | `Default -> default_token ()
-    | `Path token_path -> token_from_path token_path
-    | `Str token -> token
 
   (**** Http methode ****)
 
@@ -116,9 +99,7 @@ module Backend = struct
 
   (**** API ****)
 
-  let create ~address ?(token = `Default) () =
-    let token = get_token token in
-    { address; token }
+  let create ~address ~token () = { address; token }
 
   let get t ~path () =
     let* resp = get_from t path in

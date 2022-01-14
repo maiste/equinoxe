@@ -36,14 +36,9 @@ module type S = sig
   val address : t -> string
   (** [address t] returns the address of the server. *)
 
-  val create :
-    address:string ->
-    ?token:[ `Default | `Str of string | `Path of string ] ->
-    unit ->
-    t
+  val create : address:string -> token:string -> unit -> t
   (** [create ~address ~token ()] builds the configuration you are going to use
-      to execute the request. If [token] is not provided, it will extract the
-      token from the environment variable [EQUINOXE_TOKEN]. *)
+      to execute the request. *)
 
   val get : t -> path:string -> unit -> Json.t Lwt.t
   (** [get t ~path ()] executes a request to the server as a [GET] call and,

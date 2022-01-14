@@ -24,101 +24,80 @@
 
 open Lwt.Syntax
 module Json = Equinoxe.Json
-module Utils = Equinoxe.Private.Utils
 module Client = Http_lwt_client
 
 module Backend = struct
+  (**** Type definitions ****)
 
-(**** Type definitions ****)
+  type t = { address : string; token : string }
 
-type t = { address : string; token : string }
+  let token t = t.token
+  let address t = t.address
 
-let token t = t.token
-let address t = t.address
+  (**** Default values ****)
 
-(**** Default values ****)
+  let build_header token =
+    let token = if token = "" then [] else [ ("X-Auth-Token", token) ] in
+    token @ [ ("Content-Type", "application/json") ]
 
-let build_header token =
-  let token = if token = "" then [] else [ ("X-Auth-Token", token) ] in
-  token @ [ ("Content-Type", "application/json") ]
+  (***** Helpers *****)
 
-let equinoxe_default_path = Utils.Sys.path_from_home_dir ".config/equinoxe/"
+  let convert_to_json resp =
+    match resp with
+    | Ok (_, Some "") -> Json.of_string "{ }"
+    | Ok (_, Some s) -> Json.of_string s
+    | Ok (_, None) -> Json.error "{ }"
+    | Error (`Msg e) -> Json.error e
 
-(***** Helpers *****)
+  (**** Http methode ****)
 
-let convert_to_json resp =
-  match resp with
-  | Ok (_, Some "") -> Json.of_string "{ }"
-  | Ok (_, Some s) -> Json.of_string s
-  | Ok (_, None) -> Json.error "{ }"
-  | Error (`Msg e) -> Json.error e
+  let get_from t path =
+    let headers = build_header t.token in
+    let url = Filename.concat t.address path in
+    Client.one_request ~meth:`GET ~headers url
 
-let token_from_path token_path =
-  match Utils.Reader.read_token_opt token_path with
-  | None -> raise Not_found
-  | Some token -> token
+  let post_from t ~path body =
+    let headers = build_header t.token in
+    let url = Filename.concat t.address path in
+    Client.one_request ~meth:`POST ~headers ~body url
 
-let default_token () =
-  let token_path = Filename.concat equinoxe_default_path "token" in
-  token_from_path token_path
+  let put_from t ~path body =
+    let headers = build_header t.token in
+    let url = Filename.concat t.address path in
+    Client.one_request ~meth:`PUT ~headers ~body url
 
-let get_token = function
-  | `Default -> default_token ()
-  | `Path token_path -> token_from_path token_path
-  | `Str token -> token
+  let delete_from t path =
+    let headers = build_header t.token in
+    let url = Filename.concat t.address path in
+    Client.one_request ~meth:`DELETE ~headers url
 
-(**** Http methode ****)
+  (**** API ****)
 
-let get_from t path =
-  let headers = build_header t.token in
-  let url = Filename.concat t.address path in
-  Client.one_request ~meth:`GET ~headers url
+  let create ~address ~token () = { address; token }
 
-let post_from t ~path body =
-  let headers = build_header t.token in
-  let url = Filename.concat t.address path in
-  Client.one_request ~meth:`POST ~headers ~body url
+  let get t ~path () =
+    let+ resp = get_from t path in
+    convert_to_json resp
 
-let put_from t ~path body =
-  let headers = build_header t.token in
-  let url = Filename.concat t.address path in
-  Client.one_request ~meth:`PUT ~headers ~body url
+  let post t ~path json =
+    match Json.export json with
+    | Ok body ->
+        let+ resp = post_from t ~path body in
+        convert_to_json resp
+    | Error (`Msg e) -> Lwt.return @@ Json.error e
 
-let delete_from t path =
-  let headers = build_header t.token in
-  let url = Filename.concat t.address path in
-  Client.one_request ~meth:`DELETE ~headers url
+  let put t ~path json =
+    match Json.export json with
+    | Ok body ->
+        let+ resp = put_from t ~path body in
+        convert_to_json resp
+    | Error (`Msg e) -> Lwt.return @@ Json.error e
 
-(**** API ****)
+  let delete t ~path () =
+    let+ resp = delete_from t path in
+    convert_to_json resp
 
-let create ~address ?(token = `Default) () =
-  let token = get_token token in
-  { address; token }
-
-let get t ~path () =
-  let+ resp = get_from t path in
-  convert_to_json resp
-
-let post t ~path json =
-  match Json.export json with
-  | Ok body ->
-      let+ resp = post_from t ~path body in
-      convert_to_json resp
-  | Error (`Msg e) -> Lwt.return @@ Json.error e
-
-let put t ~path json =
-  match Json.export json with
-  | Ok body ->
-      let+ resp = put_from t ~path body in
-      convert_to_json resp
-  | Error (`Msg e) -> Lwt.return @@ Json.error e
-
-let delete t ~path () =
-  let+ resp = delete_from t path in
-  convert_to_json resp
-
-let run json = Lwt_main.run json
-
+  let run json = Lwt_main.run json
 end
 
-module Api = Equinoxe.Make(Backend)
+module Api = Equinoxe.Make (Backend)
