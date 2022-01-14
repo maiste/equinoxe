@@ -33,9 +33,7 @@ module Backend = struct
 
   (**** Default values ****)
 
-  let build_header token =
-    let token = if token = "" then [] else [ ("X-Auth-Token", token) ] in
-    token @ [ ("Content-Type", "application/json") ] |> Cohttp.Header.of_list
+  let build_headers headers = Cohttp.Header.of_list headers
 
   (***** Helpers *****)
 
@@ -64,50 +62,50 @@ module Backend = struct
 
   let compute = compute ~time:10.0
 
-  let get_from ~token ~url =
-    let headers = build_header token in
+  let get_from ~headers ~url =
+    let headers = build_headers headers in
     let url = Uri.of_string url in
     let f () = Client.get ~headers url in
     compute ~f
 
-  let post_from ~token ~url body =
-    let headers = build_header token in
+  let post_from ~headers ~url body =
+    let headers = build_headers headers in
     let url = Uri.of_string url in
     let body = Cohttp_lwt.Body.of_string body in
     let f () = Client.post ~headers ~body url in
     compute ~f
 
-  let put_from ~token ~url body =
-    let headers = build_header token in
+  let put_from ~headers ~url body =
+    let headers = build_headers headers in
     let url = Uri.of_string url in
     let body = Cohttp_lwt.Body.of_string body in
     let f () = Client.put ~headers ~body url in
     compute ~f
 
-  let delete_from ~token ~url =
-    let headers = build_header token in
+  let delete_from ~headers ~url =
+    let headers = build_headers headers in
     let url = Uri.of_string url in
     let f () = Client.delete ~headers url in
     compute ~f
 
   (**** API ****)
 
-  let get ~token ~url =
-    let* resp = get_from ~token ~url in
+  let get ~headers ~url =
+    let* resp = get_from ~headers ~url in
     convert_to_json resp
 
-  let post ~token ~url json =
+  let post ~headers ~url json =
     let body = Ezjsonm.value_to_string json in
-    let* resp = post_from ~token ~url body in
+    let* resp = post_from ~headers ~url body in
     convert_to_json resp
 
-  let put ~token ~url json =
+  let put ~headers ~url json =
     let body = Ezjsonm.value_to_string json in
-    let* resp = put_from ~token ~url body in
+    let* resp = put_from ~headers ~url body in
     convert_to_json resp
 
-  let delete ~token ~url =
-    let* resp = delete_from ~token ~url in
+  let delete ~headers ~url =
+    let* resp = delete_from ~headers ~url in
     convert_to_json resp
 end
 

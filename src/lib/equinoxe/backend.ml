@@ -24,6 +24,8 @@
 
 type json = Ezjsonm.value
 
+type headers = (string * string) list
+
 module type S = sig
   (** This module gathers all the methods you need to be able to execute HTTP
       requests to contact an API server. It must send application/json request. *)
@@ -31,20 +33,20 @@ module type S = sig
   type 'a io
   (** The I/O monad used to execute HTTP request. *)
 
-  val get : token:string -> url:string -> json io
+  val get : headers:headers -> url:string -> json io
   (** [get t ~url ()] executes a request to the server as a [GET] call and,
       returns the result as {!json}. *)
 
-  val post : token:string -> url:string -> json -> json io
+  val post : headers:headers -> url:string -> json -> json io
   (** [post t  ~url json] executes a request to the server as a [POST] call
       using {!json} to describe the request. It returns the result as
       {!json}. *)
 
-  val put : token:string -> url:string -> json -> json io
+  val put : headers:headers -> url:string -> json -> json io
   (** [put t ~url json] executes a request to the server as a [PUT] call using
       {!json} to describe the request. It returns the result as {!json}. *)
 
-  val delete : token:string -> url:string -> json io
+  val delete : headers:headers -> url:string -> json io
   (** [delete t ~path ()] executes a request to the server as a [DELETE] call
       and, returns the result as {!json}. *)
 end

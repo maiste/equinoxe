@@ -47,7 +47,14 @@ module Make (B : Backend) : API = struct
 
     let url ~t ~path = Filename.concat t.address path
 
-    let run ~t ~path fn = fn ~token:t.token ~url:(url ~t ~path)
+    let headers ~token =
+      let token = if token = "" then [] else [ ("X-Auth-Token", token) ] in
+      token @ [ ("Content-Type", "application/json") ]
+
+    let run ~t ~path http_request =
+      http_request
+        ~headers: (headers ~token:t.token)
+        ~url: (url ~t ~path)
 
     let get = run B.get
 

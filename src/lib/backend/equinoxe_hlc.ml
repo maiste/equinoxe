@@ -30,12 +30,6 @@ module Backend = struct
 
   type 'a io = 'a Lwt.t
 
-  (**** Default values ****)
-
-  let build_header token =
-    let token = if token = "" then [] else [ ("X-Auth-Token", token) ] in
-    token @ [ ("Content-Type", "application/json") ]
-
   (***** Helpers *****)
 
   let convert_to_json resp =
@@ -47,40 +41,36 @@ module Backend = struct
 
   (**** Http methode ****)
 
-  let get_from ~token ~url =
-    let headers = build_header token in
+  let get_from ~headers ~url =
     Client.one_request ~meth:`GET ~headers url
 
-  let post_from ~token ~url body =
-    let headers = build_header token in
+  let post_from ~headers ~url body =
     Client.one_request ~meth:`POST ~headers ~body url
 
-  let put_from ~token ~url body =
-    let headers = build_header token in
+  let put_from ~headers ~url body =
     Client.one_request ~meth:`PUT ~headers ~body url
 
-  let delete_from ~token ~url =
-    let headers = build_header token in
+  let delete_from ~headers ~url =
     Client.one_request ~meth:`DELETE ~headers url
 
   (**** API ****)
 
-  let get ~token ~url =
-    let* resp = get_from ~token ~url in
+  let get ~headers ~url =
+    let* resp = get_from ~headers ~url in
     convert_to_json resp
 
-  let post ~token ~url json =
+  let post ~headers ~url json =
     let body = Ezjsonm.value_to_string json in
-    let* resp = post_from ~token ~url body in
+    let* resp = post_from ~headers ~url body in
     convert_to_json resp
 
-  let put ~token ~url json =
+  let put ~headers ~url json =
     let body = Ezjsonm.value_to_string json in
-    let* resp = put_from ~token ~url body in
+    let* resp = put_from ~headers ~url body in
     convert_to_json resp
 
-  let delete ~token ~url =
-    let* resp = delete_from ~token ~url in
+  let delete ~headers ~url =
+    let* resp = delete_from ~headers ~url in
     convert_to_json resp
 end
 
