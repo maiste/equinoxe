@@ -120,7 +120,7 @@ module Term = struct
     ]
 
   let not_supported_r meth case =
-    Error
+    Lwt_result.fail
       (`Msg
         (Format.sprintf "Method %s is not supported with %s." (to_string meth)
            case))
@@ -131,5 +131,8 @@ module Term = struct
       List.fold_left (fun acc opt -> "- " ^ opt ^ "\n" ^ acc) "" opts
     in
     let msg = header ^ opts in
-    Error (`Msg msg)
+    Lwt_result.fail (`Msg msg)
+
+  let lwt_result t =
+    Term.(term_result (const Lwt_main.run $ t))
 end

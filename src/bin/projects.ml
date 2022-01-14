@@ -95,7 +95,7 @@ let projects_t =
       ()
   in
   Term.
-    ( term_result (const projects $ token_t $ meth_t),
+    ( lwt_result (const projects $ token_t $ meth_t),
       info "/projects" ~doc ~exits ~man )
 
 let projects_id_t =
@@ -111,7 +111,7 @@ let projects_id_t =
     Arg.(value & opt (some string) None & info [ "id" ] ~doc)
   in
   Term.
-    ( term_result (const projects_id $ token_t $ meth_t $ id_t),
+    ( lwt_result (const projects_id $ token_t $ meth_t $ id_t),
       info "/projects/id" ~doc ~exits ~man )
 
 let config_t =
@@ -192,7 +192,7 @@ let projects_id_devices_t =
     Arg.(value & opt (some string) None & info [ "id" ] ~doc)
   in
   Term.
-    ( term_result
+    ( lwt_result
         (const projects_id_devices $ token_t $ meth_t $ id_t $ config_t),
       info "/projects/id/devices" ~doc ~exits ~man )
 

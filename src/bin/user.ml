@@ -27,6 +27,7 @@ module Json = Utils.Json
 module Equinoxe = Utils.Equinoxe
 open Cmdliner
 open Utils.Term
+open Lwt.Infix
 
 (* Actions *)
 
@@ -59,12 +60,12 @@ let user_api_keys_id meth id =
   | DELETE ->
       if has_requiered id then
         let id = Option.get id in
-        Equinoxe.Auth.delete_user_api_keys_id e ~id () |> Json.to_unit_r
-        |> function
+        Equinoxe.Auth.delete_user_api_keys_id e ~id () |> Json.to_unit
+        >>= function
         | Ok () ->
             Format.printf "Api key %s deleted.@." id;
-            Ok ()
-        | e -> e
+            Lwt_result.return ()
+        | e -> Lwt.return e
       else not_all_requiered_r [ "id" ]
   | meth -> not_supported_r meth "/user/api-keys"
 
@@ -76,7 +77,7 @@ let user_t =
   let man =
     man_meth ~get:("Retrieve informations about the current user.", [], []) ()
   in
-  Term.(term_result (const user $ meth_t), info "/user" ~doc ~exits ~man)
+  Term.(lwt_result (const user $ meth_t), info "/user" ~doc ~exits ~man)
 
 let user_api_keys_t =
   let doc = "Manage user api-keys." in
@@ -96,7 +97,7 @@ let user_api_keys_t =
     Arg.(value & opt (some string) None & info [ "description" ] ~doc)
   in
   Term.
-    ( term_result (const user_api_keys $ meth_t $ description_t $ write_t),
+    ( lwt_result (const user_api_keys $ meth_t $ description_t $ write_t),
       info "/user/api-keys" ~doc ~exits ~man )
 
 let user_api_keys_id_t =
@@ -108,7 +109,7 @@ let user_api_keys_id_t =
     Arg.(value & opt (some string) None & info [ "id" ] ~doc)
   in
   Term.
-    ( term_result (const user_api_keys_id $ meth_t $ id_t),
+    ( lwt_result (const user_api_keys_id $ meth_t $ id_t),
       info "/user/api-keys/id" ~doc ~exits ~man )
 
 let t = [ user_t; user_api_keys_t; user_api_keys_id_t ]

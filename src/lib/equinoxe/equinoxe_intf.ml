@@ -32,7 +32,7 @@ module type API = sig
   type t
   (** Abstract type [t] represents the information known by the API system. *)
 
-  val create : ?address:string -> token:string -> unit -> t
+  val create : ?address:string -> ?token:string -> unit -> t
   (** [create ~address ~token ()] returns an {!t} object, you need to manipulate
       when executing requests. Default [address] is
       [https://api.equinix.com/metal/v1/] and default [token] is empty. *)

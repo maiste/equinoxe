@@ -38,7 +38,7 @@ module Make (B : Backend) : API with type 'a io = 'a B.io = struct
 
   type t = { address : string ; token : string }
 
-  let create ?(address = "https://api.equinix.com/metal/v1/") ~token () =
+  let create ?(address = "https://api.equinix.com/metal/v1/") ?(token = "") () =
     { address ; token }
 
   module Json = struct
