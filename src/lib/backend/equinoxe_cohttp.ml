@@ -28,12 +28,8 @@ module Client = Cohttp_lwt_unix.Client
 module Json = Equinoxe.Json
 
 module Backend = struct
-  (**** Type definitions ****)
 
-  type t = { address : string; token : string }
-
-  let token t = t.token
-  let address t = t.address
+  type 'a io = 'a Lwt.t
 
   (**** Default values ****)
 
@@ -58,72 +54,61 @@ module Backend = struct
   let convert_to_json (resp, body) =
     let code = Cohttp.(Response.status resp |> Code.code_of_status) in
     if code >= 200 && code < 300 then
-      Lwt.catch
-        (fun () ->
-          let+ body = Cohttp_lwt.Body.to_string body in
-          match body with "" -> Json.of_string "{ }" | s -> Json.of_string s)
-        (fun e -> Lwt.return @@ Json.error (Printexc.to_string e))
+      let+ body = Cohttp_lwt.Body.to_string body in
+      (match body with "" -> `O [] | s -> Ezjsonm.from_string s)
     else
       let msg = Format.sprintf "Cohttp exits with HTTP code %d" code in
-      Lwt.return @@ Json.error msg
+      Lwt.fail_with msg
 
   (**** Http methode ****)
 
   let compute = compute ~time:10.0
 
-  let get_from t path =
-    let headers = build_header t.token in
-    let url = Filename.concat t.address path |> Uri.of_string in
+  let get_from ~token ~url =
+    let headers = build_header token in
+    let url = Uri.of_string url in
     let f () = Client.get ~headers url in
     compute ~f
 
-  let post_from t ~path body =
-    let headers = build_header t.token in
-    let url = Filename.concat t.address path |> Uri.of_string in
+  let post_from ~token ~url body =
+    let headers = build_header token in
+    let url = Uri.of_string url in
     let body = Cohttp_lwt.Body.of_string body in
     let f () = Client.post ~headers ~body url in
     compute ~f
 
-  let put_from t ~path body =
-    let headers = build_header t.token in
-    let url = Filename.concat t.address path |> Uri.of_string in
+  let put_from ~token ~url body =
+    let headers = build_header token in
+    let url = Uri.of_string url in
     let body = Cohttp_lwt.Body.of_string body in
     let f () = Client.put ~headers ~body url in
     compute ~f
 
-  let delete_from t path =
-    let headers = build_header t.token in
-    let url = Filename.concat t.address path |> Uri.of_string in
+  let delete_from ~token ~url =
+    let headers = build_header token in
+    let url = Uri.of_string url in
     let f () = Client.delete ~headers url in
     compute ~f
 
   (**** API ****)
 
-  let create ~address ~token () = { address; token }
-
-  let get t ~path () =
-    let* resp = get_from t path in
+  let get ~token ~url =
+    let* resp = get_from ~token ~url in
     convert_to_json resp
 
-  let post t ~path json =
-    match Json.export json with
-    | Ok body ->
-        let* resp = post_from t ~path body in
-        convert_to_json resp
-    | Error (`Msg e) -> Lwt.return @@ Json.error e
-
-  let put t ~path json =
-    match Json.export json with
-    | Ok body ->
-        let* resp = put_from t ~path body in
-        convert_to_json resp
-    | Error (`Msg e) -> Lwt.return @@ Json.error e
-
-  let delete t ~path () =
-    let* resp = delete_from t path in
+  let post ~token ~url json =
+    let body = Ezjsonm.value_to_string json in
+    let* resp = post_from ~token ~url body in
     convert_to_json resp
 
-  let run json = Lwt_main.run json
+  let put ~token ~url json =
+    let body = Ezjsonm.value_to_string json in
+    let* resp = put_from ~token ~url body in
+    convert_to_json resp
+
+  let delete ~token ~url =
+    let* resp = delete_from ~token ~url in
+    convert_to_json resp
 end
 
 module Api = Equinoxe.Make (Backend)

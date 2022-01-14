@@ -22,41 +22,29 @@
 (*                                                                           *)
 (*****************************************************************************)
 
+type json = Ezjsonm.value
+
 module type S = sig
   (** This module gathers all the methods you need to be able to execute HTTP
       requests to contact an API server. It must send application/json request. *)
 
-  type t
-  (** [t] contains the information about the token you are using to identify the
-      client and the address of the server (URL). *)
+  type 'a io
+  (** The I/O monad used to execute HTTP request. *)
 
-  val token : t -> string
-  (** [token t] returns the token associated with the data structure. *)
+  val get : token:string -> url:string -> json io
+  (** [get t ~url ()] executes a request to the server as a [GET] call and,
+      returns the result as {!json}. *)
 
-  val address : t -> string
-  (** [address t] returns the address of the server. *)
+  val post : token:string -> url:string -> json -> json io
+  (** [post t  ~url json] executes a request to the server as a [POST] call
+      using {!json} to describe the request. It returns the result as
+      {!json}. *)
 
-  val create : address:string -> token:string -> unit -> t
-  (** [create ~address ~token ()] builds the configuration you are going to use
-      to execute the request. *)
+  val put : token:string -> url:string -> json -> json io
+  (** [put t ~url json] executes a request to the server as a [PUT] call using
+      {!json} to describe the request. It returns the result as {!json}. *)
 
-  val get : t -> path:string -> unit -> Json.t Lwt.t
-  (** [get t ~path ()] executes a request to the server as a [GET] call and,
-      returns the result as {!Json.t}. *)
-
-  val post : t -> path:string -> Json.t -> Json.t Lwt.t
-  (** [post t  ~path json] executes a request to the server as a [POST] call
-      using {!Json.t} to describe the request. It returns the result as
-      {!Json.t}. *)
-
-  val put : t -> path:string -> Json.t -> Json.t Lwt.t
-  (** [put t ~path json] executes a request to the server as a [PUT] call using
-      {!Json.t} to describe the request. It returns the result as {!Json.t}. *)
-
-  val delete : t -> path:string -> unit -> Json.t Lwt.t
+  val delete : token:string -> url:string -> json io
   (** [delete t ~path ()] executes a request to the server as a [DELETE] call
-      and, returns the result as {!Json.t}. *)
-
-  val run : Json.t Lwt.t -> Json.t
-  (** [run json] unwraps the API request and gives a JSON. *)
+      and, returns the result as {!json}. *)
 end

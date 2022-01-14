@@ -26,28 +26,53 @@ include Equinoxe_intf
 
 (* Functor to build API using a specific call API system. *)
 module Make (B : Backend) : API = struct
-  open Json.Infix
 
-  type t = B.t
+  type json = Ezjsonm.value
 
-  let create ?(address = "https://api.equinix.com/metal/v1/") ?(token = "") () =
-    B.create ~address ~token ()
+  type 'a io = 'a B.io
+
+  (*
+  let ( let* ) m f = B.bind f m
+  let ( let+ ) m f = B.map f m
+  let return x = B.return x
+  let fail = B.fail
+  *)
+
+  type t = { address : string ; token : string }
+
+  let create ?(address = "https://api.equinix.com/metal/v1/") ~token () =
+    { address ; token }
+
+  module Http = struct
+
+    let url ~t ~path = Filename.concat t.address path
+
+    let run ~t ~path fn = fn ~token:t.token ~url:(url ~t ~path)
+
+    let get = run B.get
+
+    let post body = run B.post body
+
+    (* let put body = run B.put body *)
+
+    let delete = run B.delete
+  end
 
   module Auth = struct
     let get_user_api_keys t =
       let path = "user/api-keys" in
-      B.get ~path t () |> B.run
+      Http.get ~t ~path
 
     let post_user_api_keys t ?(read_only = true) ~description () =
-      let read_only = ("read_only", ~+(string_of_bool read_only)) in
-      let description = ("description", ~+description) in
-      let json = Json.create () -+> read_only -+> description in
-      let path = "user/api-keys" in
-      B.post t ~path json |> B.run
+      let json =
+        `O [ "read_only", `Bool read_only ;
+             "description", `String description ;
+           ] in
+      Http.post ~t ~path:"user/api-keys" json
 
     let delete_user_api_keys_id t ~id () =
       let path = Filename.concat "user/api-keys/" id in
-      B.delete t ~path () |> B.run |> Json.Private.filter_error
+      Http.delete ~t ~path
   end
 
   module Devices = struct
@@ -108,11 +133,11 @@ module Make (B : Backend) : API = struct
 
     let get_devices_id t ~id () =
       let path = Filename.concat "devices" id in
-      B.get t ~path () |> B.run |> Json.Private.filter_error
+      Http.get ~t ~path
 
     let get_devices_id_events t ~id () =
       let path = Format.sprintf "devices/%s/events" id in
-      B.get t ~path () |> B.run |> Json.Private.filter_error
+      Http.get ~t ~path
 
     let post_devices_id_actions t ~id ~action () =
       let action =
@@ -124,63 +149,63 @@ module Make (B : Backend) : API = struct
         | Rescue -> "rescue"
       in
       let path = Format.sprintf "devices/%s/actions?type=%s" id action in
-      let json = Json.create () in
-      B.post t ~path json |> B.run |> Json.Private.filter_error
+      let json = `O [] in
+      Http.post ~t ~path json
 
     let delete_devices_id t ~id () =
       let path = Filename.concat "devices" id in
-      B.delete t ~path () |> B.run |> Json.Private.filter_error
+      Http.delete ~t ~path
 
     let get_devices_id_ips t ~id () =
       let path = Format.sprintf "devices/%s/ips" id in
-      B.get t ~path () |> B.run |> Json.Private.filter_error
+      Http.get ~t ~path
   end
 
   module Projects = struct
     let get_projects t =
       let path = "projects" in
-      B.get t ~path () |> B.run
+      Http.get ~t ~path
 
     let get_projects_id t ~id () =
       let path = Filename.concat "projects" id in
-      B.get t ~path () |> B.run |> Json.Private.filter_error
+      Http.get ~t ~path
 
     let get_projects_id_devices t ~id () =
       let path = Format.sprintf "projects/%s/devices" id in
-      B.get t ~path () |> B.run |> Json.Private.filter_error
+      Http.get ~t ~path
 
     let post_projects_id_devices t ~id ~config () =
       let path = Format.sprintf "projects/%s/devices" id in
       let json =
-        Devices.(
-          Json.create ()
-          -+> ("metro", ~+(location_to_string config.location))
-          -+> ("plan", ~+(plan_to_string config.plan))
-          -+> ("operating_system", ~+(os_to_string config.os))
-          -+> ("hostname", ~+(config.hostname)))
+        let open Devices in
+        `O [ "metro", `String (location_to_string config.location) ;
+             "plan", `String (plan_to_string config.plan) ;
+             "operating_system", `String (os_to_string config.os) ;
+             "hostname", `String config.hostname
+           ]
       in
-      B.post t ~path json |> B.run |> Json.Private.filter_error
+      Http.post ~t ~path json
   end
 
   module Users = struct
     let get_user t =
       let path = "user" in
-      B.get ~path t () |> B.run
+      Http.get ~t ~path
   end
 
   module Orga = struct
     let get_organizations t =
       let path = "organizations" in
-      B.get t ~path () |> B.run
+      Http.get ~t ~path
 
     let get_organizations_id t ~id () =
       let path = Filename.concat "organizations" id in
-      B.get t ~path () |> B.run |> Json.Private.filter_error
+      Http.get ~t ~path
   end
 
   module Ip = struct
     let get_ips_id t ~id () =
       let path = Filename.concat "ips" id in
-      B.get t ~path () |> B.run |> Json.Private.filter_error
+      Http.get ~t ~path
   end
 end
