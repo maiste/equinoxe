@@ -192,8 +192,7 @@ let projects_id_devices_t =
     Arg.(value & opt (some string) None & info [ "id" ] ~doc)
   in
   Term.
-    ( lwt_result
-        (const projects_id_devices $ token_t $ meth_t $ id_t $ config_t),
+    ( lwt_result (const projects_id_devices $ token_t $ meth_t $ id_t $ config_t),
       info "/projects/id/devices" ~doc ~exits ~man )
 
 let t = [ projects_t; projects_id_t; projects_id_devices_t ]

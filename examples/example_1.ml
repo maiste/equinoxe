@@ -33,9 +33,9 @@ let get_project_id_from name =
   let* projects =
     E.Projects.get_projects api --> "projects"
     |> to_list (fun p ->
-         let+ name = Lwt.return p --> "name" |> to_string
-         and+ id = Lwt.return p --> "id" |> to_string
-         in name, id)
+           let+ name = Lwt.return p --> "name" |> to_string
+           and+ id = Lwt.return p --> "id" |> to_string in
+           (name, id))
   in
   match List.find_opt (fun (name', _) -> name = name') projects with
   | Some (_, id) -> Lwt.return id

@@ -26,7 +26,6 @@ module type API = sig
   (** It is the signature that matches the API of the website. *)
 
   type 'a io
-
   type json = Ezjsonm.value
 
   type t
@@ -142,8 +141,8 @@ module type API = sig
         token. *)
 
     val get_organizations_id : t -> id:string -> unit -> json io
-    (** [get_organizations_id t ~id ()] returns the {!json io} that is referenced
-        by the [id] given in parameter. *)
+    (** [get_organizations_id t ~id ()] returns the {!json io} that is
+        referenced by the [id] given in parameter. *)
   end
 
   module Projects : sig
@@ -177,17 +176,11 @@ module type API = sig
     (** Helper functions to manipulate Json *)
 
     val ( --> ) : json io -> string -> json io
-
     val ( |-> ) : json io -> int -> json io
-
     val to_list : (json -> 'a io) -> json io -> 'a list io
-
     val to_string : json io -> string io
-
     val to_unit : json io -> unit io
-
     val pp_r : json io -> unit io
-
   end
 end
 

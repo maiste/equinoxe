@@ -26,9 +26,7 @@ include Equinoxe_intf
 
 (* Functor to build API using a specific call API system. *)
 module Make (B : Backend) : API with type 'a io = 'a B.io = struct
-
   type json = Ezjsonm.value
-
   type 'a io = 'a B.io
 
   let return x = B.return x
@@ -36,28 +34,25 @@ module Make (B : Backend) : API with type 'a io = 'a B.io = struct
   let ( let* ) m f = B.bind f m
   let fail msg = B.fail (`Msg msg)
 
-  type t = { address : string ; token : string }
+  type t = { address : string; token : string }
 
   let create ?(address = "https://api.equinix.com/metal/v1/") ?(token = "") () =
-    { address ; token }
+    { address; token }
 
   module Json = struct
-
     let ( --> ) m field =
       let* obj = m in
-      try return (Ezjsonm.find obj [field])
+      try return (Ezjsonm.find obj [ field ])
       with Not_found -> fail (Format.sprintf "JSON missing field %S" field)
 
     let ( |-> ) m index =
       let* arr = m in
       match arr with
-      | `A lst ->
-          begin match List.nth_opt lst index with
+      | `A lst -> (
+          match List.nth_opt lst index with
           | Some x -> return x
-          | None -> fail (Format.sprintf "JSON array missing %d index" index)
-          end
-      | _ ->
-          fail "JSON access to index on a non-array"
+          | None -> fail (Format.sprintf "JSON array missing %d index" index))
+      | _ -> fail "JSON access to index on a non-array"
 
     let to_list f m =
       let* m = m in
@@ -69,21 +64,17 @@ module Make (B : Backend) : API with type 'a io = 'a B.io = struct
                 let* acc = acc in
                 let+ x = f x in
                 x :: acc)
-              (return [])
-              lst
+              (return []) lst
           in
           List.rev lst
-      | _ ->
-          fail "JSON is not a list"
+      | _ -> fail "JSON is not a list"
 
     let to_string =
-      B.bind
-        (function
-          | `String s -> return s
-          | _ -> fail "JSON is not a string")
+      B.bind (function
+        | `String s -> return s
+        | _ -> fail "JSON is not a string")
 
-    let to_unit =
-      B.map (fun _ -> ())
+    let to_unit = B.map (fun _ -> ())
 
     let pp_r json =
       let+ json = json in
@@ -91,21 +82,16 @@ module Make (B : Backend) : API with type 'a io = 'a B.io = struct
   end
 
   module Http = struct
-
     let url ~t ~path = Filename.concat t.address path
 
     let headers ~token =
       let token = if token = "" then [] else [ ("X-Auth-Token", token) ] in
       token @ [ ("Content-Type", "application/json") ]
 
-    let get_json = function
-      | "" -> `O [ ]
-      | str -> Ezjsonm.from_string str
+    let get_json = function "" -> `O [] | str -> Ezjsonm.from_string str
 
     let request ~t ~path http_request =
-      http_request
-        ~headers: (headers ~token:t.token)
-        ~url: (url ~t ~path)
+      http_request ~headers:(headers ~token:t.token) ~url:(url ~t ~path)
 
     let run ~t ~path http_request =
       let+ body = request ~t ~path http_request in
@@ -117,7 +103,6 @@ module Make (B : Backend) : API with type 'a io = 'a B.io = struct
       get_json body
 
     let get = run B.get
-
     let post json = run_with_body B.post json
 
     (* let put json = run_with_body B.put json *)
@@ -132,9 +117,11 @@ module Make (B : Backend) : API with type 'a io = 'a B.io = struct
 
     let post_user_api_keys t ?(read_only = true) ~description () =
       let json =
-        `O [ "read_only", `Bool read_only ;
-             "description", `String description ;
-           ] in
+        `O
+          [
+            ("read_only", `Bool read_only); ("description", `String description);
+          ]
+      in
       Http.post ~t ~path:"user/api-keys" json
 
     let delete_user_api_keys_id t ~id () =
@@ -245,11 +232,13 @@ module Make (B : Backend) : API with type 'a io = 'a B.io = struct
       let path = Format.sprintf "projects/%s/devices" id in
       let json =
         let open Devices in
-        `O [ "metro", `String (location_to_string config.location) ;
-             "plan", `String (plan_to_string config.plan) ;
-             "operating_system", `String (os_to_string config.os) ;
-             "hostname", `String config.hostname
-           ]
+        `O
+          [
+            ("metro", `String (location_to_string config.location));
+            ("plan", `String (plan_to_string config.plan));
+            ("operating_system", `String (os_to_string config.os));
+            ("hostname", `String config.hostname);
+          ]
       in
       Http.post ~t ~path json
   end

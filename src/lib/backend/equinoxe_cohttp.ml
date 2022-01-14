@@ -27,7 +27,6 @@ open Lwt.Infix
 module Client = Cohttp_lwt_unix.Client
 
 module Backend = struct
-
   type 'a io = 'a Lwt.t
 
   let return = Lwt.return
@@ -53,16 +52,14 @@ module Backend = struct
 
   let get_body (resp, body) =
     let code = Cohttp.(Response.status resp |> Code.code_of_status) in
-    if code >= 200 && code < 300 then
-      Cohttp_lwt.Body.to_string body
+    if code >= 200 && code < 300 then Cohttp_lwt.Body.to_string body
     else
       let msg = Format.sprintf "Cohttp exits with HTTP code %d" code in
       Lwt.fail_with msg
 
   (**** Http methods ****)
 
-  let compute ~f =
-    compute ~time:10.0 ~f >>= get_body
+  let compute ~f = compute ~time:10.0 ~f >>= get_body
 
   let get ~headers ~url =
     let headers = build_headers headers in

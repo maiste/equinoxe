@@ -27,7 +27,6 @@ type 'a io = ('a, [ `Msg of string ]) Lwt_result.t
 module Client = Http_lwt_client
 
 module Backend = struct
-
   type nonrec 'a io = 'a io
 
   let return = Lwt_result.return

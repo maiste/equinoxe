@@ -23,7 +23,6 @@
 (*****************************************************************************)
 
 type error = [ `Msg of string ]
-
 type headers = (string * string) list
 
 module type S = sig
@@ -44,8 +43,7 @@ module type S = sig
 
   val post : headers:headers -> url:string -> string -> string io
   (** [post t  ~url json] executes a request to the server as a [POST] call
-      using {!json} to describe the request. It returns the result as
-      {!json}. *)
+      using {!json} to describe the request. It returns the result as {!json}. *)
 
   val put : headers:headers -> url:string -> string -> string io
   (** [put t ~url json] executes a request to the server as a [PUT] call using

@@ -133,6 +133,5 @@ module Term = struct
     let msg = header ^ opts in
     Lwt_result.fail (`Msg msg)
 
-  let lwt_result t =
-    Term.(term_result (const Lwt_main.run $ t))
+  let lwt_result t = Term.(term_result (const Lwt_main.run $ t))
 end
