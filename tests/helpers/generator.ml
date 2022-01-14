@@ -35,7 +35,7 @@ module MakeTest
 struct
   let port = Config.port
   let address = "http://localhost:" ^ string_of_int port
-  let http = Http.create ~address ~token:(`Str "") ()
+  let http = Http.create ~address ~token:"" ()
 
   let compute_or_fail ?(time = 5.0) ~f server =
     ( Lwt.pick
