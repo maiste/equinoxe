@@ -34,6 +34,20 @@ let extract_body body =
   Body.schedule_read body ~on_eof ~on_read;
   Buffer.contents buffer
 
+(* Streaming write to handle EOF. *)
+let write_body_and_close reqd body =
+  let open Httpaf in
+  let resp =
+    Response.create
+      ~headers:
+        (Headers.of_list
+           [ ("content-type", "application/json"); ("connection", "close") ])
+      `OK
+  in
+  let response_body = Reqd.respond_with_streaming reqd resp in
+  Body.write_string response_body body;
+  Body.close_writer response_body
+
 (* Many assert false as this is not supposed to test the web server but
    the API *)
 let request_handler _ reqd =
@@ -48,7 +62,7 @@ let request_handler _ reqd =
         | Ok body -> body
         | _ -> assert false
       in
-      Reqd.respond_with_string reqd (Response.create `OK) body
+      write_body_and_close reqd body
   | { Request.meth = `POST | `PUT; _ } ->
       let json = Json.of_string body in
       let userId =
@@ -61,9 +75,8 @@ let request_handler _ reqd =
         | Ok b -> b
         | _ -> assert false
       in
-      Reqd.respond_with_string reqd (Response.create `OK) body
-  | { Request.meth = `DELETE; _ } ->
-      Reqd.respond_with_string reqd (Response.create `OK) "{}"
+      write_body_and_close reqd body
+  | { Request.meth = `DELETE; _ } -> write_body_and_close reqd "{}"
   | _ -> assert false
 
 let error_handler (_ : Unix.sockaddr) ?request:_ error start_response =

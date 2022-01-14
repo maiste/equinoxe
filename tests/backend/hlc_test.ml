@@ -1,6 +1,6 @@
 (*****************************************************************************)
 (* Open Source License                                                       *)
-(* Copyright (c) 2021-present Étienne Marais <etienne@maiste.fr>             *)
+(* Copyright (c) 2022-present Étienne Marais <etienne@maiste.fr>             *)
 (*                                                                           *)
 (* Permission is hereby granted, free of charge, to any person obtaining a   *)
 (* copy of this software and associated documentation files (the "Software"),*)
@@ -22,22 +22,12 @@
 (*                                                                           *)
 (*****************************************************************************)
 
-(** The [Sys] module provides helpers for system calls. It's an extension of
-    {!Sys} module. *)
-module Sys : sig
-  include module type of Sys
-
-  val path_from_home_dir : string -> string
-  (** [path_from_home_dir path] returns a new path from the home directory. It
-      can be seen as an expansion of "$HOME/path".
-
-      It raises {!Not_found} if the HOME value is not found. *)
-end
-
-(** The [Reader] module provides helpers to read from files. *)
-module Reader : sig
-  val read_token_opt : string -> string option
-  (** [read_token_opt path] reads the first line of the file [path] and returns
-      it as [Some token] if it founds one, otherwise [None]. The token must be
-      on the first line of the file. *)
-end
+let () =
+  let module Test =
+    Helpers.Generator.MakeTest
+      (Equinoxe_hlc.Backend)
+      (struct
+        let port = 8081
+      end)
+  in
+  Lwt_main.run @@ Test.run "Http-lwt-client"

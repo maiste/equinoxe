@@ -23,8 +23,9 @@
 (*****************************************************************************)
 
 open Lwt.Syntax
+open Lwt.Infix
+module Client = Cohttp_lwt_unix.Client
 module Json = Equinoxe.Json
-module Client = Http_lwt_client
 
 module Backend = struct
   (**** Type definitions ****)
@@ -38,63 +39,88 @@ module Backend = struct
 
   let build_header token =
     let token = if token = "" then [] else [ ("X-Auth-Token", token) ] in
-    token @ [ ("Content-Type", "application/json") ]
+    token @ [ ("Content-Type", "application/json") ] |> Cohttp.Header.of_list
 
   (***** Helpers *****)
 
-  let convert_to_json resp =
-    match resp with
-    | Ok (_, Some "") -> Json.of_string "{ }"
-    | Ok (_, Some s) -> Json.of_string s
-    | Ok (_, None) -> Json.error "{ }"
-    | Error (`Msg e) -> Json.error e
+  let compute ~time ~f =
+    let* status =
+      Lwt.pick
+        [
+          (f () >|= fun v -> `Done v);
+          (Lwt_unix.sleep time >|= fun () -> `Timeout);
+        ]
+    in
+    match status with
+    | `Done v -> Lwt.return v
+    | `Timeout -> Lwt.fail_with "Http request timeout"
+
+  let convert_to_json (resp, body) =
+    let code = Cohttp.(Response.status resp |> Code.code_of_status) in
+    if code >= 200 && code < 300 then
+      Lwt.catch
+        (fun () ->
+          let+ body = Cohttp_lwt.Body.to_string body in
+          match body with "" -> Json.of_string "{ }" | s -> Json.of_string s)
+        (fun e -> Lwt.return @@ Json.error (Printexc.to_string e))
+    else
+      let msg = Format.sprintf "Cohttp exits with HTTP code %d" code in
+      Lwt.return @@ Json.error msg
 
   (**** Http methode ****)
 
+  let compute = compute ~time:10.0
+
   let get_from t path =
     let headers = build_header t.token in
-    let url = Filename.concat t.address path in
-    Client.one_request ~meth:`GET ~headers url
+    let url = Filename.concat t.address path |> Uri.of_string in
+    let f () = Client.get ~headers url in
+    compute ~f
 
   let post_from t ~path body =
     let headers = build_header t.token in
-    let url = Filename.concat t.address path in
-    Client.one_request ~meth:`POST ~headers ~body url
+    let url = Filename.concat t.address path |> Uri.of_string in
+    let body = Cohttp_lwt.Body.of_string body in
+    let f () = Client.post ~headers ~body url in
+    compute ~f
 
   let put_from t ~path body =
     let headers = build_header t.token in
-    let url = Filename.concat t.address path in
-    Client.one_request ~meth:`PUT ~headers ~body url
+    let url = Filename.concat t.address path |> Uri.of_string in
+    let body = Cohttp_lwt.Body.of_string body in
+    let f () = Client.put ~headers ~body url in
+    compute ~f
 
   let delete_from t path =
     let headers = build_header t.token in
-    let url = Filename.concat t.address path in
-    Client.one_request ~meth:`DELETE ~headers url
+    let url = Filename.concat t.address path |> Uri.of_string in
+    let f () = Client.delete ~headers url in
+    compute ~f
 
   (**** API ****)
 
   let create ~address ~token () = { address; token }
 
   let get t ~path () =
-    let+ resp = get_from t path in
+    let* resp = get_from t path in
     convert_to_json resp
 
   let post t ~path json =
     match Json.export json with
     | Ok body ->
-        let+ resp = post_from t ~path body in
+        let* resp = post_from t ~path body in
         convert_to_json resp
     | Error (`Msg e) -> Lwt.return @@ Json.error e
 
   let put t ~path json =
     match Json.export json with
     | Ok body ->
-        let+ resp = put_from t ~path body in
+        let* resp = put_from t ~path body in
         convert_to_json resp
     | Error (`Msg e) -> Lwt.return @@ Json.error e
 
   let delete t ~path () =
-    let+ resp = delete_from t path in
+    let* resp = delete_from t path in
     convert_to_json resp
 
   let run json = Lwt_main.run json

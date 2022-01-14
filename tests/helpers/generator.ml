@@ -23,17 +23,34 @@
 (*****************************************************************************)
 
 module Json = Equinoxe.Json
-module Helper_server = Helper_server_hcl
 open Json.Infix
 open Lwt.Syntax
+open Lwt.Infix
 open Utils
 
-module MakeTest (Http : Equinoxe.Backend) = struct
-  let http = Http.create ~address:"http://localhost:8080" ~token:(`Str "") ()
+module MakeTest
+    (Http : Equinoxe.Backend) (Config : sig
+      val port : int
+    end) =
+struct
+  let port = Config.port
+  let address = "http://localhost:" ^ string_of_int port
+  let http = Http.create ~address ~token:"" ()
+
+  let compute_or_fail ?(time = 5.0) ~f server =
+    ( Lwt.pick
+        [
+          (f >|= fun v -> `Done v); (Lwt_unix.sleep time >|= fun () -> `Timeout);
+        ]
+    >|= fun v -> v )
+    >>= function
+    | `Done v -> Lwt.return v
+    | `Timeout ->
+        Server.close server >>= fun () -> Lwt.fail (Failure "Timeout!")
 
   let test_address _ () =
-    let address = Http.address http in
-    Alcotest.(check string "same address" address "http://localhost:8080");
+    let address' = Http.address http in
+    Alcotest.(check string "same address" address address');
     Lwt.return_unit
 
   let test_token_empty _ () =
@@ -42,44 +59,48 @@ module MakeTest (Http : Equinoxe.Backend) = struct
     Lwt.return_unit
 
   let test_get _ () =
-    let* server = Helper_server.listen 8080 in
-    let* json = Http.get http ~path:"" () in
+    let* server = Server.listen port in
+    let json = Http.get http ~path:"" () in
+    let* json = compute_or_fail ~f:json server in
     let id = json --> "id" |> Json.to_int_r in
     Alcotest.(check (result int error_msg) "gather id from get" id (Ok 1));
-    Helper_server.close server
+    Server.close server
 
   let test_post _ () =
-    let* server = Helper_server.listen 8080 in
+    let* server = Server.listen port in
     let body =
       Json.create ()
       -+> ("title", ~+"foo")
       -+> ("body", ~+"bar")
       -+> ("userId", ~$1.0)
     in
-    let* json = Http.post http ~path:"" body in
+    let json = Http.post http ~path:"" body in
+    let* json = compute_or_fail ~f:json server in
     let id = json --> "userId" |> Json.to_int_r in
     Alcotest.(check (result int error_msg) "gather id from post" id (Ok 1));
-    Helper_server.close server
+    Server.close server
 
   let test_put _ () =
-    let* server = Helper_server.listen 8080 in
+    let* server = Server.listen port in
     let body =
       Json.create ()
       -+> ("title", ~+"foo")
       -+> ("body", ~+"bar")
       -+> ("userId", ~$1.0)
     in
-    let* json = Http.put http ~path:"" body in
+    let json = Http.put http ~path:"" body in
+    let* json = compute_or_fail ~f:json server in
     let id = json --> "userId" |> Json.to_int_r in
     Alcotest.(check (result int error_msg) "gather userId from put" id (Ok 1));
-    Helper_server.close server
+    Server.close server
 
   let test_delete _ () =
-    let* server = Helper_server.listen 8080 in
-    let* json = Http.get http ~path:"" () in
+    let* server = Server.listen port in
+    let json = Http.delete http ~path:"" () in
+    let* json = compute_or_fail ~f:json server in
     let id = json |> Json.to_unit_r in
     Alcotest.(check (result unit error_msg) "delete a resource" id (Ok ()));
-    Helper_server.close server
+    Server.close server
 
   (* Main *)
 
@@ -102,7 +123,3 @@ module MakeTest (Http : Equinoxe.Backend) = struct
             ] );
         ])
 end
-
-let () =
-  let module Test = MakeTest (Equinoxe_hlc.Backend) in
-  Lwt_main.run @@ Test.run "Http-lwt-client"

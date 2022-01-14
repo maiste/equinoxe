@@ -4,3 +4,10 @@
   (libraries equinoxe
              http-lwt-client)
   (modules equinoxe_hlc))
+
+(library
+  (name equinoxe_cohttp)
+  (public_name equinoxe-cohttp)
+  (libraries equinoxe
+             cohttp-lwt-unix)
+  (modules equinoxe_cohttp))

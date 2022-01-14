@@ -1,6 +1,6 @@
 (*****************************************************************************)
 (* Open Source License                                                       *)
-(* Copyright (c) 2021-present Étienne Marais <etienne@maiste.fr>             *)
+(* Copyright (c) 2022-present Étienne Marais <etienne@maiste.fr>             *)
 (*                                                                           *)
 (* Permission is hereby granted, free of charge, to any person obtaining a   *)
 (* copy of this software and associated documentation files (the "Software"),*)
@@ -22,8 +22,5 @@
 (*                                                                           *)
 (*****************************************************************************)
 
-(* Error type *)
-let error_msg : [ `Msg of string ] Alcotest.testable =
-  let fmt ppf (`Msg str) = Format.fprintf ppf "Msg: %s" str in
-  let equal (`Msg s1) (`Msg s2) = s1 = s2 in
-  Alcotest.testable fmt equal
+module Generator = Generator
+module Utils = Utils

@@ -1,6 +1,7 @@
 (*****************************************************************************)
+
 (* Open Source License                                                       *)
-(* Copyright (c) 2021-present Étienne Marais <etienne@maiste.fr>             *)
+(* Copyright (c) 2022-present Étienne Marais <etienne@maiste.fr>             *)
 (*                                                                           *)
 (* Permission is hereby granted, free of charge, to any person obtaining a   *)
 (* copy of this software and associated documentation files (the "Software"),*)
@@ -22,22 +23,12 @@
 (*                                                                           *)
 (*****************************************************************************)
 
-module Sys = struct
-  include Sys
-
-  let path_from_home_dir path =
-    let home = Unix.getenv "HOME" in
-    Filename.concat home path
-end
-
-module Reader = struct
-  let read_token_opt path =
-    if Sys.file_exists path then
-      try
-        let cin = open_in path in
-        let res = input_line cin |> String.trim |> Option.some in
-        close_in cin;
-        res
-      with End_of_file -> None
-    else None
-end
+let () =
+  let module Test =
+    Helpers.Generator.MakeTest
+      (Equinoxe_cohttp.Backend)
+      (struct
+        let port = 8080
+      end)
+  in
+  Lwt_main.run @@ Test.run "Cohttp"

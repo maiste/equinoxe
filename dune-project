@@ -40,6 +40,21 @@
     (result (< 1.5))))
 
 (package
+  (name equinoxe-cohttp)
+  (synopsis "Equinoxe with the cohttp-lwt-unix request handler")
+  (description
+    "Equinoxe-cohttp is an implementation of the Equinoxe library using cohttp-lwt-unix.")
+  (depends
+    equinoxe
+    cohttp-lwt-unix
+    (httpaf-lwt-unix :with-test)
+    (alcotest :with-test)
+    (alcotest-lwt :with-test)
+    (odoc :with-doc))
+  (conflicts
+    (result (< 1.5))))
+
+(package
   (name equinoxe-bin)
   (synopsis "An unofficial executable for Equinix")
   (description

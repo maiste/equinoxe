@@ -33,7 +33,12 @@ $ opam install equinoxe
 
 ### Usage
 
-The goal is to provide a minimal set of functions to interact with Equinix API:
+The goal is to provide a minimal set of functions to interact with Equinix API. To run the the actions available with `Equinoxe` you have to install a specific backend (http request client). There are currently two backends: `equinoxe-hlc` which relies on `Httpaf` and `equinoxe-cohttp` which relies on `Cohttp`. You can also provide your own custom backend:
+```OCaml
+module My_Backend : Equinoxe.Backend
+
+module Api = Equinoxe.Make (My_Backend)
+```
 
 ## Issues
 

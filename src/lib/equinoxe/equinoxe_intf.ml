@@ -28,14 +28,10 @@ module type API = sig
   type t
   (** Abstract type [t] represents the information known by the API system. *)
 
-  val create :
-    ?address:string ->
-    ?token:[ `Default | `Str of string | `Path of string ] ->
-    unit ->
-    t
+  val create : ?address:string -> ?token:string -> unit -> t
   (** [create ~address ~token ()] returns an {!t} object, you need to manipulate
-      when executing requests. Default address is
-      [https://api.equinix.com/metal/v1/]. *)
+      when executing requests. Default [address] is
+      [https://api.equinix.com/metal/v1/] and default [token] is empty. *)
 
   module Auth : sig
     (** This module manages API parts related to authentification. *)
@@ -101,8 +97,8 @@ module type API = sig
         understandable by the API. *)
 
     val plan_to_string : plan -> string
-    (** [plan_to_string plan] converts a plan into a string understandable by the
-        API. *)
+    (** [plan_to_string plan] converts a plan into a string understandable by
+        the API. *)
 
     val get_devices_id : t -> id:string -> unit -> Json.t
     (** [get_devices_id t ~id ()] returns a {!Json.t} that contains information
@@ -175,10 +171,8 @@ module type API = sig
 end
 
 module type Backend = Backend.S
+
 module Json = Json
-module Private = struct
-  module Utils = Utils
-end
 
 module type Sigs = sig
   (** Equinoxe library interface. *)
@@ -196,12 +190,4 @@ module type Sigs = sig
   (** Factory to build a system to communicate with Equinix API, using the {!S}
       communication system. *)
   module Make (B : Backend) : API
-
-  (**/**)
-
-  module Private : sig
-    (** This module holds modules that should not be used. *)
-
-    module Utils = Utils
-  end
 end

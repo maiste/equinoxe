@@ -30,8 +30,8 @@ module Make (B : Backend) : API = struct
 
   type t = B.t
 
-  let create ?(address = "https://api.equinix.com/metal/v1/") ?token () =
-    B.create ~address ?token ()
+  let create ?(address = "https://api.equinix.com/metal/v1/") ?(token = "") () =
+    B.create ~address ~token ()
 
   module Auth = struct
     let get_user_api_keys t =

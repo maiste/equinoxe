@@ -30,9 +30,9 @@ open Utils.Term
 
 (* Actions *)
 
-let devices_id meth id =
+let devices_id token meth id =
   let address = Conf.address in
-  let e = Equinoxe.create ~address () in
+  let e = Equinoxe.create ~address ~token () in
   match meth with
   | GET ->
       if has_requiered id then
@@ -46,9 +46,9 @@ let devices_id meth id =
       else not_all_requiered_r [ "id" ]
   | meth -> not_supported_r meth "/devices/{id}"
 
-let devices_id_actions meth id action =
+let devices_id_actions token meth id action =
   let address = Conf.address in
-  let e = Equinoxe.create ~address () in
+  let e = Equinoxe.create ~address ~token () in
   match meth with
   | POST ->
       if has_requiered id then
@@ -57,9 +57,9 @@ let devices_id_actions meth id action =
       else not_all_requiered_r [ "id"; "actions" ]
   | meth -> not_supported_r meth "/devices/{id}/actions"
 
-let devices_id_events meth id =
+let devices_id_events token meth id =
   let address = Conf.address in
-  let e = Equinoxe.create ~address () in
+  let e = Equinoxe.create ~address ~token () in
   match meth with
   | GET ->
       if has_requiered id then
@@ -68,9 +68,9 @@ let devices_id_events meth id =
       else not_all_requiered_r [ "id" ]
   | meth -> not_supported_r meth "/devices/{id}/events"
 
-let devices_id_ips meth id =
+let devices_id_ips token meth id =
   let address = Conf.address in
-  let e = Equinoxe.create ~address () in
+  let e = Equinoxe.create ~address ~token () in
   match meth with
   | GET ->
       if has_requiered id then
@@ -94,7 +94,7 @@ let devices_id_t =
     Arg.(value & opt (some string) None & info [ "id" ] ~doc)
   in
   Term.
-    ( term_result (const devices_id $ meth_t $ id_t),
+    ( term_result (const devices_id $ token_t $ meth_t $ id_t),
       info "/devices/id" ~doc ~exits ~man )
 
 let devices_id_actions_t =
@@ -126,7 +126,7 @@ let devices_id_actions_t =
     Arg.(required & opt (some action) None & info [ "a"; "actions" ] ~doc)
   in
   Term.
-    ( term_result (const devices_id_actions $ meth_t $ id_t $ action_t),
+    ( term_result (const devices_id_actions $ token_t $ meth_t $ id_t $ action_t),
       info "/devices/id/actions" ~doc ~exits ~man )
 
 let devices_id_events_t =
@@ -140,7 +140,7 @@ let devices_id_events_t =
     Arg.(value & opt (some string) None & info [ "id" ] ~doc)
   in
   Term.
-    ( term_result (const devices_id_events $ meth_t $ id_t),
+    ( term_result (const devices_id_events $ token_t $ meth_t $ id_t),
       info "/devices/id/events" ~doc ~exits ~man )
 
 let devices_id_ips_t =
@@ -154,7 +154,7 @@ let devices_id_ips_t =
     Arg.(value & opt (some string) None & info [ "id" ] ~doc)
   in
   Term.
-    ( term_result (const devices_id_ips $ meth_t $ id_t),
+    ( term_result (const devices_id_ips $ token_t $ meth_t $ id_t),
       info "/devices/id/ips" ~doc ~exits ~man )
 
 let t =
