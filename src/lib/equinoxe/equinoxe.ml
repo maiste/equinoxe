@@ -90,17 +90,16 @@ module Make (B : Backend) : API with type 'a io = 'a B.io = struct
 
     let get_json = function
       | "" -> return (`O [])
-      | str ->
+      | str -> (
           let json = Ezjsonm.from_string str in
-          match Ezjsonm.find json ["error"] with
+          match Ezjsonm.find json [ "error" ] with
           | errors ->
               let msg =
                 Format.sprintf "The API returns the following error: %s"
                   (Ezjsonm.value_to_string errors)
               in
               fail msg
-          | exception Not_found ->
-              return json
+          | exception Not_found -> return json)
 
     let request ~t ~path http_request =
       http_request ~headers:(headers ~token:t.token) ~url:(url ~t ~path)

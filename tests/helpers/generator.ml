@@ -22,11 +22,7 @@
 (*                                                                           *)
 (*****************************************************************************)
 
-module Json = Equinoxe.Json
-open Json.Infix
-open Lwt.Syntax
-open Lwt.Infix
-open Utils
+module J = Ezjsonm
 
 module MakeTest
     (Http : Equinoxe.Backend) (Config : sig
@@ -34,92 +30,74 @@ module MakeTest
     end) =
 struct
   let port = Config.port
-  let address = "http://localhost:" ^ string_of_int port
-  let http = Http.create ~address ~token:"" ()
 
-  let compute_or_fail ?(time = 5.0) ~f server =
-    ( Lwt.pick
-        [
-          (f >|= fun v -> `Done v); (Lwt_unix.sleep time >|= fun () -> `Timeout);
-        ]
-    >|= fun v -> v )
-    >>= function
-    | `Done v -> Lwt.return v
-    | `Timeout ->
-        Server.close server >>= fun () -> Lwt.fail (Failure "Timeout!")
+  let headers =
+    [ ("X-Auth-Token", "mytoken"); ("Content-Type", "application/json") ]
 
-  let test_address _ () =
-    let address' = Http.address http in
-    Alcotest.(check string "same address" address address');
-    Lwt.return_unit
+  let url = "http://localhost:" ^ string_of_int port
 
-  let test_token_empty _ () =
-    let token = Http.token http in
-    Alcotest.(check string "empty token" token "");
-    Lwt.return_unit
+  let return x = Http.return x
+  let ( let* ) m f = Http.bind f m
 
   let test_get _ () =
-    let* server = Server.listen port in
-    let json = Http.get http ~path:"" () in
-    let* json = compute_or_fail ~f:json server in
-    let id = json --> "id" |> Json.to_int_r in
-    Alcotest.(check (result int error_msg) "gather id from get" id (Ok 1));
-    Server.close server
+    let* json = Http.get ~url ~headers in
+    let json = Ezjsonm.value_from_string json in
+    let id = J.find json [ "id" ] |> J.get_int in
+    Alcotest.(check int "gather id from get" id 1);
+    return ()
 
   let test_post _ () =
-    let* server = Server.listen port in
     let body =
-      Json.create ()
-      -+> ("title", ~+"foo")
-      -+> ("body", ~+"bar")
-      -+> ("userId", ~$1.0)
+      `O
+        [
+          ("title", `String "foo");
+          ("body", `String "bar");
+          ("userId", `Float 1.0);
+        ]
+      |> J.value_to_string
     in
-    let json = Http.post http ~path:"" body in
-    let* json = compute_or_fail ~f:json server in
-    let id = json --> "userId" |> Json.to_int_r in
-    Alcotest.(check (result int error_msg) "gather id from post" id (Ok 1));
-    Server.close server
+    let* json = Http.post ~url ~headers body in
+    let json = Ezjsonm.value_from_string json in
+    let id = J.find json [ "userId" ] |> J.get_int in
+    Alcotest.(check int "gather id from post" id 1);
+    return ()
 
   let test_put _ () =
-    let* server = Server.listen port in
     let body =
-      Json.create ()
-      -+> ("title", ~+"foo")
-      -+> ("body", ~+"bar")
-      -+> ("userId", ~$1.0)
+      `O
+        [
+          ("title", `String "foo");
+          ("body", `String "bar");
+          ("userId", `Float 1.0);
+        ]
+      |> J.value_to_string
     in
-    let json = Http.put http ~path:"" body in
-    let* json = compute_or_fail ~f:json server in
-    let id = json --> "userId" |> Json.to_int_r in
-    Alcotest.(check (result int error_msg) "gather userId from put" id (Ok 1));
-    Server.close server
+    let* json = Http.put ~url ~headers body in
+    let json = Ezjsonm.value_from_string json in
+    let id = J.find json [ "userId" ] |> J.get_int in
+    Alcotest.(check int "gather userId from put" id 1);
+    return ()
 
   let test_delete _ () =
-    let* server = Server.listen port in
-    let json = Http.delete http ~path:"" () in
-    let* json = compute_or_fail ~f:json server in
-    let id = json |> Json.to_unit_r in
-    Alcotest.(check (result unit error_msg) "delete a resource" id (Ok ()));
-    Server.close server
+    let* _ = Http.delete ~url ~headers in
+    return ()
 
   (* Main *)
 
-  let run name =
+  let run ~exec name =
     let name = Format.sprintf "Http %s module" name in
-    Alcotest_lwt.(
+    let quick name test =
+      Alcotest.test_case name `Quick (fun x -> exec (test x))
+    in
+    Alcotest.(
       run name
         [
-          ( "getters",
-            [
-              test_case "Get right address" `Quick test_address;
-              test_case "Get right token" `Quick test_token_empty;
-            ] );
           ( "call",
             [
-              test_case "GET Method" `Quick test_get;
-              test_case "POST Method" `Quick test_post;
-              test_case "PUT Method" `Quick test_put;
-              test_case "DELETE Method" `Quick test_delete;
+              quick "GET Method" test_get;
+              quick "POST Method" test_post;
+              quick "PUT Method" test_put;
+              quick "DELETE Method" test_delete;
             ] );
         ])
 end
