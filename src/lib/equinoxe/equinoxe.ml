@@ -88,18 +88,30 @@ module Make (B : Backend) : API with type 'a io = 'a B.io = struct
       let token = if token = "" then [] else [ ("X-Auth-Token", token) ] in
       token @ [ ("Content-Type", "application/json") ]
 
-    let get_json = function "" -> `O [] | str -> Ezjsonm.from_string str
+    let get_json = function
+      | "" -> return (`O [])
+      | str ->
+          let json = Ezjsonm.from_string str in
+          match Ezjsonm.find json ["error"] with
+          | errors ->
+              let msg =
+                Format.sprintf "The API returns the following error: %s"
+                  (Ezjsonm.value_to_string errors)
+              in
+              fail msg
+          | exception Not_found ->
+              return json
 
     let request ~t ~path http_request =
       http_request ~headers:(headers ~token:t.token) ~url:(url ~t ~path)
 
     let run ~t ~path http_request =
-      let+ body = request ~t ~path http_request in
+      let* body = request ~t ~path http_request in
       get_json body
 
     let run_with_body ~t ~path http_request json =
       let body = Ezjsonm.value_to_string json in
-      let+ body = request ~t ~path http_request body in
+      let* body = request ~t ~path http_request body in
       get_json body
 
     let get = run B.get
