@@ -104,7 +104,7 @@ module type API = sig
         the API. *)
 
     val get_devices_id : t -> id:string -> unit -> json io
-    (** [get_devices_id t ~id ()] returns a {!json io} that contains information
+    (** [get_devices_id t ~id ()] returns a {!json} that contains information
         about the device specified by [id]. *)
 
     val get_devices_id_events : t -> id:string -> unit -> json io
@@ -118,7 +118,7 @@ module type API = sig
 
     val delete_devices_id : t -> id:string -> unit -> json io
     (** [delete_devices_id t ~id ()] deletes a device on Equinix and returns a
-        {!json io} with the result. *)
+        {!json} with the result. *)
 
     val get_devices_id_ips : t -> id:string -> unit -> json io
     (** [get_devices_id_ips t ~id ()] retrieves information about the device
@@ -141,7 +141,7 @@ module type API = sig
         token. *)
 
     val get_organizations_id : t -> id:string -> unit -> json io
-    (** [get_organizations_id t ~id ()] returns the {!json io} that is
+    (** [get_organizations_id t ~id ()] returns the {!json} that is
         referenced by the [id] given in parameter. *)
   end
 
@@ -152,11 +152,11 @@ module type API = sig
     (** [get_projects t] returns all projects associated with the token. *)
 
     val get_projects_id : t -> id:string -> unit -> json io
-    (** [get_projects_id t ~id ()] returns the {!json io} that is referenced by
+    (** [get_projects_id t ~id ()] returns the {!json} that is referenced by
         the [id] given in parameter. *)
 
     val get_projects_id_devices : t -> id:string -> unit -> json io
-    (** [get_projects_id_devices t ~id ()] returns the {!json io} that contains
+    (** [get_projects_id_devices t ~id ()] returns the {!json} that contains
         all the devices related to the project [id]. *)
 
     val post_projects_id_devices :

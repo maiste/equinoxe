@@ -22,7 +22,7 @@
 (*                                                                           *)
 (*****************************************************************************)
 
-(** It provides an API call system relying on Piaf. *)
+(** It provides an API call system relying on {!Http_lwt_client}. *)
 
 type 'a io = ('a, [ `Msg of string ]) Lwt_result.t
 
