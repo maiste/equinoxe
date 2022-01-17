@@ -35,7 +35,6 @@ struct
     [ ("X-Auth-Token", "mytoken"); ("Content-Type", "application/json") ]
 
   let url = "http://localhost:" ^ string_of_int port
-
   let return x = Http.return x
   let ( let* ) m f = Http.bind f m
 

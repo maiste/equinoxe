@@ -26,7 +26,12 @@ open Cmdliner
 
 (* Import module and create Equinoxe from Ezcurl. *)
 module Equinoxe = Equinoxe_hlc.Api
-module Json = Equinoxe.Json
+
+module Json = struct
+  let pp json = Format.printf "%s" (Ezjsonm.value_to_string ~minify:false json)
+  let pp_r m = Lwt_result.map pp m
+  let to_unit m = Lwt_result.map (fun _ -> ()) m
+end
 
 module Conf = struct
   (* Constantes definitions. *)
