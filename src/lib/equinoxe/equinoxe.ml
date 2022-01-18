@@ -30,8 +30,6 @@ module Make (B : Backend) : API with type 'a io = 'a B.io = struct
   type 'a io = 'a B.io
 
   let return x = B.return x
-
-  (* let ( let+ ) m f = B.map f m *)
   let ( let* ) m f = B.bind f m
   let fail msg = B.fail (`Msg msg)
 
@@ -74,9 +72,6 @@ module Make (B : Backend) : API with type 'a io = 'a B.io = struct
 
     let get = run B.get
     let post json = run_with_body B.post json
-
-    (* let put json = run_with_body B.put json *)
-
     let delete = run B.delete
   end
 
