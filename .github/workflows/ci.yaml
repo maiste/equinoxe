@@ -25,7 +25,6 @@ jobs:
             packages: '.'
 
     runs-on: ${{ matrix.os }}
-
     steps:
       - name: Checkout on branch
         uses: actions/checkout@v2
@@ -35,6 +34,8 @@ jobs:
           ocaml-compiler: ${{ matrix.ocaml-compiler }}
           opam-local-packages: $${ matrix.opam-local-packages }}
           opam-depext-flags: --with-test
+      - name: Pin dependencies
+        run: opam pin add equinoxe.dev -n . && opam pin add equinoxe-cohttp.dev -n . && opam pin add equinoxe-hlc.dev -n .
       - name: Install opam packages
         run: opam install ${{ matrix.packages }} --with-test --deps-only
       - name: Run install - check - test
