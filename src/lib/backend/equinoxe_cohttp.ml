@@ -36,8 +36,6 @@ module Backend = struct
 
   (***** Helpers *****)
 
-  let build_headers headers = Cohttp.Header.of_list headers
-
   let compute ~time ~f =
     let* status =
       Lwt.pick
@@ -62,27 +60,27 @@ module Backend = struct
   let compute ~f = compute ~time:10.0 ~f >>= get_body
 
   let get ~headers ~url =
-    let headers = build_headers headers in
+    let headers = Cohttp.Header.of_list headers in
     let url = Uri.of_string url in
     let f () = Client.get ~headers url in
     compute ~f
 
   let post ~headers ~url body =
-    let headers = build_headers headers in
+    let headers = Cohttp.Header.of_list headers in
     let url = Uri.of_string url in
     let body = Cohttp_lwt.Body.of_string body in
     let f () = Client.post ~headers ~body url in
     compute ~f
 
   let put ~headers ~url body =
-    let headers = build_headers headers in
+    let headers = Cohttp.Header.of_list headers in
     let url = Uri.of_string url in
     let body = Cohttp_lwt.Body.of_string body in
     let f () = Client.put ~headers ~body url in
     compute ~f
 
   let delete ~headers ~url =
-    let headers = build_headers headers in
+    let headers = Cohttp.Header.of_list headers in
     let url = Uri.of_string url in
     let f () = Client.delete ~headers url in
     compute ~f
