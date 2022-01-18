@@ -48,6 +48,11 @@ let write_body_and_close reqd body =
   Body.write_string response_body body;
   Body.close_writer response_body
 
+let check_headers headers =
+  assert (Httpaf.Headers.get headers "X-Auth-Token" = Some "mytoken");
+  assert (Httpaf.Headers.get headers "Content-Type" = Some "application/json");
+  ()
+
 (* Many assert false as this is not supposed to test the web server but
    the API *)
 let request_handler _ reqd =
@@ -55,6 +60,7 @@ let request_handler _ reqd =
   let request = Reqd.request reqd in
   let request_body = Reqd.request_body reqd in
   let body = extract_body request_body in
+  check_headers request.Request.headers;
   match request with
   | { Request.meth = `GET; _ } ->
       let body = `O [ ("id", `Float 1.0) ] |> J.value_to_string in
