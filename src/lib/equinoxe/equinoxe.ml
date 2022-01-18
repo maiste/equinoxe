@@ -81,9 +81,7 @@ module Make (B : Backend) : API with type 'a io = 'a B.io = struct
   end
 
   module Auth = struct
-    let get_user_api_keys t =
-      let path = "user/api-keys" in
-      Http.get ~t ~path
+    let get_user_api_keys t = Http.get ~t ~path:"user/api-keys"
 
     let post_user_api_keys t ?(read_only = true) ~description () =
       let json =
@@ -186,9 +184,7 @@ module Make (B : Backend) : API with type 'a io = 'a B.io = struct
   end
 
   module Projects = struct
-    let get_projects t =
-      let path = "projects" in
-      Http.get ~t ~path
+    let get_projects t = Http.get ~t ~path:"projects"
 
     let get_projects_id t ~id () =
       let path = Filename.concat "projects" id in
@@ -214,15 +210,11 @@ module Make (B : Backend) : API with type 'a io = 'a B.io = struct
   end
 
   module Users = struct
-    let get_user t =
-      let path = "user" in
-      Http.get ~t ~path
+    let get_user t = Http.get ~t ~path:"user"
   end
 
   module Orga = struct
-    let get_organizations t =
-      let path = "organizations" in
-      Http.get ~t ~path
+    let get_organizations t = Http.get ~t ~path:"organizations"
 
     let get_organizations_id t ~id () =
       let path = Filename.concat "organizations" id in
