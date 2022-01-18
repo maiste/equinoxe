@@ -141,8 +141,8 @@ module type API = sig
         token. *)
 
     val get_organizations_id : t -> id:string -> unit -> json io
-    (** [get_organizations_id t ~id ()] returns the {!json} that is
-        referenced by the [id] given in parameter. *)
+    (** [get_organizations_id t ~id ()] returns the {!json} that is referenced
+        by the [id] given in parameter. *)
   end
 
   module Projects : sig
@@ -152,12 +152,12 @@ module type API = sig
     (** [get_projects t] returns all projects associated with the token. *)
 
     val get_projects_id : t -> id:string -> unit -> json io
-    (** [get_projects_id t ~id ()] returns the {!json} that is referenced by
-        the [id] given in parameter. *)
+    (** [get_projects_id t ~id ()] returns the {!json} that is referenced by the
+        [id] given in parameter. *)
 
     val get_projects_id_devices : t -> id:string -> unit -> json io
-    (** [get_projects_id_devices t ~id ()] returns the {!json} that contains
-        all the devices related to the project [id]. *)
+    (** [get_projects_id_devices t ~id ()] returns the {!json} that contains all
+        the devices related to the project [id]. *)
 
     val post_projects_id_devices :
       t -> id:string -> config:Devices.config -> unit -> json io
@@ -184,7 +184,7 @@ module type Sigs = sig
 
   module type Backend = Backend
 
-  (** Factory to build a system to communicate with Equinix API, using the {!S}
-      communication system. *)
+  (** Factory to build a system to communicate with Equinix API, using the
+      {!Backend} communication system. *)
   module Make (B : Backend) : API with type 'a io = 'a B.io
 end
