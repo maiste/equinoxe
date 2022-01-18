@@ -11,7 +11,7 @@ doc: "maiste.github.io/equinoxe"
 bug-reports: "https://github.com/maiste/equinoxe/issues"
 depends: [
   "dune" {>= "2.9"}
-  "equinoxe"
+  "equinoxe" {= version}
   "cohttp-lwt-unix"
   "httpaf-lwt-unix" {with-test}
   "alcotest" {with-test}
