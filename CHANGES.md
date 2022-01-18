@@ -4,6 +4,14 @@
 
 - Add a Cohttp client version, with a specific package (#60, @maiste)
 
+### Changed
+
+- Rewrite the API using `io` monad (#63, @art-w)
+
+### Removed
+
+- Remove `JSON` module and use `Ezjsonm` directly (#63, @art-w)
+
 ## 0.1.0
 
 ### Added
