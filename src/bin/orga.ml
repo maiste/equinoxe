@@ -61,7 +61,7 @@ let organizations_t =
   in
 
   Term.
-    ( term_result (const organizations $ token_t $ meth_t),
+    ( lwt_result (const organizations $ token_t $ meth_t),
       info "/organizations" ~doc ~exits ~man )
 
 let organizations_id_t =
@@ -77,7 +77,7 @@ let organizations_id_t =
     Arg.(value & opt (some string) None & info [ "id" ] ~doc)
   in
   Term.
-    ( term_result (const organizations_id $ token_t $ meth_t $ id_t),
+    ( lwt_result (const organizations_id $ token_t $ meth_t $ id_t),
       info "/organizations/id" ~doc ~exits ~man )
 
 let t = [ organizations_t; organizations_id_t ]

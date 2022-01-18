@@ -1,7 +1,3 @@
 (library
-  (name helpers)
-  (libraries alcotest
-             alcotest-lwt
-             equinoxe
-             httpaf
-             httpaf-lwt-unix))
+ (name helpers)
+ (libraries alcotest alcotest-lwt equinoxe httpaf httpaf-lwt-unix))

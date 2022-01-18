@@ -1,6 +1,5 @@
 (executable
-  (name main)
-  (public_name equinoxe-cli)
-  (package equinoxe-bin)
-  (libraries cmdliner
-             equinoxe-hlc))
+ (name main)
+ (public_name equinoxe-cli)
+ (package equinoxe-bin)
+ (libraries cmdliner equinoxe-hlc))

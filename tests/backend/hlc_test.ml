@@ -22,12 +22,18 @@
 (*                                                                           *)
 (*****************************************************************************)
 
-let () =
-  let module Test =
-    Helpers.Generator.MakeTest
-      (Equinoxe_hlc.Backend)
-      (struct
-        let port = 8081
-      end)
-  in
-  Lwt_main.run @@ Test.run "Http-lwt-client"
+let port = 4546
+
+module Test =
+  Helpers.Generator.MakeTest
+    (Equinoxe_hlc.Backend)
+    (struct
+      let port = port
+    end)
+
+let exec m =
+  match Lwt_main.run (Helpers.Server.with_server ~port m ()) with
+  | Ok v -> v
+  | Error (`Msg m) -> failwith m
+
+let () = Test.run ~exec "Http-lwt-client"

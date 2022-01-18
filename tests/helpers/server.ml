@@ -21,8 +21,8 @@
 (* DEALINGS IN THE SOFTWARE.                                                 *)
 (*                                                                           *)
 (*****************************************************************************)
-module Json = Equinoxe.Json
-open Json.Infix
+
+module J = Ezjsonm
 
 let extract_body body =
   let open Httpaf in
@@ -48,6 +48,11 @@ let write_body_and_close reqd body =
   Body.write_string response_body body;
   Body.close_writer response_body
 
+let check_headers headers =
+  assert (Httpaf.Headers.get headers "X-Auth-Token" = Some "mytoken");
+  assert (Httpaf.Headers.get headers "Content-Type" = Some "application/json");
+  ()
+
 (* Many assert false as this is not supposed to test the web server but
    the API *)
 let request_handler _ reqd =
@@ -55,26 +60,15 @@ let request_handler _ reqd =
   let request = Reqd.request reqd in
   let request_body = Reqd.request_body reqd in
   let body = extract_body request_body in
+  check_headers request.Request.headers;
   match request with
   | { Request.meth = `GET; _ } ->
-      let body =
-        Json.create () -+> ("id", ~$1.0) |> Json.export |> function
-        | Ok body -> body
-        | _ -> assert false
-      in
+      let body = `O [ ("id", `Float 1.0) ] |> J.value_to_string in
       write_body_and_close reqd body
   | { Request.meth = `POST | `PUT; _ } ->
-      let json = Json.of_string body in
-      let userId =
-        json --> "userId" |> Json.to_float_r |> function
-        | Ok i -> i
-        | _ -> assert false
-      in
-      let body =
-        Json.create () -+> ("userId", ~$userId) |> Json.export |> function
-        | Ok b -> b
-        | _ -> assert false
-      in
+      let json = J.value_from_string body in
+      let userId = J.find json [ "userId" ] |> J.get_float in
+      let body = `O [ ("userId", `Float userId) ] |> J.value_to_string in
       write_body_and_close reqd body
   | { Request.meth = `DELETE; _ } -> write_body_and_close reqd "{}"
   | _ -> assert false
@@ -99,3 +93,7 @@ let listen port =
   Lwt_io.establish_server_with_client_socket address connection_handler
 
 let close = Lwt_io.shutdown_server
+
+let with_server ~port f x =
+  Lwt.bind (listen port) @@ fun server ->
+  Lwt.finalize (fun () -> f x) (fun () -> close server)

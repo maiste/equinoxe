@@ -94,7 +94,7 @@ let devices_id_t =
     Arg.(value & opt (some string) None & info [ "id" ] ~doc)
   in
   Term.
-    ( term_result (const devices_id $ token_t $ meth_t $ id_t),
+    ( lwt_result (const devices_id $ token_t $ meth_t $ id_t),
       info "/devices/id" ~doc ~exits ~man )
 
 let devices_id_actions_t =
@@ -126,7 +126,7 @@ let devices_id_actions_t =
     Arg.(required & opt (some action) None & info [ "a"; "actions" ] ~doc)
   in
   Term.
-    ( term_result (const devices_id_actions $ token_t $ meth_t $ id_t $ action_t),
+    ( lwt_result (const devices_id_actions $ token_t $ meth_t $ id_t $ action_t),
       info "/devices/id/actions" ~doc ~exits ~man )
 
 let devices_id_events_t =
@@ -140,7 +140,7 @@ let devices_id_events_t =
     Arg.(value & opt (some string) None & info [ "id" ] ~doc)
   in
   Term.
-    ( term_result (const devices_id_events $ token_t $ meth_t $ id_t),
+    ( lwt_result (const devices_id_events $ token_t $ meth_t $ id_t),
       info "/devices/id/events" ~doc ~exits ~man )
 
 let devices_id_ips_t =
@@ -154,7 +154,7 @@ let devices_id_ips_t =
     Arg.(value & opt (some string) None & info [ "id" ] ~doc)
   in
   Term.
-    ( term_result (const devices_id_ips $ token_t $ meth_t $ id_t),
+    ( lwt_result (const devices_id_ips $ token_t $ meth_t $ id_t),
       info "/devices/id/ips" ~doc ~exits ~man )
 
 let t =

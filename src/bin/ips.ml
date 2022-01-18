@@ -55,7 +55,7 @@ let ips_id_t =
     Arg.(value & opt (some string) None & info [ "id" ] ~doc)
   in
   Term.
-    ( term_result (const ips_id $ token_t $ meth_t $ id_t),
+    ( lwt_result (const ips_id $ token_t $ meth_t $ id_t),
       info "/ips/id" ~doc ~exits ~man )
 
 let t = [ ips_id_t ]

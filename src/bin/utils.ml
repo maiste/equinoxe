@@ -25,8 +25,13 @@
 open Cmdliner
 
 (* Import module and create Equinoxe from Ezcurl. *)
-module Json = Equinoxe.Json
 module Equinoxe = Equinoxe_hlc.Api
+
+module Json = struct
+  let pp json = Format.printf "%s" (Ezjsonm.value_to_string ~minify:false json)
+  let pp_r m = Lwt_result.map pp m
+  let to_unit m = Lwt_result.map (fun _ -> ()) m
+end
 
 module Conf = struct
   (* Constantes definitions. *)
@@ -120,7 +125,7 @@ module Term = struct
     ]
 
   let not_supported_r meth case =
-    Error
+    Lwt_result.fail
       (`Msg
         (Format.sprintf "Method %s is not supported with %s." (to_string meth)
            case))
@@ -131,5 +136,7 @@ module Term = struct
       List.fold_left (fun acc opt -> "- " ^ opt ^ "\n" ^ acc) "" opts
     in
     let msg = header ^ opts in
-    Error (`Msg msg)
+    Lwt_result.fail (`Msg msg)
+
+  let lwt_result t = Term.(term_result (const Lwt_main.run $ t))
 end

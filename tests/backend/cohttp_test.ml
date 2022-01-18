@@ -23,12 +23,14 @@
 (*                                                                           *)
 (*****************************************************************************)
 
-let () =
-  let module Test =
-    Helpers.Generator.MakeTest
-      (Equinoxe_cohttp.Backend)
-      (struct
-        let port = 8080
-      end)
-  in
-  Lwt_main.run @@ Test.run "Cohttp"
+let port = 4545
+
+module Test =
+  Helpers.Generator.MakeTest
+    (Equinoxe_cohttp.Backend)
+    (struct
+      let port = port
+    end)
+
+let exec m = Lwt_main.run (Helpers.Server.with_server ~port m ())
+let () = Test.run ~exec "Cohttp"

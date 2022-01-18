@@ -21,17 +21,25 @@
 (* DEALINGS IN THE SOFTWARE.                                                 *)
 (*                                                                           *)
 
-module Json = Equinoxe.Json
 module E = Equinoxe_cohttp.Api
-open Json.Infix
+module J = Ezjsonm
+open Lwt.Syntax
 
-let ( let* ) = Result.bind
 let token = "YOUR TOKEN"
 let api = E.create ~token ()
 
 let get_project_id_from name =
-  (E.Projects.get_projects api --> "projects" |->? ("name", name)) --> "id"
-  |> Json.to_string_r
+  let* json = E.Projects.get_projects api in
+  let projects =
+    J.find json [ "projects" ]
+    |> J.get_list (fun p ->
+           let name = J.find p [ "name" ] |> J.get_string
+           and id = J.find p [ "id" ] |> J.get_string in
+           (name, id))
+  in
+  match List.find_opt (fun (name', _) -> name = name') projects with
+  | Some (_, id) -> Lwt.return id
+  | None -> Lwt.fail_with (Format.sprintf "get_project_id: %S not found" name)
 
 let get_project_device_id project_id =
   E.Projects.get_projects_id_devices api ~id:project_id ()
@@ -46,47 +54,52 @@ let create_device project_id =
         os = Debian_10;
       }
   in
-  E.Projects.post_projects_id_devices api ~id:project_id ~config () --> "id"
-  |> Json.to_string_r
+  let* json =
+    E.Projects.post_projects_id_devices api ~id:project_id ~config ()
+  in
+  Lwt.return (J.find json [ "id" ] |> J.get_string)
 
 let wait_for_ready machine_id =
   let rec check () =
-    let state =
-      E.Devices.get_devices_id api ~id:machine_id () --> "state"
-      |> Json.to_string_r
-    in
+    let* json = E.Devices.get_devices_id api ~id:machine_id () in
+    let state = J.find json [ "state" ] |> J.get_string in
     match state with
-    | Ok "active" ->
+    | "active" ->
         Format.printf "\nMachine is up!@.";
-        state
-    | Ok state ->
+        Lwt.return state
+    | state ->
         Format.printf "\rCheck status (%s) after sleeping 10 sec." state;
         Format.print_flush ();
         Unix.sleep 10;
         check ()
-    | _ -> state
   in
   check ()
 
 let get_ip machine_id =
-  (E.Devices.get_devices_id api ~id:machine_id () --> "ip_addresses" |-> 0)
-  --> "address"
-  |> Json.to_string_r
+  let* json = E.Devices.get_devices_id api ~id:machine_id () in
+  let ips =
+    J.find json [ "ip_addresses" ]
+    |> J.get_list (fun x -> J.find x [ "address" ] |> J.get_string)
+  in
+  Lwt.return (List.nth ips 0)
 
 let destroy_machine machine_id =
-  E.Devices.delete_devices_id api ~id:machine_id () |> Json.to_unit_r
+  let* _ = E.Devices.delete_devices_id api ~id:machine_id () in
+  Lwt.return ()
 
 let deploy_wait_stop () =
   let* id = get_project_id_from "testing" in
   let* machine_id = create_device id in
-  let () = Format.printf "Machine created.@." in
-  let* _state = wait_for_ready machine_id in
-  let* address = get_ip machine_id in
-  let () = Format.printf "Ip is [%s]. Sleep for 60 sec.@." address in
-  let () = Unix.sleep 60 in
-  destroy_machine machine_id
+  Lwt.finalize
+    (fun () ->
+      let () = Format.printf "Machine created.@." in
+      let* _state = wait_for_ready machine_id in
+      let* address = get_ip machine_id in
+      let () = Format.printf "Ip is [%s]. Sleep for 60 sec.@." address in
+      Lwt_unix.sleep 60.0)
+    (fun () -> destroy_machine machine_id)
 
 let () =
-  deploy_wait_stop () |> function
-  | Ok () -> Format.printf "Machine destroyed!@."
-  | Error (`Msg msg) -> Format.printf "Error with: %s@." msg
+  match Lwt_main.run (deploy_wait_stop ()) with
+  | () -> Format.printf "Machine destroyed!@."
+  | exception e -> Format.printf "Error with: %s@." (Printexc.to_string e)

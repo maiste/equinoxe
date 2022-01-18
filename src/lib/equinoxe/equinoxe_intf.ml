@@ -25,6 +25,9 @@
 module type API = sig
   (** It is the signature that matches the API of the website. *)
 
+  type 'a io
+  type json = Ezjsonm.value
+
   type t
   (** Abstract type [t] represents the information known by the API system. *)
 
@@ -36,15 +39,15 @@ module type API = sig
   module Auth : sig
     (** This module manages API parts related to authentification. *)
 
-    val get_user_api_keys : t -> Json.t
+    val get_user_api_keys : t -> json io
     (** [get_user_api_keys t] returns the keys available for the current user. *)
 
     val post_user_api_keys :
-      t -> ?read_only:bool -> description:string -> unit -> Json.t
+      t -> ?read_only:bool -> description:string -> unit -> json io
     (** [post_user_api_keys t ~read_only ~description ()] creates a new API key
         on Equinix. Default value to read_only is true. *)
 
-    val delete_user_api_keys_id : t -> id:string -> unit -> Json.t
+    val delete_user_api_keys_id : t -> id:string -> unit -> json io
     (** [delete_user_api_keys_id t ~id () ] deletes the key referenced by [id]
         from the user keys. *)
   end
@@ -100,24 +103,24 @@ module type API = sig
     (** [plan_to_string plan] converts a plan into a string understandable by
         the API. *)
 
-    val get_devices_id : t -> id:string -> unit -> Json.t
-    (** [get_devices_id t ~id ()] returns a {!Json.t} that contains information
+    val get_devices_id : t -> id:string -> unit -> json io
+    (** [get_devices_id t ~id ()] returns a {!json} that contains information
         about the device specified by [id]. *)
 
-    val get_devices_id_events : t -> id:string -> unit -> Json.t
+    val get_devices_id_events : t -> id:string -> unit -> json io
     (** [get_device_id_events t ~id ()] retrieves information about the device
         events. *)
 
     val post_devices_id_actions :
-      t -> id:string -> action:action -> unit -> Json.t
+      t -> id:string -> action:action -> unit -> json io
     (** [post_devices_id_actions t ~id ~action ()] executes an action on the
         device specified by its id. *)
 
-    val delete_devices_id : t -> id:string -> unit -> Json.t
+    val delete_devices_id : t -> id:string -> unit -> json io
     (** [delete_devices_id t ~id ()] deletes a device on Equinix and returns a
-        {!Json.t} with the result. *)
+        {!json} with the result. *)
 
-    val get_devices_id_ips : t -> id:string -> unit -> Json.t
+    val get_devices_id_ips : t -> id:string -> unit -> json io
     (** [get_devices_id_ips t ~id ()] retrieves information about the device
         ips. *)
   end
@@ -125,7 +128,7 @@ module type API = sig
   module Ip : sig
     (** This module manages API parts related to ips. *)
 
-    val get_ips_id : t -> id:string -> unit -> Json.t
+    val get_ips_id : t -> id:string -> unit -> json io
     (** [get_ips_id t ~id ()] returns informations about an ip referenced by its
         [id]. *)
   end
@@ -133,31 +136,31 @@ module type API = sig
   module Orga : sig
     (** This module manages API parts related to organizations. *)
 
-    val get_organizations : t -> Json.t
+    val get_organizations : t -> json io
     (** [get_organizations t] returns all the organizations associated with the
         token. *)
 
-    val get_organizations_id : t -> id:string -> unit -> Json.t
-    (** [get_organizations_id t ~id ()] returns the {!Json.t} that is referenced
+    val get_organizations_id : t -> id:string -> unit -> json io
+    (** [get_organizations_id t ~id ()] returns the {!json} that is referenced
         by the [id] given in parameter. *)
   end
 
   module Projects : sig
     (** This module manages API parts related to projects. *)
 
-    val get_projects : t -> Json.t
+    val get_projects : t -> json io
     (** [get_projects t] returns all projects associated with the token. *)
 
-    val get_projects_id : t -> id:string -> unit -> Json.t
-    (** [get_projects_id t ~id ()] returns the {!Json.t} that is referenced by
-        the [id] given in parameter. *)
+    val get_projects_id : t -> id:string -> unit -> json io
+    (** [get_projects_id t ~id ()] returns the {!json} that is referenced by the
+        [id] given in parameter. *)
 
-    val get_projects_id_devices : t -> id:string -> unit -> Json.t
-    (** [get_projects_id_devices t ~id ()] returns the {!Json.t} that contains
-        all the devices related to the project [id]. *)
+    val get_projects_id_devices : t -> id:string -> unit -> json io
+    (** [get_projects_id_devices t ~id ()] returns the {!json} that contains all
+        the devices related to the project [id]. *)
 
     val post_projects_id_devices :
-      t -> id:string -> config:Devices.config -> unit -> Json.t
+      t -> id:string -> config:Devices.config -> unit -> json io
     (** [post_projects_id_devicest ~id ~config ()] creates a machine on the
         Equinix with the {!Devices.config} specification *)
   end
@@ -165,21 +168,15 @@ module type API = sig
   module Users : sig
     (** This module manages API parts related to users. *)
 
-    val get_user : t -> Json.t
+    val get_user : t -> json io
     (** [get_user t] returns information about the user linked to the API key. *)
   end
 end
 
 module type Backend = Backend.S
 
-module Json = Json
-
 module type Sigs = sig
   (** Equinoxe library interface. *)
-
-  (** {1 Manipulate Results} *)
-
-  module Json = Json
 
   module type API = API
 
@@ -187,7 +184,7 @@ module type Sigs = sig
 
   module type Backend = Backend
 
-  (** Factory to build a system to communicate with Equinix API, using the {!S}
-      communication system. *)
-  module Make (B : Backend) : API
+  (** Factory to build a system to communicate with Equinix API, using the
+      {!Backend} communication system. *)
+  module Make (B : Backend) : API with type 'a io = 'a B.io
 end
