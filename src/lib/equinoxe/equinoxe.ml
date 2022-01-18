@@ -45,10 +45,15 @@ module Make (B : Backend) : API with type 'a io = 'a B.io = struct
       let token = if token = "" then [] else [ ("X-Auth-Token", token) ] in
       token @ [ ("Content-Type", "application/json") ]
 
+    let json_of_string str =
+      match Ezjsonm.from_string str with
+      | json -> return json
+      | exception Ezjsonm.Parse_error (_, msg) -> fail msg
+
     let get_json = function
       | "" -> return (`O [])
       | str -> (
-          let json = Ezjsonm.from_string str in
+          let* json = json_of_string str in
           match Ezjsonm.find json [ "error" ] with
           | errors ->
               let msg =
