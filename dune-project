@@ -54,13 +54,3 @@
   (conflicts
     (result (< 1.5))))
 
-(package
-  (name equinoxe-bin)
-  (synopsis "An unofficial executable for Equinix")
-  (description
-    "Equinoxe-bin is a CLI tool to interact with the Equinix API.")
-  (depends
-    cmdliner
-    equinoxe-hlc)
-  (conflicts
-    (result (< 1.5))))
