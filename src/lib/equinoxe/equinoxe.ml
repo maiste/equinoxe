@@ -227,3 +227,112 @@ module Make (B : Backend) : API with type 'a io = 'a B.io = struct
       Http.get ~t ~path
   end
 end
+
+module MakeFriendly (B : Backend) : FRIENDLY_API with type 'a io = 'a B.io =
+struct
+  type 'a io = 'a B.io
+
+  module A : API with type 'a io = 'a B.io = Make (B)
+
+  type t = A.t
+
+  let return x = B.return x
+  let ( let* ) m f = B.bind f m
+  let ( let+ ) m f = B.map f m
+  let fail msg = B.fail (`Msg msg)
+
+  let extract_from json field ~filter =
+    match Ezjsonm.find_opt json [ field ] with
+    | Some v -> filter v
+    | None ->
+        let msg =
+          Format.sprintf "Field %s is not available in output json" field
+        in
+        fail msg
+
+  let extract_string_from json field =
+    let filter = function
+      | `String s -> return s
+      | _ ->
+          let msg = Format.sprintf "Field %s is not a string" field in
+          fail msg
+    in
+    extract_from json field ~filter
+
+  let extract_int_from json field =
+    let filter = function
+      | `Float f when Float.is_integer f -> return (int_of_float f)
+      | _ ->
+          let msg = Format.sprintf "Field %s is not an integer" field in
+          fail msg
+    in
+    extract_from json field ~filter
+
+  let extract_array_from json field =
+    let filter = function
+      | `A l -> return l
+      | _ ->
+          let msg = Format.sprintf "Field %s is not an array" field in
+          fail msg
+    in
+    extract_from json field ~filter
+
+  let create = A.create
+
+  module Orga = struct
+    type config = {
+      name : string;
+      id : string;
+      account_id : string;
+      website : string;
+      maintenance_email : string;
+      max_projects : int;
+    }
+
+    let extract_config_from json =
+      let* name = extract_string_from json "name" in
+      let* id = extract_string_from json "id" in
+      let* account_id = extract_string_from json "account_id" in
+      let* website = extract_string_from json "website" in
+      let* maintenance_email = extract_string_from json "maintenance_email" in
+      let* max_projects = extract_int_from json "max_projects" in
+      return { id; account_id; name; website; maintenance_email; max_projects }
+
+    let to_string config =
+      let pp_empty s = if s = "" then "<empty>" else s in
+      Format.sprintf
+        "{\n\
+         \tname: %s;\n\
+         \tid: %s;\n\
+         \taccount_id: %s;\n\
+         \twebsite: %s;\n\
+         \tmaintenance_email: %s;\n\
+         \tmax_projects: %d;\n\
+         }\n"
+        (pp_empty config.id)
+        (pp_empty config.account_id)
+        (pp_empty config.name) (pp_empty config.website)
+        (pp_empty config.maintenance_email)
+        config.max_projects
+
+    let get_all t =
+      let* json = A.Orga.get_organizations t in
+      let* organizations = extract_array_from json "organizations" in
+      List.fold_left
+        (fun acc dict ->
+          let* acc = acc in
+          let+ config = extract_config_from dict in
+          config :: acc)
+        (return []) organizations
+
+    let get t p =
+      let* organizations = get_all t in
+      match List.find_opt p organizations with
+      | Some organization -> return organization
+      | None ->
+          let msg = "The organization can't be found" in
+          fail msg
+
+    let pp config = Format.printf "%s" (to_string config)
+  end
+end
