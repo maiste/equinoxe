@@ -238,65 +238,40 @@ struct
 
   let return x = B.return x
   let ( let* ) m f = B.bind f m
-  let ( let+ ) m f = B.map f m
   let fail msg = B.fail (`Msg msg)
-
-  let extract_from json field ~filter =
-    match Ezjsonm.find_opt json [ field ] with
-    | Some v -> filter v
-    | None ->
-        let msg =
-          Format.sprintf "Field %s is not available in output json" field
-        in
-        fail msg
-
-  let extract_string_from json field =
-    let filter = function
-      | `String s -> return s
-      | _ ->
-          let msg = Format.sprintf "Field %s is not a string" field in
-          fail msg
-    in
-    extract_from json field ~filter
-
-  let extract_int_from json field =
-    let filter = function
-      | `Float f when Float.is_integer f -> return (int_of_float f)
-      | _ ->
-          let msg = Format.sprintf "Field %s is not an integer" field in
-          fail msg
-    in
-    extract_from json field ~filter
-
-  let extract_array_from json field =
-    let filter = function
-      | `A l -> return l
-      | _ ->
-          let msg = Format.sprintf "Field %s is not an array" field in
-          fail msg
-    in
-    extract_from json field ~filter
-
   let create = A.create
 
+  let access field json =
+    try Ezjsonm.find json [ field ]
+    with Not_found ->
+      raise
+        (Ezjsonm.Parse_error
+           (json, Format.sprintf "access: field %s not found" field))
+
   module Orga = struct
+    type id = string
+
     type config = {
+      id : id;
       name : string;
-      id : string;
       account_id : string;
       website : string;
       maintenance_email : string;
       max_projects : int;
     }
 
-    let extract_config_from json =
-      let* name = extract_string_from json "name" in
-      let* id = extract_string_from json "id" in
-      let* account_id = extract_string_from json "account_id" in
-      let* website = extract_string_from json "website" in
-      let* maintenance_email = extract_string_from json "maintenance_email" in
-      let* max_projects = extract_int_from json "max_projects" in
-      return { id; account_id; name; website; maintenance_email; max_projects }
+    let id_of_string id = id
+
+    let config_of_json json =
+      {
+        name = access "name" json |> Ezjsonm.get_string;
+        id = access "id" json |> Ezjsonm.get_string;
+        account_id = access "account_id" json |> Ezjsonm.get_string;
+        website = access "website" json |> Ezjsonm.get_string;
+        maintenance_email =
+          access "maintenance_email" json |> Ezjsonm.get_string;
+        max_projects = access "max_projects" json |> Ezjsonm.get_int;
+      }
 
     let to_string config =
       let pp_empty s = if s = "" then "<empty>" else s in
@@ -315,23 +290,33 @@ struct
         (pp_empty config.maintenance_email)
         config.max_projects
 
+    let get t id =
+      let* json = A.Orga.get_organizations_id t ~id () in
+      try
+        let organization = config_of_json json in
+        return organization
+      with Ezjsonm.Parse_error (v, err) ->
+        let msg =
+          Format.sprintf "get: parse error %s with %s on %s" err
+            (Ezjsonm.value_to_string v)
+            (Ezjsonm.value_to_string json)
+        in
+        fail msg
+
     let get_all t =
       let* json = A.Orga.get_organizations t in
-      let* organizations = extract_array_from json "organizations" in
-      List.fold_left
-        (fun acc dict ->
-          let* acc = acc in
-          let+ config = extract_config_from dict in
-          config :: acc)
-        (return []) organizations
-
-    let get t p =
-      let* organizations = get_all t in
-      match List.find_opt p organizations with
-      | Some organization -> return organization
-      | None ->
-          let msg = "The organization can't be found" in
-          fail msg
+      try
+        let organizations =
+          access "organizations" json |> Ezjsonm.get_list config_of_json
+        in
+        return organizations
+      with Ezjsonm.Parse_error (v, err) ->
+        let msg =
+          Format.sprintf "Orga.get_all: parse error %s on %s with %s " err
+            (Ezjsonm.value_to_string v)
+            (Ezjsonm.value_to_string json)
+        in
+        fail msg
 
     let pp config = Format.printf "%s" (to_string config)
   end

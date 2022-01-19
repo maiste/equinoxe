@@ -187,9 +187,14 @@ module type FRIENDLY_API = sig
       [https://api.equinix.com/metal/v1/] and default [token] is empty. *)
 
   module Orga : sig
+    (** A module to interact with Equinix organization. *)
+
+    type id
+    (** The unique indentifier for the an oraganization. *)
+
     type config = {
+      id : id;
       name : string;
-      id : string;
       account_id : string;
       website : string;
       maintenance_email : string;
@@ -197,14 +202,16 @@ module type FRIENDLY_API = sig
     }
     (** Type that represents an organization configuration. *)
 
+    val id_of_string : string -> id
+    (** [id_of_string str] creates an id from a string from the Equinix API. *)
+
     val to_string : config -> string
     (** [to_string config] returns a string representing an organization
         configuration. *)
 
-    val get : t -> (config -> bool) -> config io
-    (** [get t p] returns an organization configuration which satisfies the
-        predicate function. If two items satisfy the the predicate it will the
-        first returns by the API. *)
+    val get : t -> id -> config io
+    (** [get t id] returns an organization configuration associated with the
+        [id] given. *)
 
     val get_all : t -> config list io
     (** [get_all t] return all the organization associated with the [t] api
