@@ -178,7 +178,7 @@ module type FRIENDLY_API = sig
     (** A module to interact with Equinix organization. *)
 
     type id
-    (** The unique indentifier for the an oraganization. *)
+    (** The unique indentifier for the an organization. *)
 
     type config = {
       id : id;
