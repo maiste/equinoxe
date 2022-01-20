@@ -3,6 +3,7 @@
 ### Added
 
 - Add a Cohttp client version, with a specific package (#60, @maiste)
+- Add Orga module to a statically-typed API (#68, @maiste)
 
 ### Changed
 
@@ -11,6 +12,7 @@
 ### Removed
 
 - Remove `JSON` module and use `Ezjsonm` directly (#63, @art-w)
+- Remove modules from the old JSON Api module (#68, @maiste)
 
 ## 0.1.0
 
