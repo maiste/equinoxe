@@ -213,14 +213,6 @@ module Make (B : Backend) : API with type 'a io = 'a B.io = struct
     let get_user t = Http.get ~t ~path:"user"
   end
 
-  module Orga = struct
-    let get_organizations t = Http.get ~t ~path:"organizations"
-
-    let get_organizations_id t ~id () =
-      let path = Filename.concat "organizations" id in
-      Http.get ~t ~path
-  end
-
   module Ip = struct
     let get_ips_id t ~id () =
       let path = Filename.concat "ips" id in
@@ -231,15 +223,14 @@ end
 module MakeFriendly (B : Backend) : FRIENDLY_API with type 'a io = 'a B.io =
 struct
   type 'a io = 'a B.io
+  type t = { address : string; token : string }
 
-  module A : API with type 'a io = 'a B.io = Make (B)
-
-  type t = A.t
+  let create ?(address = "https://api.equinix.com/metal/v1/") ?(token = "") () =
+    { address; token }
 
   let return x = B.return x
   let ( let* ) m f = B.bind f m
   let fail msg = B.fail (`Msg msg)
-  let create = A.create
 
   let access field json =
     try Ezjsonm.find json [ field ]
@@ -247,6 +238,48 @@ struct
       raise
         (Ezjsonm.Parse_error
            (json, Format.sprintf "access: field %s not found" field))
+
+  module Http = struct
+    let url ~t ~path = Filename.concat t.address path
+
+    let headers ~token =
+      let token = if token = "" then [] else [ ("X-Auth-Token", token) ] in
+      token @ [ ("Content-Type", "application/json") ]
+
+    let json_of_string str =
+      match Ezjsonm.from_string str with
+      | json -> return json
+      | exception Ezjsonm.Parse_error (_, msg) -> fail msg
+
+    let get_json = function
+      | "" -> return (`O [])
+      | str -> (
+          let* json = json_of_string str in
+          match Ezjsonm.find json [ "error" ] with
+          | errors ->
+              let msg =
+                Format.sprintf "The API returns the following error: %s"
+                  (Ezjsonm.value_to_string errors)
+              in
+              fail msg
+          | exception Not_found -> return json)
+
+    let request ~t ~path http_request =
+      http_request ~headers:(headers ~token:t.token) ~url:(url ~t ~path)
+
+    let run ~t ~path http_request =
+      let* body = request ~t ~path http_request in
+      get_json body
+
+    let run_with_body ~t ~path http_request json =
+      let body = Ezjsonm.value_to_string json in
+      let* body = request ~t ~path http_request body in
+      get_json body
+
+    let get = run B.get
+    let _post json = run_with_body B.post json
+    let _delete = run B.delete
+  end
 
   module Orga = struct
     type id = string
@@ -290,8 +323,9 @@ struct
         (pp_empty config.maintenance_email)
         config.max_projects
 
-    let get t id =
-      let* json = A.Orga.get_organizations_id t ~id () in
+    let get_from t id =
+      let path = Filename.concat "organizations" id in
+      let* json = Http.get ~t ~path in
       try
         let organization = config_of_json json in
         return organization
@@ -304,7 +338,7 @@ struct
         fail msg
 
     let get_all t =
-      let* json = A.Orga.get_organizations t in
+      let* json = Http.get ~t ~path:"organizations" in
       try
         let organizations =
           access "organizations" json |> Ezjsonm.get_list config_of_json

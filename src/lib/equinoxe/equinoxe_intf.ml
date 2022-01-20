@@ -23,7 +23,7 @@
 (*****************************************************************************)
 
 module type API = sig
-  (** It is the signature that matches the API of the website. *)
+  (** @deprecated It is the signature that matches the API of the website. *)
 
   type 'a io
   type json = Ezjsonm.value
@@ -133,18 +133,6 @@ module type API = sig
         [id]. *)
   end
 
-  module Orga : sig
-    (** This module manages API parts related to organizations. *)
-
-    val get_organizations : t -> json io
-    (** [get_organizations t] returns all the organizations associated with the
-        token. *)
-
-    val get_organizations_id : t -> id:string -> unit -> json io
-    (** [get_organizations_id t ~id ()] returns the {!json} that is referenced
-        by the [id] given in parameter. *)
-  end
-
   module Projects : sig
     (** This module manages API parts related to projects. *)
 
@@ -209,9 +197,9 @@ module type FRIENDLY_API = sig
     (** [to_string config] returns a string representing an organization
         configuration. *)
 
-    val get : t -> id -> config io
-    (** [get t id] returns an organization configuration associated with the
-        [id] given. *)
+    val get_from : t -> id -> config io
+    (** [get_from t id] returns an organization configuration associated with
+        the [id] given. *)
 
     val get_all : t -> config list io
     (** [get_all t] return all the organization associated with the [t] api
