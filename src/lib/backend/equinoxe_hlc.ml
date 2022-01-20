@@ -59,3 +59,4 @@ module Backend = struct
 end
 
 module Api = Equinoxe.Make (Backend)
+module Friendly_api = Equinoxe.MakeFriendly (Backend)

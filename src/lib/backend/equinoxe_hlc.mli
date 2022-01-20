@@ -31,3 +31,6 @@ module Backend : Equinoxe.Backend with type 'a io = 'a io
 
 module Api : Equinoxe.API with type 'a io = 'a io
 (** @inline *)
+
+module Friendly_api : Equinoxe.FRIENDLY_API with type 'a io = 'a io
+(** @inline *)
