@@ -23,7 +23,7 @@
 (*****************************************************************************)
 
 module type API = sig
-  (** It is the signature that matches the API of the website. *)
+  (** @deprecated It is the signature that matches the API of the website. *)
 
   type 'a io
   type json = Ezjsonm.value
@@ -133,18 +133,6 @@ module type API = sig
         [id]. *)
   end
 
-  module Orga : sig
-    (** This module manages API parts related to organizations. *)
-
-    val get_organizations : t -> json io
-    (** [get_organizations t] returns all the organizations associated with the
-        token. *)
-
-    val get_organizations_id : t -> id:string -> unit -> json io
-    (** [get_organizations_id t ~id ()] returns the {!json} that is referenced
-        by the [id] given in parameter. *)
-  end
-
   module Projects : sig
     (** This module manages API parts related to projects. *)
 
@@ -173,12 +161,62 @@ module type API = sig
   end
 end
 
+module type FRIENDLY_API = sig
+  (** It offers OCaml types to manipulate the Equinix API. *)
+
+  type 'a io
+
+  type t
+  (** Abstract type [t] represents the information known by the API system. *)
+
+  val create : ?address:string -> ?token:string -> unit -> t
+  (** [create ~address ~token ()] returns an {!t} object, you need to manipulate
+      when executing requests. Default [address] is
+      [https://api.equinix.com/metal/v1/] and default [token] is empty. *)
+
+  module Orga : sig
+    (** A module to interact with Equinix organization. *)
+
+    type id
+    (** The unique indentifier for the an organization. *)
+
+    type config = {
+      id : id;
+      name : string;
+      account_id : string;
+      website : string;
+      maintenance_email : string;
+      max_projects : int;
+    }
+    (** Type that represents an organization configuration. *)
+
+    val id_of_string : string -> id
+    (** [id_of_string str] creates an id from a string from the Equinix API. *)
+
+    val to_string : config -> string
+    (** [to_string config] returns a string representing an organization
+        configuration. *)
+
+    val get_from : t -> id -> config io
+    (** [get_from t id] returns an organization configuration associated with
+        the [id] given. *)
+
+    val get_all : t -> config list io
+    (** [get_all t] return all the organization associated with the [t] api
+        token. *)
+
+    val pp : config -> unit
+    (** [pp config] pretty-prints an organization configuration. *)
+  end
+end
+
 module type Backend = Backend.S
 
 module type Sigs = sig
   (** Equinoxe library interface. *)
 
   module type API = API
+  module type FRIENDLY_API = FRIENDLY_API
 
   (** {1 Build your own API} *)
 
@@ -187,4 +225,8 @@ module type Sigs = sig
   (** Factory to build a system to communicate with Equinix API, using the
       {!Backend} communication system. *)
   module Make (B : Backend) : API with type 'a io = 'a B.io
+
+  (** Factory to build a system to communicate with Equinix API in a
+      strongly-typed way using the {!Backend} gathering system. *)
+  module MakeFriendly (B : Backend) : FRIENDLY_API with type 'a io = 'a B.io
 end

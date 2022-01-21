@@ -22,41 +22,22 @@
 (*                                                                           *)
 (*****************************************************************************)
 
-type 'a io = ('a, [ `Msg of string ]) Lwt_result.t
+module E = Equinoxe.MakeFriendly (Equinoxe_cohttp.Backend)
+open Lwt.Syntax
 
-module Client = Http_lwt_client
+let token = "YOUR TOKEN"
+let organization = "YOUR ORGA"
+let api = E.create ~token ()
 
-module Backend = struct
-  type nonrec 'a io = 'a io
+let get_all_organizations () =
+  let+ organizations = E.Orga.get_all api in
+  List.iter E.Orga.pp organizations
 
-  let return = Lwt_result.return
-  let map = Lwt_result.map
-  let bind f m = Lwt_result.bind m f
-  let fail e = Lwt_result.fail e
+let program () =
+  let* () = get_all_organizations () in
+  Lwt.return_unit
 
-  (***** Helpers *****)
-
-  let get_body = function
-    | Ok (_, None) -> return ""
-    | Ok (_, Some body) -> return body
-    | Error e -> fail e
-
-  let ( =<< ) f m = Lwt.bind m f
-
-  (**** Http methods ****)
-
-  let get ~headers ~url =
-    get_body =<< Client.one_request ~meth:`GET ~headers url
-
-  let post ~headers ~url body =
-    get_body =<< Client.one_request ~meth:`POST ~headers ~body url
-
-  let put ~headers ~url body =
-    get_body =<< Client.one_request ~meth:`PUT ~headers ~body url
-
-  let delete ~headers ~url =
-    get_body =<< Client.one_request ~meth:`DELETE ~headers url
-end
-
-module Api = Equinoxe.Make (Backend)
-module Friendly_api = Equinoxe.MakeFriendly (Backend)
+let () =
+  match Lwt_main.run (program ()) with
+  | () -> ()
+  | exception e -> Format.printf "Error with: %s@." (Printexc.to_string e)

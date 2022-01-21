@@ -213,17 +213,145 @@ module Make (B : Backend) : API with type 'a io = 'a B.io = struct
     let get_user t = Http.get ~t ~path:"user"
   end
 
-  module Orga = struct
-    let get_organizations t = Http.get ~t ~path:"organizations"
-
-    let get_organizations_id t ~id () =
-      let path = Filename.concat "organizations" id in
-      Http.get ~t ~path
-  end
-
   module Ip = struct
     let get_ips_id t ~id () =
       let path = Filename.concat "ips" id in
       Http.get ~t ~path
+  end
+end
+
+module MakeFriendly (B : Backend) : FRIENDLY_API with type 'a io = 'a B.io =
+struct
+  type 'a io = 'a B.io
+  type t = { address : string; token : string }
+
+  let create ?(address = "https://api.equinix.com/metal/v1/") ?(token = "") () =
+    { address; token }
+
+  let return x = B.return x
+  let ( let* ) m f = B.bind f m
+  let fail msg = B.fail (`Msg msg)
+
+  let access field json =
+    try Ezjsonm.find json [ field ]
+    with Not_found ->
+      raise
+        (Ezjsonm.Parse_error
+           (json, Format.sprintf "access: field %s not found" field))
+
+  module Http = struct
+    let url ~t ~path = Filename.concat t.address path
+
+    let headers ~token =
+      let token = if token = "" then [] else [ ("X-Auth-Token", token) ] in
+      token @ [ ("Content-Type", "application/json") ]
+
+    let json_of_string str =
+      match Ezjsonm.from_string str with
+      | json -> return json
+      | exception Ezjsonm.Parse_error (_, msg) -> fail msg
+
+    let get_json = function
+      | "" -> return (`O [])
+      | str -> (
+          let* json = json_of_string str in
+          match Ezjsonm.find json [ "error" ] with
+          | errors ->
+              let msg =
+                Format.sprintf "The API returns the following error: %s"
+                  (Ezjsonm.value_to_string errors)
+              in
+              fail msg
+          | exception Not_found -> return json)
+
+    let request ~t ~path http_request =
+      http_request ~headers:(headers ~token:t.token) ~url:(url ~t ~path)
+
+    let run ~t ~path http_request =
+      let* body = request ~t ~path http_request in
+      get_json body
+
+    let run_with_body ~t ~path http_request json =
+      let body = Ezjsonm.value_to_string json in
+      let* body = request ~t ~path http_request body in
+      get_json body
+
+    let get = run B.get
+    let _post json = run_with_body B.post json
+    let _delete = run B.delete
+  end
+
+  module Orga = struct
+    type id = string
+
+    type config = {
+      id : id;
+      name : string;
+      account_id : string;
+      website : string;
+      maintenance_email : string;
+      max_projects : int;
+    }
+
+    let id_of_string id = id
+
+    let config_of_json json =
+      {
+        name = access "name" json |> Ezjsonm.get_string;
+        id = access "id" json |> Ezjsonm.get_string;
+        account_id = access "account_id" json |> Ezjsonm.get_string;
+        website = access "website" json |> Ezjsonm.get_string;
+        maintenance_email =
+          access "maintenance_email" json |> Ezjsonm.get_string;
+        max_projects = access "max_projects" json |> Ezjsonm.get_int;
+      }
+
+    let to_string config =
+      let pp_empty s = if s = "" then "<empty>" else s in
+      Format.sprintf
+        "{\n\
+         \tname: %s;\n\
+         \tid: %s;\n\
+         \taccount_id: %s;\n\
+         \twebsite: %s;\n\
+         \tmaintenance_email: %s;\n\
+         \tmax_projects: %d;\n\
+         }\n"
+        (pp_empty config.id)
+        (pp_empty config.account_id)
+        (pp_empty config.name) (pp_empty config.website)
+        (pp_empty config.maintenance_email)
+        config.max_projects
+
+    let get_from t id =
+      let path = Filename.concat "organizations" id in
+      let* json = Http.get ~t ~path in
+      try
+        let organization = config_of_json json in
+        return organization
+      with Ezjsonm.Parse_error (v, err) ->
+        let msg =
+          Format.sprintf "get: parse error %s with %s on %s" err
+            (Ezjsonm.value_to_string v)
+            (Ezjsonm.value_to_string json)
+        in
+        fail msg
+
+    let get_all t =
+      let* json = Http.get ~t ~path:"organizations" in
+      try
+        let organizations =
+          access "organizations" json |> Ezjsonm.get_list config_of_json
+        in
+        return organizations
+      with Ezjsonm.Parse_error (v, err) ->
+        let msg =
+          Format.sprintf "Orga.get_all: parse error %s on %s with %s " err
+            (Ezjsonm.value_to_string v)
+            (Ezjsonm.value_to_string json)
+        in
+        fail msg
+
+    let pp config = Format.printf "%s" (to_string config)
   end
 end
