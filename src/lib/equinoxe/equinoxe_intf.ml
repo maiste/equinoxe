@@ -152,14 +152,10 @@ module type API = sig
     (** [post_projects_id_devicest ~id ~config ()] creates a machine on the
         Equinix with the {!Devices.config} specification *)
   end
-
-  module Users : sig
-    (** This module manages API parts related to users. *)
-
-    val get_user : t -> json io
-    (** [get_user t] returns information about the user linked to the API key. *)
-  end
 end
+
+module Date = ODate.Unix
+(** Module to manipulate dates in the API. *)
 
 module type FRIENDLY_API = sig
   (** It offers OCaml types to manipulate the Equinix API. *)
@@ -207,6 +203,35 @@ module type FRIENDLY_API = sig
 
     val pp : config -> unit
     (** [pp config] pretty-prints an organization configuration. *)
+  end
+
+  module Users : sig
+    (** A module to interact with Equinix users. *)
+
+    type id
+    (** A unique identifier for a user. *)
+
+    type config = {
+      id : id;
+      first_name : string;
+      last_name : string;
+      email : string;
+      created_at : Date.t;
+      last_login_at : Date.t;
+    }
+    (** Representation of a user configuration. *)
+
+    val id_of_string : string -> id
+    (* [id_of_string str] creates an id from a string from the Equinix API. *)
+
+    val to_string : config -> string
+    (** [to_string config] returns a string representing a user. *)
+
+    val get_current_user : t -> config io
+    (** [get_current_user t] returns the user interacting with the API. *)
+
+    val pp : config -> unit
+    (** [pp config] pretty-prints a user configuration. *)
   end
 end
 

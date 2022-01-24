@@ -209,10 +209,6 @@ module Make (B : Backend) : API with type 'a io = 'a B.io = struct
       Http.post ~t ~path json
   end
 
-  module Users = struct
-    let get_user t = Http.get ~t ~path:"user"
-  end
-
   module Ip = struct
     let get_ips_id t ~id () =
       let path = Filename.concat "ips" id in
@@ -347,6 +343,75 @@ struct
       with Ezjsonm.Parse_error (v, err) ->
         let msg =
           Format.sprintf "Orga.get_all: parse error %s on %s with %s " err
+            (Ezjsonm.value_to_string v)
+            (Ezjsonm.value_to_string json)
+        in
+        fail msg
+
+    let pp config = Format.printf "%s" (to_string config)
+  end
+
+  module Users = struct
+    type id = string
+
+    type config = {
+      id : id;
+      first_name : string;
+      last_name : string;
+      email : string;
+      created_at : Date.t;
+      last_login_at : Date.t;
+    }
+
+    let id_of_string id = id
+
+    let config_of_json json =
+      try
+        {
+          id = access "id" json |> Ezjsonm.get_string;
+          first_name = access "first_name" json |> Ezjsonm.get_string;
+          last_name = access "last_name" json |> Ezjsonm.get_string;
+          email = access "email" json |> Ezjsonm.get_string;
+          created_at =
+            access "create_at" json
+            |> Ezjsonm.get_string
+            |> Date.Parser.from_iso;
+          last_login_at =
+            access "last_login_at" json
+            |> Ezjsonm.get_string
+            |> Date.Parser.from_iso;
+        }
+      with Failure _ ->
+        raise
+          (Ezjsonm.Parse_error
+             (json, Format.sprintf "Date.Parser.from_iso: can't parse date"))
+
+    let to_string config =
+      let replace_empty s = if s = "" then "<empty>" else s in
+      let created_at = Date.Printer.to_iso config.created_at in
+      let last_login_at = Date.Printer.to_iso config.last_login_at in
+      Format.sprintf
+        "{\n\
+         \tid: %s;\n\
+         \tfirst_name: %s;\n\
+         \tlast_name: %s;\n\
+         \temail: %s;\n\
+         \tcreate_at: %s;\n\
+         \tlast_login_at: %s;\n\
+         }\n"
+        (replace_empty config.id)
+        (replace_empty config.first_name)
+        (replace_empty config.last_name)
+        (replace_empty config.email)
+        created_at last_login_at
+
+    let get_current_user t =
+      let* json = Http.get ~t ~path:"user" in
+      try return (config_of_json json)
+      with Ezjsonm.Parse_error (v, err) ->
+        let msg =
+          Format.sprintf "User.get_current_user: parse error %s on %s with %s "
+            err
             (Ezjsonm.value_to_string v)
             (Ezjsonm.value_to_string json)
         in
