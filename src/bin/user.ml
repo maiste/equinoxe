@@ -25,24 +25,28 @@
 module Conf = Utils.Conf
 module Json = Utils.Json
 module Equinoxe = Utils.Equinoxe
+module Equinoxe_f = Utils.Equinoxe_f
 open Cmdliner
 open Utils.Term
+open Utils.Monad
 open Lwt.Infix
 
 (* Actions *)
 
-let user = function
+let user token = function
   | GET ->
       let address = Conf.address in
-      let e = Equinoxe.create ~address () in
-      Equinoxe.Users.get_user e |> Json.pp_r
+      let e = Equinoxe_f.create ~address ~token () in
+      let* users = Equinoxe_f.Users.get_current_user e in
+      Equinoxe_f.Users.pp users;
+      return ()
   | meth -> not_supported_r meth "/user"
 
 let user_api_keys meth description write =
   let address = Conf.address in
   let e = Equinoxe.create ~address () in
   match meth with
-  | GET -> Equinoxe.Users.get_user e |> Json.pp_r
+  | GET -> Equinoxe.Auth.get_user_api_keys e |> Json.pp_r
   | POST ->
       let read_only = not write in
       let has_requiered = has_requiered description in
@@ -77,7 +81,8 @@ let user_t =
   let man =
     man_meth ~get:("Retrieve informations about the current user.", [], []) ()
   in
-  Term.(lwt_result (const user $ meth_t), info "/user" ~doc ~exits ~man)
+  Term.
+    (lwt_result (const user $ token_t $ meth_t), info "/user" ~doc ~exits ~man)
 
 let user_api_keys_t =
   let doc = "Manage user api-keys." in
