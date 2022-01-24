@@ -22,8 +22,6 @@
 (*                                                                           *)
 (*****************************************************************************)
 
-open Lwt.Syntax
-open Lwt.Infix
 module Client = Cohttp_lwt_unix.Client
 
 module Backend = struct
@@ -34,52 +32,31 @@ module Backend = struct
   let bind f m = Lwt.bind m f
   let fail (`Msg e) = Lwt.fail_with e
 
-  (***** Helpers *****)
+  (***** Helper *****)
 
-  let compute ~time ~f =
-    let* status =
-      Lwt.pick
-        [
-          (f () >|= fun v -> `Done v);
-          (Lwt_unix.sleep time >|= fun () -> `Timeout);
-        ]
-    in
-    match status with
-    | `Done v -> Lwt.return v
-    | `Timeout -> Lwt.fail_with "Http request timeout"
-
-  let get_body (_, body) =
-    Cohttp_lwt.Body.to_string body
+  let compute fn ~headers ~url =
+    let headers = Cohttp.Header.of_list headers in
+    let url = Uri.of_string url in
+    Lwt.bind (fn ~headers ~url) (fun (_, body) ->
+        Cohttp_lwt.Body.to_string body)
 
   (**** Http methods ****)
 
-  let compute ~f = compute ~time:10.0 ~f >>= get_body
-
   let get ~headers ~url =
-    let headers = Cohttp.Header.of_list headers in
-    let url = Uri.of_string url in
-    let f () = Client.get ~headers url in
-    compute ~f
+    compute ~headers ~url @@ fun ~headers ~url -> Client.get ~headers url
 
   let post ~headers ~url body =
-    let headers = Cohttp.Header.of_list headers in
-    let url = Uri.of_string url in
+    compute ~headers ~url @@ fun ~headers ~url ->
     let body = Cohttp_lwt.Body.of_string body in
-    let f () = Client.post ~headers ~body url in
-    compute ~f
+    Client.post ~headers ~body url
 
   let put ~headers ~url body =
-    let headers = Cohttp.Header.of_list headers in
-    let url = Uri.of_string url in
+    compute ~headers ~url @@ fun ~headers ~url ->
     let body = Cohttp_lwt.Body.of_string body in
-    let f () = Client.put ~headers ~body url in
-    compute ~f
+    Client.put ~headers ~body url
 
   let delete ~headers ~url =
-    let headers = Cohttp.Header.of_list headers in
-    let url = Uri.of_string url in
-    let f () = Client.delete ~headers url in
-    compute ~f
+    compute ~headers ~url @@ fun ~headers ~url -> Client.delete ~headers url
 end
 
 module Api = Equinoxe.Make (Backend)
