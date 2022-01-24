@@ -48,12 +48,8 @@ module Backend = struct
     | `Done v -> Lwt.return v
     | `Timeout -> Lwt.fail_with "Http request timeout"
 
-  let get_body (resp, body) =
-    let code = Cohttp.(Response.status resp |> Code.code_of_status) in
-    if code >= 200 && code < 300 then Cohttp_lwt.Body.to_string body
-    else
-      let msg = Format.sprintf "Cohttp exits with HTTP code %d" code in
-      Lwt.fail_with msg
+  let get_body (_, body) =
+    Cohttp_lwt.Body.to_string body
 
   (**** Http methods ****)
 
