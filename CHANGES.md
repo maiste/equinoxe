@@ -8,11 +8,13 @@
 ### Changed
 
 - Rewrite the API using `io` monad (#63, @art-w)
+- Uniform error handling between Cohttp and HLC (#69, @art-w)
 
 ### Removed
 
 - Remove `JSON` module and use `Ezjsonm` directly (#63, @art-w)
 - Remove modules from the old JSON Api module (#68, @maiste)
+- Remove timeout support from Cohttp (#69, @art-w)
 
 ## 0.1.0
 
