@@ -23,23 +23,20 @@
 (*****************************************************************************)
 
 module E = Equinoxe_cohttp.Api
+module F = Equinoxe_cohttp.Friendly_api
 module J = Ezjsonm
 open Lwt.Syntax
 
 let token = "YOUR TOKEN"
 let api = E.create ~token ()
+let f_api = F.create ~token ()
 
 let get_project_id_from name =
-  let* json = E.Projects.get_projects api in
-  let projects =
-    J.find json [ "projects" ]
-    |> J.get_list (fun p ->
-           let name = J.find p [ "name" ] |> J.get_string
-           and id = J.find p [ "id" ] |> J.get_string in
-           (name, id))
-  in
-  match List.find_opt (fun (name', _) -> name = name') projects with
-  | Some (_, id) -> Lwt.return id
+  let* projects = F.Project.get_all f_api in
+  match
+    List.find_opt (fun F.Project.{ name = name'; _ } -> name = name') projects
+  with
+  | Some project -> Lwt.return project.id
   | None -> Lwt.fail_with (Format.sprintf "get_project_id: %S not found" name)
 
 let get_project_device_id project_id =
@@ -90,6 +87,7 @@ let destroy_machine machine_id =
 
 let deploy_wait_stop () =
   let* id = get_project_id_from "testing" in
+  let id = F.Project.string_of_id id in
   let* machine_id = create_device id in
   Lwt.finalize
     (fun () ->

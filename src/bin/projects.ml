@@ -25,8 +25,10 @@
 module Conf = Utils.Conf
 module Json = Utils.Json
 module Equinoxe = Utils.Equinoxe
+module Equinoxe_f = Utils.Equinoxe_f
 open Cmdliner
 open Utils.Term
+open Utils.Monad
 
 (* Helpers *)
 
@@ -52,18 +54,22 @@ let config hostname location plan os =
 let projects token = function
   | GET ->
       let address = Conf.address in
-      let e = Equinoxe.create ~address ~token () in
-      Equinoxe.Projects.get_projects e |> Json.pp_r
+      let e = Equinoxe_f.create ~address ~token () in
+      let* projects = Equinoxe_f.Project.get_all e in
+      List.iter Equinoxe_f.Project.pp projects;
+      return ()
   | meth -> not_supported_r meth "/projects"
 
 let projects_id token meth id =
   let address = Conf.address in
-  let e = Equinoxe.create ~address ~token () in
+  let e = Equinoxe_f.create ~address ~token () in
   match meth with
   | GET ->
-      if has_requiered id then
-        let id = Option.get id in
-        Equinoxe.Projects.get_projects_id e ~id () |> Json.pp_r
+      if has_requiered id then (
+        let id = Option.get id |> Equinoxe_f.Project.id_of_string in
+        let* project = Equinoxe_f.Project.get_from e ~id in
+        Equinoxe_f.Project.pp project;
+        return ())
       else not_all_requiered_r [ "id" ]
   | meth -> not_supported_r meth "/projects/{id}"
 
