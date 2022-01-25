@@ -235,6 +235,8 @@ struct
         (Ezjsonm.Parse_error
            (json, Format.sprintf "access: field %s not found" field))
 
+  let replace_empty s = if s = "" then "<empty>" else s
+
   module Http = struct
     let url ~t ~path = Filename.concat t.address path
 
@@ -303,7 +305,6 @@ struct
       }
 
     let to_string config =
-      let pp_empty s = if s = "" then "<empty>" else s in
       Format.sprintf
         "{\n\
          \tname: %s;\n\
@@ -312,11 +313,12 @@ struct
          \twebsite: %s;\n\
          \tmaintenance_email: %s;\n\
          \tmax_projects: %d;\n\
-         }\n"
-        (pp_empty config.id)
-        (pp_empty config.account_id)
-        (pp_empty config.name) (pp_empty config.website)
-        (pp_empty config.maintenance_email)
+         }"
+        (replace_empty config.id)
+        (replace_empty config.account_id)
+        (replace_empty config.name)
+        (replace_empty config.website)
+        (replace_empty config.maintenance_email)
         config.max_projects
 
     let get_from t id =
@@ -348,7 +350,7 @@ struct
         in
         fail msg
 
-    let pp config = Format.printf "%s" (to_string config)
+    let pp config = Format.printf "%s\n" (to_string config)
   end
 
   module Users = struct
@@ -387,7 +389,6 @@ struct
              (json, Format.sprintf "Date.Parser.from_iso: can't parse date"))
 
     let to_string config =
-      let replace_empty s = if s = "" then "<empty>" else s in
       let created_at = Date.Printer.to_iso config.created_at in
       let last_login_at = Date.Printer.to_iso config.last_login_at in
       Format.sprintf
@@ -398,7 +399,7 @@ struct
          \temail: %s;\n\
          \tcreate_at: %s;\n\
          \tlast_login_at: %s;\n\
-         }\n"
+         }"
         (replace_empty config.id)
         (replace_empty config.first_name)
         (replace_empty config.last_name)
