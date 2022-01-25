@@ -112,21 +112,18 @@ module type API = sig
   module Projects : sig
     (** This module manages API parts related to projects. *)
 
-    val get_projects : t -> json io
-    (** [get_projects t] returns all projects associated with the token. *)
-
-    val get_projects_id : t -> id:string -> unit -> json io
-    (** [get_projects_id t ~id ()] returns the {!json} that is referenced by the
-        [id] given in parameter. *)
-
-    val get_projects_id_devices : t -> id:string -> unit -> json io
-    (** [get_projects_id_devices t ~id ()] returns the {!json} that contains all
-        the devices related to the project [id]. *)
-
     val post_projects_id_devices :
       t -> id:string -> config:Devices.config -> unit -> json io
     (** [post_projects_id_devicest ~id ~config ()] creates a machine on the
-        Equinix with the {!Devices.config} specification *)
+        Equinix with the {!Devices.config} specification
+
+        TODO: move to Device module in friendly_api! *)
+
+    val get_projects_id_devices : t -> id:string -> unit -> json io
+    (** [get_projects_id_devices t ~id ()] returns the {!json} that contains all
+        the devices related to the project [id].
+
+        TODO: same as post_projects_id_devices! *)
   end
 end
 
@@ -277,6 +274,40 @@ module type FRIENDLY_API = sig
 
     val pp : config -> unit
     (** [pp config] prints a [config] in a human readable way. *)
+  end
+
+  module Project : sig
+    (** This module manages API parts related to projects. *)
+
+    type id
+    (** Unique identifier for the Equinix API. *)
+
+    type config = {
+      id : id;
+      name : string;
+      created_at : Date.t;
+      updated_at : Date.t;
+    }
+    (** Representation of an Equinix Project. *)
+
+    val id_of_string : string -> id
+    (** [id_of_string str] converts [str] into an [id]. *)
+
+    val string_of_id : id -> string
+    (** [string_of_id id] returns the string that represents the [id]. *)
+
+    val to_string : config -> string
+    (** [to_string config] returns a string representation of the [config]. *)
+
+    val get_all : t -> config list io
+    (** [get_all t] returns all projects associated with the token. *)
+
+    val get_from : t -> id:id -> config io
+    (** [get_from t ~id ] returns the {!config} of the project that is
+        referenced by the [id] given in parameter. *)
+
+    val pp : config -> unit
+    (** [pp config] prints a human readable Project config. *)
   end
 end
 

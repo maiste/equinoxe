@@ -167,12 +167,6 @@ module Make (B : Backend) : API with type 'a io = 'a B.io = struct
   end
 
   module Projects = struct
-    let get_projects t = Http.get ~t ~path:"projects"
-
-    let get_projects_id t ~id () =
-      let path = Filename.concat "projects" id in
-      Http.get ~t ~path
-
     let get_projects_id_devices t ~id () =
       let path = Format.sprintf "projects/%s/devices" id in
       Http.get ~t ~path
@@ -521,6 +515,64 @@ struct
       try return (config_of_json json)
       with Ezjsonm.Parse_error (v, err) ->
         fail_with_parsing ~name:"Ip.get_from" ~err ~json v
+
+    let pp config = Format.printf "%s\n" (to_string config)
+  end
+
+  module Project = struct
+    type id = string
+
+    type config = {
+      id : id;
+      name : string;
+      created_at : Date.t;
+      updated_at : Date.t;
+    }
+
+    let id_of_string id = id
+    let string_of_id id = id
+
+    let config_of_json json =
+      try
+        {
+          id = access "id" json |> Ezjsonm.get_string;
+          name = access "name" json |> Ezjsonm.get_string;
+          created_at =
+            access "created_at" json
+            |> Ezjsonm.get_string
+            |> Date.Parser.from_iso;
+          updated_at =
+            access "updated_at" json
+            |> Ezjsonm.get_string
+            |> Date.Parser.from_iso;
+        }
+      with Failure _ -> raise_wrong_date ~name:"Project.config_of_json" json
+
+    let to_string config =
+      let created_at = Date.Printer.to_iso config.created_at in
+      let updated_at = Date.Printer.to_iso config.updated_at in
+      Format.sprintf
+        "{\n\tid: %s;\n\tname: %s;\n\tcreated_at: %s;\n\tupdated_at: %s;\n}"
+        (replace_empty config.id)
+        (replace_empty config.name)
+        created_at updated_at
+
+    let get_all t =
+      let* json = Http.get ~t ~path:"projects" in
+      try
+        let projects =
+          access "projects" json |> Ezjsonm.get_list config_of_json
+        in
+        return projects
+      with Ezjsonm.Parse_error (v, err) ->
+        fail_with_parsing ~name:"Project.get_all" ~err ~json v
+
+    let get_from t ~id =
+      let path = Filename.concat "projects" id in
+      let* json = Http.get ~t ~path in
+      try return (config_of_json json)
+      with Ezjsonm.Parse_error (v, err) ->
+        fail_with_parsing ~name:"Project.get_from" ~err ~json v
 
     let pp config = Format.printf "%s\n" (to_string config)
   end
