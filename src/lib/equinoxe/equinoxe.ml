@@ -218,6 +218,19 @@ struct
         (Ezjsonm.Parse_error
            (json, Format.sprintf "access: field %s not found" field))
 
+  let fail_with_parsing ~name ~err ~json v =
+    let msg =
+      Format.sprintf "%s: parse error %s with %s on %s" name err
+        (Ezjsonm.value_to_string v)
+        (Ezjsonm.value_to_string json)
+    in
+    fail msg
+
+  let raise_wrong_date ~name json =
+    raise
+      (Ezjsonm.Parse_error
+         (json, Format.sprintf "%s: Date.Parser.from_iso can't parse date" name))
+
   let replace_empty s = if s = "" then "<empty>" else s
 
   module Http = struct
@@ -311,12 +324,7 @@ struct
         let organization = config_of_json json in
         return organization
       with Ezjsonm.Parse_error (v, err) ->
-        let msg =
-          Format.sprintf "get: parse error %s with %s on %s" err
-            (Ezjsonm.value_to_string v)
-            (Ezjsonm.value_to_string json)
-        in
-        fail msg
+        fail_with_parsing ~name:"get" ~err ~json v
 
     let get_all t =
       let* json = Http.get ~t ~path:"organizations" in
@@ -326,12 +334,7 @@ struct
         in
         return organizations
       with Ezjsonm.Parse_error (v, err) ->
-        let msg =
-          Format.sprintf "Orga.get_all: parse error %s on %s with %s " err
-            (Ezjsonm.value_to_string v)
-            (Ezjsonm.value_to_string json)
-        in
-        fail msg
+        fail_with_parsing ~name:"Orga.get_all" ~err ~json v
 
     let pp config = Format.printf "%s\n" (to_string config)
   end
@@ -366,10 +369,7 @@ struct
             |> Ezjsonm.get_string
             |> Date.Parser.from_iso;
         }
-      with Failure _ ->
-        raise
-          (Ezjsonm.Parse_error
-             (json, Format.sprintf "Date.Parser.from_iso: can't parse date"))
+      with Failure _ -> raise_wrong_date ~name:"User.config_of_json" json
 
     let to_string config =
       let created_at = Date.Printer.to_iso config.created_at in
@@ -393,13 +393,7 @@ struct
       let* json = Http.get ~t ~path:"user" in
       try return (config_of_json json)
       with Ezjsonm.Parse_error (v, err) ->
-        let msg =
-          Format.sprintf "User.get_current_user: parse error %s on %s with %s "
-            err
-            (Ezjsonm.value_to_string v)
-            (Ezjsonm.value_to_string json)
-        in
-        fail msg
+        fail_with_parsing ~name:"User.get_current_user" ~err ~json v
 
     let pp config = Format.printf "%s\n" (to_string config)
   end
@@ -429,10 +423,7 @@ struct
             |> Date.Parser.from_iso;
           description = access "description" json |> Ezjsonm.get_string;
         }
-      with Failure _ ->
-        raise
-          (Ezjsonm.Parse_error
-             (json, Format.sprintf "Date.Parser.from_iso: can't parse date"))
+      with Failure _ -> raise_wrong_date ~name:"Auth.config_of_json" json
 
     let to_string config =
       let created_at = Date.Printer.to_iso config.created_at in
@@ -455,12 +446,7 @@ struct
         let keys = access "api_keys" json |> Ezjsonm.get_list config_of_json in
         return keys
       with Ezjsonm.Parse_error (v, err) ->
-        let msg =
-          Format.sprintf "Auth.get_keys: parse error %s on %s with %s " err
-            (Ezjsonm.value_to_string v)
-            (Ezjsonm.value_to_string json)
-        in
-        fail msg
+        fail_with_parsing ~name:"Auth.get_keys" ~err ~json v
 
     let create_key t ?(read_only = true) ~description () =
       let json =
@@ -472,12 +458,7 @@ struct
       let* resp = Http.post ~t ~path:"user/api-keys" json in
       try return (config_of_json resp)
       with Ezjsonm.Parse_error (v, err) ->
-        let msg =
-          Format.sprintf "Auth.create_key: parse error %s on %s with %s " err
-            (Ezjsonm.value_to_string v)
-            (Ezjsonm.value_to_string json)
-        in
-        fail msg
+        fail_with_parsing ~name:"Auth.create_key" ~err ~json v
 
     let delete_key t ~id =
       let path = Filename.concat "user/api-keys/" id in
