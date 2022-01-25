@@ -29,7 +29,6 @@ module Equinoxe_f = Utils.Equinoxe_f
 open Cmdliner
 open Utils.Term
 open Utils.Monad
-open Lwt.Infix
 
 (* Actions *)
 
@@ -42,34 +41,33 @@ let user token = function
       return ()
   | meth -> not_supported_r meth "/user"
 
-let user_api_keys meth description write =
+let user_api_keys token meth description write =
   let address = Conf.address in
-  let e = Equinoxe.create ~address () in
+  let e = Equinoxe_f.create ~address ~token () in
   match meth with
-  | GET -> Equinoxe.Auth.get_user_api_keys e |> Json.pp_r
+  | GET ->
+      let* keys = Equinoxe_f.Auth.get_keys e in
+      List.iter Equinoxe_f.Auth.pp keys;
+      return ()
   | POST ->
       let read_only = not write in
       let has_requiered = has_requiered description in
       let description = Option.get description in
-      if has_requiered then
-        Equinoxe.Auth.post_user_api_keys e ~read_only ~description ()
-        |> Json.pp_r
+      if has_requiered then (
+        let* req = Equinoxe_f.Auth.create_key e ~read_only ~description () in
+        Equinoxe_f.Auth.pp req;
+        return ())
       else not_all_requiered_r [ "description" ]
   | meth -> not_supported_r meth "/user/api-keys"
 
-let user_api_keys_id meth id =
+let user_api_keys_id token meth id =
   let address = Conf.address in
-  let e = Equinoxe.create ~address () in
+  let e = Equinoxe_f.create ~address ~token () in
   match meth with
   | DELETE ->
       if has_requiered id then
-        let id = Option.get id in
-        Equinoxe.Auth.delete_user_api_keys_id e ~id () |> Json.to_unit
-        >>= function
-        | Ok () ->
-            Format.printf "Api key %s deleted.@." id;
-            Lwt_result.return ()
-        | e -> Lwt.return e
+        let id = Option.get id |> Equinoxe_f.Auth.id_of_string in
+        Equinoxe_f.Auth.delete_key e ~id
       else not_all_requiered_r [ "id" ]
   | meth -> not_supported_r meth "/user/api-keys"
 
@@ -102,7 +100,8 @@ let user_api_keys_t =
     Arg.(value & opt (some string) None & info [ "description" ] ~doc)
   in
   Term.
-    ( lwt_result (const user_api_keys $ meth_t $ description_t $ write_t),
+    ( lwt_result
+        (const user_api_keys $ token_t $ meth_t $ description_t $ write_t),
       info "/user/api-keys" ~doc ~exits ~man )
 
 let user_api_keys_id_t =
@@ -114,7 +113,7 @@ let user_api_keys_id_t =
     Arg.(value & opt (some string) None & info [ "id" ] ~doc)
   in
   Term.
-    ( lwt_result (const user_api_keys_id $ meth_t $ id_t),
+    ( lwt_result (const user_api_keys_id $ token_t $ meth_t $ id_t),
       info "/user/api-keys/id" ~doc ~exits ~man )
 
 let t = [ user_t; user_api_keys_t; user_api_keys_id_t ]
