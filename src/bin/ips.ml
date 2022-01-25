@@ -24,9 +24,10 @@
 
 module Conf = Utils.Conf
 module Json = Utils.Json
-module Equinoxe = Utils.Equinoxe
+module Equinoxe = Utils.Equinoxe_f
 open Cmdliner
 open Utils.Term
+open Utils.Monad
 
 (* Actions *)
 
@@ -35,9 +36,11 @@ let ips_id token meth id =
   let e = Equinoxe.create ~address ~token () in
   match meth with
   | GET ->
-      if has_requiered id then
-        let id = Option.get id in
-        Equinoxe.Ip.get_ips_id e ~id () |> Json.pp_r
+      if has_requiered id then (
+        let id = Option.get id |> Equinoxe.Ip.id_of_string in
+        let* ip = Equinoxe.Ip.get_from e ~id in
+        Equinoxe.Ip.pp ip;
+        return ())
       else not_all_requiered_r [ "id" ]
   | meth -> not_supported_r meth "/ips/{id}"
 
