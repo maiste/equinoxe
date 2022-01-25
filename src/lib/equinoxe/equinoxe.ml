@@ -80,23 +80,6 @@ module Make (B : Backend) : API with type 'a io = 'a B.io = struct
     let delete = run B.delete
   end
 
-  module Auth = struct
-    let get_user_api_keys t = Http.get ~t ~path:"user/api-keys"
-
-    let post_user_api_keys t ?(read_only = true) ~description () =
-      let json =
-        `O
-          [
-            ("read_only", `Bool read_only); ("description", `String description);
-          ]
-      in
-      Http.post ~t ~path:"user/api-keys" json
-
-    let delete_user_api_keys_id t ~id () =
-      let path = Filename.concat "user/api-keys/" id in
-      Http.delete ~t ~path
-  end
-
   module Devices = struct
     type action = Power_on | Power_off | Reboot | Reinstall | Rescue
 
@@ -275,8 +258,8 @@ struct
       get_json body
 
     let get = run B.get
-    let _post json = run_with_body B.post json
-    let _delete = run B.delete
+    let post json = run_with_body B.post json
+    let delete = run B.delete
   end
 
   module Orga = struct
@@ -418,6 +401,89 @@ struct
         in
         fail msg
 
-    let pp config = Format.printf "%s" (to_string config)
+    let pp config = Format.printf "%s\n" (to_string config)
+  end
+
+  module Auth = struct
+    type id = string
+
+    type config = {
+      id : id;
+      token : string;
+      read_only : bool;
+      created_at : Date.t;
+      description : string;
+    }
+
+    let id_of_string id = id
+
+    let config_of_json json =
+      try
+        {
+          id = access "id" json |> Ezjsonm.get_string;
+          token = access "token" json |> Ezjsonm.get_string;
+          read_only = access "read_only" json |> Ezjsonm.get_bool;
+          created_at =
+            access "created_at" json
+            |> Ezjsonm.get_string
+            |> Date.Parser.from_iso;
+          description = access "description" json |> Ezjsonm.get_string;
+        }
+      with Failure _ ->
+        raise
+          (Ezjsonm.Parse_error
+             (json, Format.sprintf "Date.Parser.from_iso: can't parse date"))
+
+    let to_string config =
+      let created_at = Date.Printer.to_iso config.created_at in
+      Format.sprintf
+        "{\n\
+         \tid: %s;\n\
+         \ttoken: %s;\n\
+         \tread_only: %b;\n\
+         \tcreate_at: %s;\n\
+         description: %s;\n\
+         }"
+        (replace_empty config.id)
+        (replace_empty config.token)
+        config.read_only created_at
+        (replace_empty config.description)
+
+    let get_keys t =
+      let* json = Http.get ~t ~path:"user/api-keys" in
+      try
+        let keys = access "api_keys" json |> Ezjsonm.get_list config_of_json in
+        return keys
+      with Ezjsonm.Parse_error (v, err) ->
+        let msg =
+          Format.sprintf "Auth.get_keys: parse error %s on %s with %s " err
+            (Ezjsonm.value_to_string v)
+            (Ezjsonm.value_to_string json)
+        in
+        fail msg
+
+    let create_key t ?(read_only = true) ~description () =
+      let json =
+        `O
+          [
+            ("read_only", `Bool read_only); ("description", `String description);
+          ]
+      in
+      let* resp = Http.post ~t ~path:"user/api-keys" json in
+      try return (config_of_json resp)
+      with Ezjsonm.Parse_error (v, err) ->
+        let msg =
+          Format.sprintf "Auth.create_key: parse error %s on %s with %s " err
+            (Ezjsonm.value_to_string v)
+            (Ezjsonm.value_to_string json)
+        in
+        fail msg
+
+    let delete_key t ~id =
+      let path = Filename.concat "user/api-keys/" id in
+      let* _json = Http.delete ~t ~path in
+      return ()
+
+    let pp config = Format.printf "%s\n" (to_string config)
   end
 end

@@ -36,22 +36,6 @@ module type API = sig
       when executing requests. Default [address] is
       [https://api.equinix.com/metal/v1/] and default [token] is empty. *)
 
-  module Auth : sig
-    (** This module manages API parts related to authentification. *)
-
-    val get_user_api_keys : t -> json io
-    (** [get_user_api_keys t] returns the keys available for the current user. *)
-
-    val post_user_api_keys :
-      t -> ?read_only:bool -> description:string -> unit -> json io
-    (** [post_user_api_keys t ~read_only ~description ()] creates a new API key
-        on Equinix. Default value to read_only is true. *)
-
-    val delete_user_api_keys_id : t -> id:string -> unit -> json io
-    (** [delete_user_api_keys_id t ~id () ] deletes the key referenced by [id]
-        from the user keys. *)
-  end
-
   module Devices : sig
     (** This module manages API parts related to devices. *)
 
@@ -232,6 +216,43 @@ module type FRIENDLY_API = sig
 
     val pp : config -> unit
     (** [pp config] pretty-prints a user configuration. *)
+  end
+
+  module Auth : sig
+    (** This module manages API parts related to authentification. *)
+
+    type id
+    (** Unique identifier to represent a key in the Equinix API *)
+
+    type config = {
+      id : id;
+      token : string;
+      read_only : bool;
+      created_at : Date.t;
+      description : string;
+    }
+    (** Representation of an API key *)
+
+    val id_of_string : string -> id
+    (** [id_of_string str] returns a unique identifier from the Equinix API *)
+
+    val to_string : config -> string
+    (** [to_string config] returns a string representating an API key. *)
+
+    val get_keys : t -> config list io
+    (** [get_keys t] returns the keys available for the current user. *)
+
+    val create_key :
+      t -> ?read_only:bool -> description:string -> unit -> config io
+    (** [create_key t ~read_only ~description ()] creates a new API key on
+        Equinix. Default value to read_only is true. *)
+
+    val delete_key : t -> id:id -> unit io
+    (** [delete_key t ~id () ] deletes the key referenced by [id] from the user
+        keys. *)
+
+    val pp : config -> unit
+    (** [pp config] prints on stdout the [config] given. *)
   end
 end
 
