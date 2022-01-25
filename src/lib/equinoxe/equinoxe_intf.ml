@@ -109,14 +109,6 @@ module type API = sig
         ips. *)
   end
 
-  module Ip : sig
-    (** This module manages API parts related to ips. *)
-
-    val get_ips_id : t -> id:string -> unit -> json io
-    (** [get_ips_id t ~id ()] returns informations about an ip referenced by its
-        [id]. *)
-  end
-
   module Projects : sig
     (** This module manages API parts related to projects. *)
 
@@ -248,11 +240,43 @@ module type FRIENDLY_API = sig
         Equinix. Default value to read_only is true. *)
 
     val delete_key : t -> id:id -> unit io
-    (** [delete_key t ~id () ] deletes the key referenced by [id] from the user
+    (** [delete_key t ~id ] deletes the key referenced by [id] from the user
         keys. *)
 
     val pp : config -> unit
     (** [pp config] prints on stdout the [config] given. *)
+  end
+
+  module Ip : sig
+    (** This module manages API parts related to ips. *)
+
+    type id
+    (** Abstract to represent a unique identifier in the Equinix API. *)
+
+    type config = {
+      id : id;
+      netmask : string;
+      network : string;
+      address : string;
+      gateway : string;
+      public : bool;
+      enabled : bool;
+      created_at : Date.t;
+    }
+    (** Representation of an Ip configuration. *)
+
+    val id_of_string : string -> id
+    (** [id_of_string str] turns a string into an Ip [id]. *)
+
+    val to_string : config -> string
+    (** [to_string config] returns a string that represents the configuration. *)
+
+    val get_from : t -> id:id -> config io
+    (** [get_ips_id t ~id] returns informations about an ip referenced by its
+        [id]. *)
+
+    val pp : config -> unit
+    (** [pp config] prints a [config] in a human readable way. *)
   end
 end
 

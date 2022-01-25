@@ -191,12 +191,6 @@ module Make (B : Backend) : API with type 'a io = 'a B.io = struct
       in
       Http.post ~t ~path json
   end
-
-  module Ip = struct
-    let get_ips_id t ~id () =
-      let path = Filename.concat "ips" id in
-      Http.get ~t ~path
-  end
 end
 
 module MakeFriendly (B : Backend) : FRIENDLY_API with type 'a io = 'a B.io =
@@ -464,6 +458,69 @@ struct
       let path = Filename.concat "user/api-keys/" id in
       let* _json = Http.delete ~t ~path in
       return ()
+
+    let pp config = Format.printf "%s\n" (to_string config)
+  end
+
+  module Ip = struct
+    type id = string
+
+    type config = {
+      id : id;
+      netmask : string;
+      network : string;
+      address : string;
+      gateway : string;
+      public : bool;
+      enabled : bool;
+      created_at : Date.t;
+    }
+
+    let id_of_string id = id
+
+    let to_string config =
+      let created_at = Date.Printer.to_iso config.created_at in
+      Format.sprintf
+        "{\n\
+         \tid: %s;\n\
+         \tnetmask: %s;\n\
+         \tnetwork: %s;\n\
+         \taddress: %s;\n\
+         \tgateway: %s;\n\
+         \tpublic: %b;\n\
+         \tenabled: %b;\n\
+         \tcreate_at: %s;\n\
+         }"
+        (replace_empty config.id)
+        (replace_empty config.netmask)
+        (replace_empty config.network)
+        (replace_empty config.address)
+        (replace_empty config.gateway)
+        config.public config.enabled created_at
+
+    let config_of_json json =
+      try
+        {
+          id = access "id" json |> Ezjsonm.get_string;
+          netmask = access "netmask" json |> Ezjsonm.get_string;
+          network = access "network" json |> Ezjsonm.get_string;
+          address = access "address" json |> Ezjsonm.get_string;
+          gateway = access "gateway" json |> Ezjsonm.get_string;
+          public = access "public" json |> Ezjsonm.get_bool;
+          enabled = access "enabled" json |> Ezjsonm.get_bool;
+          created_at =
+            access "created_at" json
+            |> Ezjsonm.get_string
+            |> Date.Parser.from_iso;
+        }
+      with Failure _ -> raise_wrong_date ~name:"Ip.config_of_json" json
+
+    let get_from t ~id =
+      let path = Filename.concat "ips" id in
+      let* json = Http.get ~t ~path in
+      try return (config_of_json json)
+      with Ezjsonm.Parse_error (v, err) ->
+        fail_with_parsing ~name:"Ip.get_from" ~err ~json v
 
     let pp config = Format.printf "%s\n" (to_string config)
   end
