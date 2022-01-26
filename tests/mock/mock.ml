@@ -37,8 +37,12 @@ struct
 
   let address_length = String.length address
 
+  let starts_with ~prefix str =
+    let len = String.length prefix in
+    String.length str >= len && String.sub str 0 len = prefix
+
   let check_url url =
-    if String.starts_with ~prefix:address url then
+    if starts_with ~prefix:address url then
       String.sub url address_length (String.length url - address_length)
     else raise (Wrong_url url)
 
