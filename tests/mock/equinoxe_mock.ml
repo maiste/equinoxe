@@ -719,6 +719,21 @@ let test_post_devices_id_actions =
   in
   Alcotest.(check ezjsonm) "json" (`O []) json
 
+let test_delete_devices_id =
+  Alcotest.test_case "Devices.delete_devices_id" `Quick @@ fun () ->
+  let module E =
+  (val mock
+         [
+           (Delete "devices/XYZ", "");
+           (Delete "devices/DEAD?force_delete=true", "");
+         ])
+  in
+  let t = E.create ~address ~token () in
+  let json = E.Devices.delete_devices_id t ~id:"XYZ" () in
+  Alcotest.(check ezjsonm) "json" (`O []) json;
+  let json = E.Devices.delete_devices_id t ~id:"DEAD" ~force:true () in
+  Alcotest.(check ezjsonm) "json" (`O []) json
+
 let test_devices =
   [
     ( "devices",
@@ -726,6 +741,7 @@ let test_devices =
         test_get_devices_id;
         test_get_devices_id_events;
         test_post_devices_id_actions;
+        test_delete_devices_id;
       ] );
   ]
 
