@@ -173,8 +173,22 @@ let test_auth_post_user_api_keys =
   let expected_json = Ezjsonm.from_string raw_json in
   Alcotest.(check ezjsonm) "json" expected_json json
 
+let test_auth_delete_user_api_keys_id =
+  Alcotest.test_case "Auth.delete_user_api_keys_id" `Quick @@ fun () ->
+  let module E = (val mock [ (Delete "user/api-keys/id54321", "") ]) in
+  let t = E.create ~address ~token () in
+  let json = E.Auth.delete_user_api_keys_id t ~id:"id54321" () in
+  Alcotest.(check ezjsonm) "json" (`O []) json
+
 let test_auth =
-  [ ("auth", [ test_auth_get_user_api_keys; test_auth_post_user_api_keys ]) ]
+  [
+    ( "auth",
+      [
+        test_auth_get_user_api_keys;
+        test_auth_post_user_api_keys;
+        test_auth_delete_user_api_keys_id;
+      ] );
+  ]
 
 let test_orga_get_all =
   Alcotest.test_case "Orga.get_all" `Quick @@ fun () ->
