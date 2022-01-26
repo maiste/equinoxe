@@ -6,4 +6,5 @@ let () =
       ("orga", Mock_orga.tests);
       ("devices", Mock_devices.tests);
       ("projects", Mock_projects.tests);
+      ("users", Mock_users.tests);
     ]
