@@ -639,5 +639,53 @@ let test_get_devices_id =
   let expected_json = Ezjsonm.from_string raw_json in
   Alcotest.(check ezjsonm) "json" expected_json json
 
-let test_devices = [ ("devices", [ test_get_devices_id ]) ]
+let test_get_devices_id_events =
+  Alcotest.test_case "Devices.get_devices_id_events" `Quick @@ fun () ->
+  let raw_json =
+    {|{
+        "events": [
+          {
+            "id": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
+            "state": "string",
+            "type": "string",
+            "body": "string",
+            "relationships": [
+              {
+                "href": "string"
+              }
+            ],
+            "interpolated": "string",
+            "created_at": "2019-08-24T14:15:22Z",
+            "href": "string"
+          }
+        ],
+        "meta": {
+          "first": {
+            "href": "string"
+          },
+          "previous": {
+            "href": "string"
+          },
+          "self": {
+            "href": "string"
+          },
+          "next": {
+            "href": "string"
+          },
+          "last": {
+            "href": "string"
+          },
+          "total": 0
+        }
+      }|}
+  in
+  let module E = (val mock [ (Get "devices/i64/events", raw_json) ]) in
+  let t = E.create ~address ~token () in
+  let json = E.Devices.get_devices_id_events t ~id:"i64" () in
+  let expected_json = Ezjsonm.from_string raw_json in
+  Alcotest.(check ezjsonm) "json" expected_json json
+
+let test_devices =
+  [ ("devices", [ test_get_devices_id; test_get_devices_id_events ]) ]
+
 let () = Alcotest.run "mock" (test_errors @ test_auth @ test_orga @ test_devices)
