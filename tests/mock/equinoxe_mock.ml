@@ -734,6 +734,51 @@ let test_delete_devices_id =
   let json = E.Devices.delete_devices_id t ~id:"DEAD" ~force:true () in
   Alcotest.(check ezjsonm) "json" (`O []) json
 
+let test_get_devices_id_ips =
+  Alcotest.test_case "Devices.get_devices_id_ips" `Quick @@ fun () ->
+  let raw_json =
+    {|{
+        "ip_addresses": [
+          {
+            "id": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
+            "address_family": 0,
+            "netmask": "string",
+            "public": true,
+            "enabled": true,
+            "cidr": 0,
+            "management": true,
+            "manageable": true,
+            "global_ip": true,
+            "assigned_to": {
+              "href": "string"
+            },
+            "network": "string",
+            "address": "string",
+            "gateway": "string",
+            "href": "string",
+            "created_at": "2019-08-24T14:15:22Z",
+            "metro": {
+              "id": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
+              "name": "string",
+              "code": "string",
+              "country": "string"
+            },
+            "parent_block": {
+              "network": "string",
+              "netmask": "string",
+              "cidr": 0,
+              "href": "string"
+            }
+          }
+        ]
+      }|}
+  in
+  let module E = (val mock [ (Get "devices/toto/ips", raw_json) ]) in
+  let t = E.create ~address ~token () in
+  let json = E.Devices.get_devices_id_ips t ~id:"toto" () in
+  let expected_json = Ezjsonm.from_string raw_json in
+  Alcotest.(check ezjsonm) "json" expected_json json
+
 let test_devices =
   [
     ( "devices",
@@ -742,6 +787,7 @@ let test_devices =
         test_get_devices_id_events;
         test_post_devices_id_actions;
         test_delete_devices_id;
+        test_get_devices_id_ips;
       ] );
   ]
 
