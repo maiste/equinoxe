@@ -451,4 +451,193 @@ let test_orga_get_from =
   assert (expected.E.Orga.id = orga.E.Orga.id)
 
 let test_orga = [ ("orga", [ test_orga_get_all; test_orga_get_from ]) ]
-let () = Alcotest.run "mock" (test_errors @ test_auth @ test_orga)
+
+let test_get_devices_id =
+  Alcotest.test_case "Devices.get_devices_id" `Quick @@ fun () ->
+  let raw_json =
+    {|{
+        "id": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
+        "short_id": "string",
+        "hostname": "string",
+        "description": "string",
+        "state": "string",
+        "tags": [
+          "string"
+        ],
+        "image_url": "string",
+        "billing_cycle": "string",
+        "user": "string",
+        "iqn": "string",
+        "locked": true,
+        "bonding_mode": 0,
+        "created_at": "2019-08-24T14:15:22Z",
+        "updated_at": "2019-08-24T14:15:22Z",
+        "spot_instance": true,
+        "spot_price_max": 0,
+        "termination_time": "2019-08-24T14:15:22Z",
+        "customdata": {},
+        "provisioning_percentage": 0,
+        "operating_system": {
+          "id": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
+          "slug": "string",
+          "name": "string",
+          "distro": "string",
+          "version": "string",
+          "preinstallable": true,
+          "provisionable_on": [
+            "string"
+          ],
+          "pricing": {},
+          "licensed": true
+        },
+        "always_pxe": true,
+        "ipxe_script_url": "string",
+        "facility": {
+          "id": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
+          "name": "string",
+          "code": "string",
+          "features": [
+            "baremetal",
+            "backend_transfer",
+            "global_ipv4"
+          ],
+          "ip_ranges": [
+            "2604:1380::/36",
+            "147.75.192.0/21"
+          ],
+          "address": {
+            "address": "string",
+            "address2": "string",
+            "city": "string",
+            "state": "string",
+            "zip_code": "string",
+            "country": "string",
+            "coordinates": {
+              "latitude": "string",
+              "longitude": "string"
+            }
+          },
+          "metro": {
+            "id": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
+            "name": "string",
+            "code": "string",
+            "country": "string"
+          }
+        },
+        "metro": {
+          "id": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
+          "name": "string",
+          "code": "string",
+          "country": "string"
+        },
+        "plan": {
+          "id": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
+          "slug": "string",
+          "name": "string",
+          "description": "string",
+          "line": "string",
+          "specs": {},
+          "pricing": {},
+          "legacy": true,
+          "class": "string",
+          "available_in": [
+            {
+              "href": "string"
+            }
+          ]
+        },
+        "userdata": "string",
+        "root_password": "string",
+        "switch_uuid": "string",
+        "network_ports": {
+          "id": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
+          "type": "string",
+          "name": "string",
+          "data": {},
+          "disbond_operation_supported": true,
+          "virtual_networks": [
+            {
+              "href": "string"
+            }
+          ],
+          "href": "string"
+        },
+        "href": "string",
+        "project": {
+          "href": "string"
+        },
+        "project_lite": {
+          "href": "string"
+        },
+        "volumes": [
+          {
+            "href": "string"
+          }
+        ],
+        "hardware_reservation": {
+          "href": "string"
+        },
+        "ssh_keys": [
+          {
+            "href": "string"
+          }
+        ],
+        "ip_addresses": [
+          {
+            "id": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
+            "address_family": 0,
+            "netmask": "string",
+            "public": true,
+            "enabled": true,
+            "cidr": 0,
+            "management": true,
+            "manageable": true,
+            "global_ip": true,
+            "assigned_to": {
+              "href": "string"
+            },
+            "network": "string",
+            "address": "string",
+            "gateway": "string",
+            "href": "string",
+            "created_at": "2019-08-24T14:15:22Z",
+            "metro": {
+              "id": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
+              "name": "string",
+              "code": "string",
+              "country": "string"
+            },
+            "parent_block": {
+              "network": "string",
+              "netmask": "string",
+              "cidr": 0,
+              "href": "string"
+            }
+          }
+        ],
+        "provisioning_events": [
+          {
+            "id": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
+            "state": "string",
+            "type": "string",
+            "body": "string",
+            "relationships": [
+              {
+                "href": "string"
+              }
+            ],
+            "interpolated": "string",
+            "created_at": "2019-08-24T14:15:22Z",
+            "href": "string"
+          }
+        ]
+      }|}
+  in
+  let module E = (val mock [ (Get "devices/dev42", raw_json) ]) in
+  let t = E.create ~address ~token () in
+  let json = E.Devices.get_devices_id t ~id:"dev42" () in
+  let expected_json = Ezjsonm.from_string raw_json in
+  Alcotest.(check ezjsonm) "json" expected_json json
+
+let test_devices = [ ("devices", [ test_get_devices_id ]) ]
+let () = Alcotest.run "mock" (test_errors @ test_auth @ test_orga @ test_devices)
