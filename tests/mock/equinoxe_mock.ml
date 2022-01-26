@@ -685,7 +685,48 @@ let test_get_devices_id_events =
   let expected_json = Ezjsonm.from_string raw_json in
   Alcotest.(check ezjsonm) "json" expected_json json
 
+let test_post_devices_id_actions =
+  Alcotest.test_case "Devices.post_devices_id_actions" `Quick @@ fun () ->
+  let module E =
+  (val mock
+         [
+           (Post ("devices/abc/actions?type=power_on", ""), "");
+           (Post ("devices/def/actions?type=power_off", ""), "");
+           (Post ("devices/ghi/actions?type=reboot", ""), "");
+           (Post ("devices/jkl/actions?type=rescue", ""), "");
+           (Post ("devices/mno/actions?type=reinstall", ""), "");
+         ])
+  in
+  let t = E.create ~address ~token () in
+  let json =
+    E.Devices.post_devices_id_actions t ~id:"abc" ~action:E.Devices.Power_on ()
+  in
+  Alcotest.(check ezjsonm) "json" (`O []) json;
+  let json =
+    E.Devices.post_devices_id_actions t ~id:"def" ~action:E.Devices.Power_off ()
+  in
+  Alcotest.(check ezjsonm) "json" (`O []) json;
+  let json =
+    E.Devices.post_devices_id_actions t ~id:"ghi" ~action:E.Devices.Reboot ()
+  in
+  Alcotest.(check ezjsonm) "json" (`O []) json;
+  let json =
+    E.Devices.post_devices_id_actions t ~id:"jkl" ~action:E.Devices.Rescue ()
+  in
+  Alcotest.(check ezjsonm) "json" (`O []) json;
+  let json =
+    E.Devices.post_devices_id_actions t ~id:"mno" ~action:E.Devices.Reinstall ()
+  in
+  Alcotest.(check ezjsonm) "json" (`O []) json
+
 let test_devices =
-  [ ("devices", [ test_get_devices_id; test_get_devices_id_events ]) ]
+  [
+    ( "devices",
+      [
+        test_get_devices_id;
+        test_get_devices_id_events;
+        test_post_devices_id_actions;
+      ] );
+  ]
 
 let () = Alcotest.run "mock" (test_errors @ test_auth @ test_orga @ test_devices)

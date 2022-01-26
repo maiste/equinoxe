@@ -108,8 +108,9 @@ module Make (B : Backend) : API with type 'a io = 'a B.io = struct
       get_json body
 
     let get = run B.get
-    let post_empty = run_with_body B.post ""
-    let post json = run_with_body B.post (Ezjsonm.value_to_string json)
+    let post_raw body = run_with_body B.post body
+    let post_empty = post_raw ""
+    let post json = post_raw (Ezjsonm.value_to_string json)
     let delete = run B.delete
   end
 
