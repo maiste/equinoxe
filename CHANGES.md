@@ -4,6 +4,7 @@
 
 - Add a Cohttp client version, with a specific package (#60, @maiste)
 - Add a statically-typed API (#68, #71, @maiste)
+- Add unit tests to mock Equinix api (#70, @art-w)
 
 ### Changed
 
