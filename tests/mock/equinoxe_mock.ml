@@ -5,4 +5,5 @@ let () =
       ("auth", Mock_auth.tests);
       ("orga", Mock_orga.tests);
       ("devices", Mock_devices.tests);
+      ("projects", Mock_projects.tests);
     ]
