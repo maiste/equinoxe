@@ -28,169 +28,26 @@ include Equinoxe_intf
 module Make (B : Backend) : API with type 'a io = 'a B.io = struct
   type json = Ezjsonm.value
   type 'a io = 'a B.io
-
-  let return x = B.return x
-  let ( let* ) m f = B.bind f m
-  let fail msg = B.fail (`Msg msg)
-
   type t = { address : string; token : string }
 
   let create ?(address = "https://api.equinix.com/metal/v1/") ?(token = "") () =
     { address; token }
-
-  module Http = struct
-    let url ~t ~path = Filename.concat t.address path
-
-    let headers ~token =
-      let token = if token = "" then [] else [ ("X-Auth-Token", token) ] in
-      token @ [ ("Content-Type", "application/json") ]
-
-    let json_of_string str =
-      match Ezjsonm.from_string str with
-      | json -> return json
-      | exception Ezjsonm.Parse_error (_, msg) -> fail msg
-
-    let get_json = function
-      | "" -> return (`O [])
-      | str -> (
-          let* json = json_of_string str in
-          match Ezjsonm.find json [ "error" ] with
-          | errors ->
-              let msg =
-                Format.sprintf "The API returns the following error: %s"
-                  (Ezjsonm.value_to_string errors)
-              in
-              fail msg
-          | exception Not_found -> return json)
-
-    let request ~t ~path http_request =
-      http_request ~headers:(headers ~token:t.token) ~url:(url ~t ~path)
-
-    let run ~t ~path http_request =
-      let* body = request ~t ~path http_request in
-      get_json body
-
-    let run_with_body ~t ~path http_request json =
-      let body = Ezjsonm.value_to_string json in
-      let* body = request ~t ~path http_request body in
-      get_json body
-
-    let get = run B.get
-    let post json = run_with_body B.post json
-    let delete = run B.delete
-  end
-
-  module Devices = struct
-    type action = Power_on | Power_off | Reboot | Reinstall | Rescue
-
-    type os =
-      | Debian_9
-      | Debian_10
-      | NixOs_21_05
-      | Ubuntu_18_04
-      | Ubuntu_20_04
-      | Ubuntu_21_04
-      | FreeBSD_11_2
-      | Centos_8
-
-    type location =
-      | Washington
-      | Dallas
-      | Silicon_valley
-      | Sao_paulo
-      | Amsterdam
-      | Frankfurt
-      | Singapore
-      | Sydney
-
-    type plan = C3_small_x86 | C3_medium_x86
-
-    type config = {
-      hostname : string;
-      location : location;
-      plan : plan;
-      os : os;
-    }
-
-    let os_to_string = function
-      | Debian_9 -> "debian_9"
-      | Debian_10 -> "debian_10"
-      | NixOs_21_05 -> "nixos_21_05"
-      | Ubuntu_18_04 -> "ubuntu_18_04"
-      | Ubuntu_20_04 -> "ubuntu_20_04"
-      | Ubuntu_21_04 -> "ubuntu_21_04"
-      | FreeBSD_11_2 -> "freebsd_11_2"
-      | Centos_8 -> "centos_8"
-
-    let location_to_string = function
-      | Washington -> "DC"
-      | Dallas -> "DA"
-      | Silicon_valley -> "SV"
-      | Sao_paulo -> "SP"
-      | Amsterdam -> "AM"
-      | Frankfurt -> "FR"
-      | Singapore -> "SG"
-      | Sydney -> "SY"
-
-    let plan_to_string = function
-      | C3_small_x86 -> "c3.small.x86"
-      | C3_medium_x86 -> "c3.medium.x86"
-
-    let get_devices_id t ~id () =
-      let path = Filename.concat "devices" id in
-      Http.get ~t ~path
-
-    let get_devices_id_events t ~id () =
-      let path = Format.sprintf "devices/%s/events" id in
-      Http.get ~t ~path
-
-    let post_devices_id_actions t ~id ~action () =
-      let action =
-        match action with
-        | Power_on -> "power_on"
-        | Power_off -> "power_off"
-        | Reboot -> "reboot"
-        | Reinstall -> "reinstall"
-        | Rescue -> "rescue"
-      in
-      let path = Format.sprintf "devices/%s/actions?type=%s" id action in
-      let json = `O [] in
-      Http.post ~t ~path json
-
-    let delete_devices_id t ~id () =
-      let path = Filename.concat "devices" id in
-      Http.delete ~t ~path
-
-    let get_devices_id_ips t ~id () =
-      let path = Format.sprintf "devices/%s/ips" id in
-      Http.get ~t ~path
-  end
-
-  module Projects = struct
-    let get_projects_id_devices t ~id () =
-      let path = Format.sprintf "projects/%s/devices" id in
-      Http.get ~t ~path
-
-    let post_projects_id_devices t ~id ~config () =
-      let path = Format.sprintf "projects/%s/devices" id in
-      let json =
-        let open Devices in
-        `O
-          [
-            ("metro", `String (location_to_string config.location));
-            ("plan", `String (plan_to_string config.plan));
-            ("operating_system", `String (os_to_string config.os));
-            ("hostname", `String config.hostname);
-          ]
-      in
-      Http.post ~t ~path json
-  end
 end
 
 module MakeFriendly (B : Backend) : FRIENDLY_API with type 'a io = 'a B.io =
 struct
   type 'a io = 'a B.io
   type t = { address : string; token : string }
+
+  exception Unknown_value of string * string
+
+  let () =
+    Printexc.register_printer (function
+      | Unknown_value (name, v) ->
+          Some
+            (Format.sprintf "Internal error: %s got an unknown value (%s)" name
+               v)
+      | _ -> None)
 
   let create ?(address = "https://api.equinix.com/metal/v1/") ?(token = "") () =
     { address; token }
@@ -204,13 +61,13 @@ struct
     with Not_found ->
       raise
         (Ezjsonm.Parse_error
-           (json, Format.sprintf "access: field %s not found" field))
+           (`String field, Format.sprintf "access: field %s not found" field))
 
   let fail_with_parsing ~name ~err ~json v =
     let msg =
       Format.sprintf "%s: parse error %s with %s on %s" name err
         (Ezjsonm.value_to_string v)
-        (Ezjsonm.value_to_string json)
+        (Ezjsonm.value_to_string ~minify:false json)
     in
     fail msg
 
@@ -253,13 +110,13 @@ struct
       let* body = request ~t ~path http_request in
       get_json body
 
-    let run_with_body ~t ~path http_request json =
-      let body = Ezjsonm.value_to_string json in
+    let run_with_body ~t ~path http_request body =
       let* body = request ~t ~path http_request body in
       get_json body
 
     let get = run B.get
-    let post json = run_with_body B.post json
+    let post_empty = run_with_body B.post ""
+    let post json = run_with_body B.post (Ezjsonm.value_to_string json)
     let delete = run B.delete
   end
 
@@ -573,6 +430,301 @@ struct
       try return (config_of_json json)
       with Ezjsonm.Parse_error (v, err) ->
         fail_with_parsing ~name:"Project.get_from" ~err ~json v
+
+    let pp config = Format.printf "%s\n" (to_string config)
+  end
+
+  module State = struct
+    type t =
+      | Active
+      | Queued
+      | Provisioning
+      | Inactive
+      | Powering_off
+      | Powering_on
+
+    let to_string = function
+      | Active -> "active"
+      | Queued -> "queued"
+      | Provisioning -> "provisioning"
+      | Inactive -> "inactive"
+      | Powering_off -> "powering_off"
+      | Powering_on -> "powering_on"
+
+    let of_string = function
+      | "active" -> Active
+      | "queued" -> Queued
+      | "provisioning" -> Provisioning
+      | "inactive" -> Inactive
+      | "powering_off" -> Powering_off
+      | "powering_on" -> Powering_on
+      | s -> raise (Unknown_value ("State.of_string", s))
+  end
+
+  module Event = struct
+    type id = string
+
+    let id_of_string id = id
+    let id_to_string str = str
+
+    type t = {
+      id : id;
+      state : State.t;
+      event_type : string;
+      body : string;
+      created_at : Date.t;
+    }
+
+    let t_of_json json =
+      try
+        {
+          id = access "id" json |> Ezjsonm.get_string;
+          state = access "state" json |> Ezjsonm.get_string |> State.of_string;
+          event_type = access "type" json |> Ezjsonm.get_string;
+          body = access "body" json |> Ezjsonm.get_string;
+          created_at =
+            access "created_at" json
+            |> Ezjsonm.get_string
+            |> Date.Parser.from_iso;
+        }
+      with Failure _ -> raise_wrong_date ~name:"Event.t_of_json" json
+  end
+
+  module Devices = struct
+    type id = string
+
+    let id_of_string id = id
+
+    type action = Power_on | Power_off | Reboot | Reinstall | Rescue
+
+    let action_to_string = function
+      | Power_on -> "power_on"
+      | Power_off -> "power_off"
+      | Reboot -> "reboot"
+      | Reinstall -> "reinstall"
+      | Rescue -> "rescue"
+
+    type os =
+      | Debian_9
+      | Debian_10
+      | NixOs_21_05
+      | Ubuntu_18_04
+      | Ubuntu_20_04
+      | Ubuntu_21_04
+      | FreeBSD_11_2
+      | Centos_8
+      | Alpine_3
+
+    let os_of_string = function
+      | "debian_9" -> Debian_9
+      | "debian_10" -> Debian_10
+      | "nixos_21_05" -> NixOs_21_05
+      | "ubuntu_18_04" -> Ubuntu_18_04
+      | "ubuntu_20_04" -> Ubuntu_20_04
+      | "ubuntu_21_04" -> Ubuntu_21_04
+      | "freebsd_11_2" -> FreeBSD_11_2
+      | "centos_8" -> Centos_8
+      | "alpine_3" -> Alpine_3
+      | s -> raise (Unknown_value ("Device.os_of_string", s))
+
+    let os_to_string = function
+      | Debian_9 -> "debian_9"
+      | Debian_10 -> "debian_10"
+      | NixOs_21_05 -> "nixos_21_05"
+      | Ubuntu_18_04 -> "ubuntu_18_04"
+      | Ubuntu_20_04 -> "ubuntu_20_04"
+      | Ubuntu_21_04 -> "ubuntu_21_04"
+      | FreeBSD_11_2 -> "freebsd_11_2"
+      | Centos_8 -> "centos_8"
+      | Alpine_3 -> "alpine_3"
+
+    type location =
+      | Washington
+      | Dallas
+      | Silicon_valley
+      | Sao_paulo
+      | Amsterdam
+      | Frankfurt
+      | Singapore
+      | Sydney
+
+    let location_to_string = function
+      | Washington -> "DC"
+      | Dallas -> "DA"
+      | Silicon_valley -> "SV"
+      | Sao_paulo -> "SP"
+      | Amsterdam -> "AM"
+      | Frankfurt -> "FR"
+      | Singapore -> "SG"
+      | Sydney -> "SY"
+
+    let location_of_string = function
+      | "DC" -> Washington
+      | "DA" -> Dallas
+      | "SV" -> Silicon_valley
+      | "SP" -> Sao_paulo
+      | "AM" -> Amsterdam
+      | "FR" -> Frankfurt
+      | "SG" -> Singapore
+      | "SY" -> Sydney
+      | s -> raise (Unknown_value ("Device.location_of_string", s))
+
+    type plan = C3_small_x86 | C3_medium_x86
+
+    let plan_of_string = function
+      | "c3.small.x86" -> C3_small_x86
+      | "c3.medium.x86" -> C3_medium_x86
+      | s -> raise (Unknown_value ("Device.plan_of_string", s))
+
+    let plan_to_string = function
+      | C3_small_x86 -> "c3.small.x86"
+      | C3_medium_x86 -> "c3.medium.x86"
+
+    type builder = {
+      hostname : string option;
+      plan : plan;
+      os : os;
+      location : location;
+    }
+
+    type setter = Hostname of string
+
+    let build plan os location = { hostname = None; plan; os; location }
+
+    let set_builder builder = function
+      | Hostname hostname -> { builder with hostname = Some hostname }
+
+    let ( |+ ) = set_builder
+
+    let builder_to_json builder =
+      `O
+        ([
+           ("metro", `String (location_to_string builder.location));
+           ("plan", `String (plan_to_string builder.plan));
+           ("operating_system", `String (os_to_string builder.os));
+         ]
+        @
+        match builder.hostname with
+        | Some hostname -> [ ("hostname", `String hostname) ]
+        | None -> [])
+
+    type config = {
+      id : id;
+      hostname : string;
+      location : location;
+      plan : plan;
+      os : os;
+      state : State.t;
+      tags : string list;
+      user : string;
+      created_at : Date.t;
+      ips : Ip.config list;
+    }
+
+    let config_of_json json =
+      let ips =
+        try access "ip_addresses" json |> Ezjsonm.get_list Ip.config_of_json
+        with _ -> []
+      in
+      try
+        {
+          id = access "id" json |> Ezjsonm.get_string;
+          hostname = access "hostname" json |> Ezjsonm.get_string;
+          location =
+            access "metro" json
+            |> access "code"
+            |> Ezjsonm.get_string
+            |> String.uppercase_ascii
+            |> location_of_string;
+          plan =
+            access "plan" json
+            |> access "slug"
+            |> Ezjsonm.get_string
+            |> plan_of_string;
+          os =
+            access "operating_system" json
+            |> access "slug"
+            |> Ezjsonm.get_string
+            |> os_of_string;
+          state = access "state" json |> Ezjsonm.get_string |> State.of_string;
+          tags = access "tags" json |> Ezjsonm.get_list Ezjsonm.get_string;
+          user = access "user" json |> Ezjsonm.get_string;
+          created_at =
+            access "created_at" json
+            |> Ezjsonm.get_string
+            |> Date.Parser.from_iso;
+          ips;
+        }
+      with Failure _ -> raise_wrong_date ~name:"Device.config_of_json" json
+
+    let to_string config =
+      let location = location_to_string config.location in
+      let plan = plan_to_string config.plan in
+      let state = State.to_string config.state in
+      let tags = String.concat ", " config.tags in
+      let created_at = Date.Printer.to_iso config.created_at in
+      let ips =
+        if config.ips = [] then "<empty>"
+        else
+          List.map (fun ip -> Ip.to_string ip) config.ips |> String.concat ", "
+      in
+      Format.sprintf
+        "{\n\
+         \tid: %s;\n\
+         \thostname: %s;\n\
+         \tlocation: %s;\n\
+         \tplan: %s;\n\
+         \tstate: %s;\n\
+         \ttags:%s ;\n\
+         \tuser: %s;\n\
+         \tcreated_at: %s;\n\
+         \tip: %s;\n\
+         } " (replace_empty config.id)
+        (replace_empty config.hostname)
+        location plan state tags
+        (replace_empty config.user)
+        created_at ips
+
+    let get_from t ~id =
+      let path = Filename.concat "devices" id in
+      let* json = Http.get ~t ~path in
+      try return (config_of_json json)
+      with Ezjsonm.Parse_error (v, err) ->
+        fail_with_parsing ~name:"Devices.get_from" ~err ~json v
+
+    let get_events_from t ~id =
+      let path = Format.sprintf "devices/%s/events" id in
+      let* json = Http.get ~t ~path in
+      try access "events" json |> Ezjsonm.get_list Event.t_of_json |> return
+      with Ezjsonm.Parse_error (v, err) ->
+        fail_with_parsing ~name:"Device.get_events_from" ~err ~json v
+
+    let execute_action_on t ~id ~action =
+      let action = action_to_string action in
+      let path = Format.sprintf "devices/%s/actions?type=%s" id action in
+      let* _json = Http.post_empty ~t ~path in
+      return ()
+
+    let delete t ~id ?(force = false) () =
+      let path = Filename.concat "devices" id in
+      let path = if force then path ^ "?force_delete=true" else path in
+      let* _json = Http.delete ~t ~path in
+      return ()
+
+    let get_all_from_project t ~id =
+      let path = Format.sprintf "projects/%s/devices" id in
+      let* json = Http.get ~t ~path in
+      try access "devices" json |> Ezjsonm.get_list config_of_json |> return
+      with Ezjsonm.Parse_error (v, err) ->
+        fail_with_parsing ~name:"Devices.get_all_from_project" ~err ~json v
+
+    let create t ~id builder =
+      let path = Format.sprintf "projects/%s/devices" id in
+      let json = builder_to_json builder in
+      let* json = Http.post ~t ~path json in
+      try return (config_of_json json)
+      with Ezjsonm.Parse_error (v, err) ->
+        fail_with_parsing ~name:"Device.create" ~err ~json v
 
     let pp config = Format.printf "%s\n" (to_string config)
   end
