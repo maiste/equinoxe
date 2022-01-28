@@ -184,7 +184,7 @@ struct
     let pp config = Format.printf "%s\n" (to_string config)
   end
 
-  module Users = struct
+  module User = struct
     type id = string
 
     type config = {
@@ -488,9 +488,25 @@ struct
             |> Date.Parser.from_iso;
         }
       with Failure _ -> raise_wrong_date ~name:"Event.t_of_json" json
+
+    let to_string t =
+      let created_at = Date.Printer.to_iso t.created_at in
+      Format.sprintf
+        "{\n\
+         \tid: %s;\n\
+         \tstate: %s;\n\
+         \ttype: %s;\n\
+         \tbody: %s;\n\
+         \tcreated_at: %s;\n\
+         }"
+        (replace_empty t.id) (State.to_string t.state)
+        (replace_empty t.event_type)
+        (replace_empty t.body) created_at
+
+    let pp t = Format.printf "%s\n" (to_string t)
   end
 
-  module Devices = struct
+  module Device = struct
     type id = string
 
     let id_of_string id = id
@@ -589,7 +605,7 @@ struct
 
     type setter = Hostname of string
 
-    let build plan os location = { hostname = None; plan; os; location }
+    let build ~plan ~os ~location = { hostname = None; plan; os; location }
 
     let set_builder builder = function
       | Hostname hostname -> { builder with hostname = Some hostname }

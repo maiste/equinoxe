@@ -92,7 +92,7 @@ module type FRIENDLY_API = sig
     (** [pp config] pretty-prints an organization configuration. *)
   end
 
-  module Users : sig
+  module User : sig
     (** A module to interact with Equinix users. *)
 
     type id
@@ -273,9 +273,15 @@ module type FRIENDLY_API = sig
 
     val t_of_json : Ezjsonm.value -> t
     (** [t_of_json json] extracts information about event from [json]. *)
+
+    val to_string : t -> string
+    (** [to_string t] returns a string representation of [t]. *)
+
+    val pp : t -> unit
+    (** [pp t] print in human readable way the [t] value. *)
   end
 
-  module Devices : sig
+  module Device : sig
     (** This module manages API parts related to devices. *)
 
     type id
@@ -339,7 +345,7 @@ module type FRIENDLY_API = sig
     val ( |+ ) : builder -> setter -> builder
     (** [builder |+ setter] is an infix operator for {!set_builder}. *)
 
-    val build : plan -> os -> location -> builder
+    val build : plan:plan -> os:os -> location:location -> builder
     (* [build plan os locatation] returns a build with the minimal configuration required. *)
 
     type config = {
