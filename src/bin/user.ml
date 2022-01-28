@@ -24,8 +24,7 @@
 
 module Conf = Utils.Conf
 module Json = Utils.Json
-module Equinoxe = Utils.Equinoxe
-module Equinoxe_f = Utils.Equinoxe_f
+module Equinoxe = Utils.Equinoxe_f
 open Cmdliner
 open Utils.Term
 open Utils.Monad
@@ -35,39 +34,39 @@ open Utils.Monad
 let user token = function
   | GET ->
       let address = Conf.address in
-      let e = Equinoxe_f.create ~address ~token () in
-      let* users = Equinoxe_f.Users.get_current_user e in
-      Equinoxe_f.Users.pp users;
+      let e = Equinoxe.create ~address ~token () in
+      let* users = Equinoxe.User.get_current_user e in
+      Equinoxe.User.pp users;
       return ()
   | meth -> not_supported_r meth "/user"
 
 let user_api_keys token meth description write =
   let address = Conf.address in
-  let e = Equinoxe_f.create ~address ~token () in
+  let e = Equinoxe.create ~address ~token () in
   match meth with
   | GET ->
-      let* keys = Equinoxe_f.Auth.get_keys e in
-      List.iter Equinoxe_f.Auth.pp keys;
+      let* keys = Equinoxe.Auth.get_keys e in
+      List.iter Equinoxe.Auth.pp keys;
       return ()
   | POST ->
       let read_only = not write in
       let has_requiered = has_requiered description in
       let description = Option.get description in
       if has_requiered then (
-        let* req = Equinoxe_f.Auth.create_key e ~read_only ~description () in
-        Equinoxe_f.Auth.pp req;
+        let* req = Equinoxe.Auth.create_key e ~read_only ~description () in
+        Equinoxe.Auth.pp req;
         return ())
       else not_all_requiered_r [ "description" ]
   | meth -> not_supported_r meth "/user/api-keys"
 
 let user_api_keys_id token meth id =
   let address = Conf.address in
-  let e = Equinoxe_f.create ~address ~token () in
+  let e = Equinoxe.create ~address ~token () in
   match meth with
   | DELETE ->
       if has_requiered id then
-        let id = Option.get id |> Equinoxe_f.Auth.id_of_string in
-        Equinoxe_f.Auth.delete_key e ~id
+        let id = Option.get id |> Equinoxe.Auth.id_of_string in
+        Equinoxe.Auth.delete_key e ~id
       else not_all_requiered_r [ "id" ]
   | meth -> not_supported_r meth "/user/api-keys"
 
