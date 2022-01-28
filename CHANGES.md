@@ -3,18 +3,19 @@
 ### Added
 
 - Add a Cohttp client version, with a specific package (#60, @maiste)
-- Add Orga module to a statically-typed API (#68, @maiste)
+- Add a statically-typed API (#68, #71, @maiste)
 
 ### Changed
 
 - Rewrite the API using `io` monad (#63, @art-w)
 - Uniform error handling between Cohttp and HLC (#69, @art-w)
+- Update `Equinoxe-cohttp` and `Equinix-hlc` to support only new API (#71, @maiste)
 
 ### Removed
 
 - Remove `JSON` module and use `Ezjsonm` directly (#63, @art-w)
-- Remove modules from the old JSON Api module (#68, @maiste)
 - Remove timeout support from Cohttp (#69, @art-w)
+- Remove old API with JSON from `Equinoxe`, `Equinoxe-cohttp` and `Equinoxe-hlc` (#68, #71, @maiste)
 
 ## 0.1.0
 
