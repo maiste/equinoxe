@@ -22,25 +22,10 @@
 (*                                                                           *)
 (*****************************************************************************)
 
-module type API = sig
-  (** @deprecated It is the signature that matches the API of the website. *)
-
-  type 'a io
-  type json = Ezjsonm.value
-
-  type t
-  (** Abstract type [t] represents the information known by the API system. *)
-
-  val create : ?address:string -> ?token:string -> unit -> t
-  (** [create ~address ~token ()] returns an {!t} object, you need to manipulate
-      when executing requests. Default [address] is
-      [https://api.equinix.com/metal/v1/] and default [token] is empty. *)
-end
-
 module Date = ODate.Unix
 (** Module to manipulate dates in the API. *)
 
-module type FRIENDLY_API = sig
+module type API = sig
   (** It offers OCaml types to manipulate the Equinix API. *)
 
   type 'a io
@@ -403,17 +388,12 @@ module type Sigs = sig
   (** Equinoxe library interface. *)
 
   module type API = API
-  module type FRIENDLY_API = FRIENDLY_API
 
   (** {1 Build your own API} *)
 
   module type Backend = Backend
 
-  (** Factory to build a system to communicate with Equinix API, using the
-      {!Backend} communication system. *)
-  module Make (B : Backend) : API with type 'a io = 'a B.io
-
   (** Factory to build a system to communicate with Equinix API in a
       strongly-typed way using the {!Backend} gathering system. *)
-  module MakeFriendly (B : Backend) : FRIENDLY_API with type 'a io = 'a B.io
+  module Make (B : Backend) : API with type 'a io = 'a B.io
 end

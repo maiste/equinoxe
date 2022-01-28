@@ -23,8 +23,7 @@
 (*****************************************************************************)
 
 module Conf = Utils.Conf
-module Json = Utils.Json
-module Equinoxe = Utils.Equinoxe_f
+module Equinoxe = Utils.Equinoxe
 open Cmdliner
 open Utils.Term
 open Utils.Monad

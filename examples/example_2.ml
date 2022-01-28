@@ -22,7 +22,7 @@
 (*                                                                           *)
 (*****************************************************************************)
 
-module E = Equinoxe.MakeFriendly (Equinoxe_cohttp.Backend)
+module E = Equinoxe_cohttp
 open Lwt.Syntax
 
 let token = "YOUR TOKEN"

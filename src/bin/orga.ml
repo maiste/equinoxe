@@ -23,9 +23,7 @@
 (*****************************************************************************)
 
 module Conf = Utils.Conf
-module Json = Utils.Json
 module Equinoxe = Utils.Equinoxe
-module Equinoxe_f = Utils.Equinoxe_f
 open Cmdliner
 open Utils.Term
 open Utils.Monad
@@ -35,21 +33,21 @@ open Utils.Monad
 let organizations token = function
   | GET ->
       let address = Conf.address in
-      let e = Equinoxe_f.create ~address ~token () in
-      let* organizations = Equinoxe_f.Orga.get_all e in
-      List.iter Equinoxe_f.Orga.pp organizations;
+      let e = Equinoxe.create ~address ~token () in
+      let* organizations = Equinoxe.Orga.get_all e in
+      List.iter Equinoxe.Orga.pp organizations;
       return ()
   | meth -> not_supported_r meth "/organizations"
 
 let organizations_id token meth id =
   let address = Conf.address in
-  let e = Equinoxe_f.create ~address ~token () in
+  let e = Equinoxe.create ~address ~token () in
   match meth with
   | GET ->
       if has_requiered id then (
-        let id = Equinoxe_f.Orga.id_of_string (Option.get id) in
-        let* organization = Equinoxe_f.Orga.get_from e id in
-        Equinoxe_f.Orga.pp organization;
+        let id = Equinoxe.Orga.id_of_string (Option.get id) in
+        let* organization = Equinoxe.Orga.get_from e id in
+        Equinoxe.Orga.pp organization;
         return ())
       else not_all_requiered_r [ "id" ]
   | meth -> not_supported_r meth "/organizations/{id}"

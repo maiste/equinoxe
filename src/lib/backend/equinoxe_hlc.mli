@@ -24,13 +24,8 @@
 
 (** It provides an API call system relying on {!Http_lwt_client}. *)
 
-type 'a io = ('a, [ `Msg of string ]) Lwt_result.t
-
-module Backend : Equinoxe.Backend with type 'a io = 'a io
+module Backend : Equinoxe.Backend with type 'a io = ('a, [ `Msg of string ]) Lwt_result.t
 (** @inline *)
 
-module Api : Equinoxe.API with type 'a io = 'a io
-(** @inline *)
-
-module Friendly_api : Equinoxe.FRIENDLY_API with type 'a io = 'a io
+include Equinoxe.API with type 'a io = ('a, [ `Msg of string ]) Lwt_result.t
 (** @inline *)

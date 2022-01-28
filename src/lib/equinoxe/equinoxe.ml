@@ -26,16 +26,6 @@ include Equinoxe_intf
 
 (* Functor to build API using a specific call API system. *)
 module Make (B : Backend) : API with type 'a io = 'a B.io = struct
-  type json = Ezjsonm.value
-  type 'a io = 'a B.io
-  type t = { address : string; token : string }
-
-  let create ?(address = "https://api.equinix.com/metal/v1/") ?(token = "") () =
-    { address; token }
-end
-
-module MakeFriendly (B : Backend) : FRIENDLY_API with type 'a io = 'a B.io =
-struct
   type 'a io = 'a B.io
   type t = { address : string; token : string }
 

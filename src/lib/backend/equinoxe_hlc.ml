@@ -22,12 +22,10 @@
 (*                                                                           *)
 (*****************************************************************************)
 
-type 'a io = ('a, [ `Msg of string ]) Lwt_result.t
-
 module Client = Http_lwt_client
 
 module Backend = struct
-  type nonrec 'a io = 'a io
+  type nonrec 'a io = ('a, [ `Msg of string ]) Lwt_result.t
 
   let return = Lwt_result.return
   let map = Lwt_result.map
@@ -58,5 +56,4 @@ module Backend = struct
     get_body =<< Client.one_request ~meth:`DELETE ~headers url
 end
 
-module Api = Equinoxe.Make (Backend)
-module Friendly_api = Equinoxe.MakeFriendly (Backend)
+include Equinoxe.Make (Backend)

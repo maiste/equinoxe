@@ -59,5 +59,4 @@ module Backend = struct
     compute ~headers ~url @@ fun ~headers ~url -> Client.delete ~headers url
 end
 
-module Api = Equinoxe.Make (Backend)
-module Friendly_api = Equinoxe.MakeFriendly (Backend)
+include Equinoxe.Make (Backend)

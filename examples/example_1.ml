@@ -22,46 +22,44 @@
 (*                                                                           *)
 (*****************************************************************************)
 
-module E = Equinoxe_cohttp.Api
-module F = Equinoxe_cohttp.Friendly_api
+module E = Equinoxe_cohttp
 open Lwt.Syntax
 
 let token = "Your token"
 let api = E.create ~token ()
-let f_api = F.create ~token ()
 
 let get_project_id_from name =
-  let* projects = F.Project.get_all f_api in
+  let* projects = E.Project.get_all api in
   match
-    List.find_opt (fun F.Project.{ name = name'; _ } -> name = name') projects
+    List.find_opt (fun E.Project.{ name = name'; _ } -> name = name') projects
   with
   | Some project -> Lwt.return project.id
   | None -> Lwt.fail_with (Format.sprintf "get_project_id: %S not found" name)
 
 let get_project_device_id project_id =
-  F.Device.get_all_from_project f_api ~id:project_id
+  E.Device.get_all_from_project api ~id:project_id
 
 let create_device project_id =
-  let open F.Device in
+  let open E.Device in
   let builder =
     build ~plan:C3_small_x86 ~location:Amsterdam ~os:Debian_10
     |+ Hostname "friendly-api-test"
   in
-  let* config = create f_api ~id:project_id builder in
+  let* config = create api ~id:project_id builder in
   Lwt.return config.id
 
 let wait_for state machine_id =
   let rec check () =
-    let* device = F.Device.get_from f_api ~id:machine_id in
+    let* device = E.Device.get_from api ~id:machine_id in
     if device.state = state then Lwt.return ()
     else
       match device.state with
-      | F.State.Active ->
+      | E.State.Active ->
           Format.printf "\nMachine is up!@.";
           check ()
       | s ->
           Format.printf "\rCheck status (%s) after sleeping 10 sec."
-            (F.State.to_string s);
+            (E.State.to_string s);
           Format.print_flush ();
           Unix.sleep 10;
           check ()
@@ -69,10 +67,10 @@ let wait_for state machine_id =
   check ()
 
 let get_ip machine_id =
-  let* config = F.Device.get_from f_api ~id:machine_id in
-  Lwt.return F.Device.(config.ips)
+  let* config = E.Device.get_from api ~id:machine_id in
+  Lwt.return E.Device.(config.ips)
 
-let destroy_machine machine_id = F.Device.delete f_api ~id:machine_id ()
+let destroy_machine machine_id = E.Device.delete api ~id:machine_id ()
 
 let deploy_wait_stop () =
   let* id = get_project_id_from "testing" in
@@ -80,7 +78,7 @@ let deploy_wait_stop () =
   Lwt.finalize
     (fun () ->
       let () = Format.printf "Machine created.@." in
-      let* _state = wait_for F.State.Active machine_id in
+      let* _state = wait_for E.State.Active machine_id in
       let* ips = get_ip machine_id in
       let () =
         match ips with
@@ -89,21 +87,19 @@ let deploy_wait_stop () =
       in
       let* () =
         Format.printf "Turn machine off@.";
-        F.Device.execute_action_on f_api ~id:machine_id
-          ~action:F.Device.Power_off
+        E.Device.execute_action_on api ~id:machine_id ~action:E.Device.Power_off
       in
-      let* () = wait_for F.State.Inactive machine_id in
+      let* () = wait_for E.State.Inactive machine_id in
       let* () =
         Format.printf "Turn machine on.@.";
-        F.Device.execute_action_on f_api ~id:machine_id
-          ~action:F.Device.Power_on
+        E.Device.execute_action_on api ~id:machine_id ~action:E.Device.Power_on
       in
-      let* () = wait_for F.State.Active machine_id in
+      let* () = wait_for E.State.Active machine_id in
       let* () =
         Format.printf "Reboot@.";
-        F.Device.execute_action_on f_api ~id:machine_id ~action:F.Device.Reboot
+        E.Device.execute_action_on api ~id:machine_id ~action:E.Device.Reboot
       in
-      let* () = wait_for F.State.Active machine_id in
+      let* () = wait_for E.State.Active machine_id in
       Lwt_unix.sleep 60.0)
     (fun () -> destroy_machine machine_id)
 
