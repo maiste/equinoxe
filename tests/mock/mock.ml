@@ -41,7 +41,7 @@ struct
     let len = String.length prefix in
     String.length str >= len && String.sub str 0 len = prefix
 
-  let check_url url =
+  let extract_path url =
     if starts_with ~prefix:address url then
       String.sub url address_length (String.length url - address_length)
     else raise (Wrong_url url)
@@ -55,17 +55,17 @@ struct
 
   let compute ~headers ~url fn =
     check_headers headers;
-    let url = check_url url in
-    find (fn ~url)
+    let path = extract_path url in
+    find (fn ~path)
 
-  let get = compute (fun ~url -> Get url)
-  let delete = compute (fun ~url -> Delete url)
+  let get = compute (fun ~path -> Get path)
+  let delete = compute (fun ~path -> Delete path)
 
   let post ~headers ~url body =
-    compute ~headers ~url (fun ~url -> Post (url, body))
+    compute ~headers ~url (fun ~path -> Post (path, body))
 
   let put ~headers ~url body =
-    compute ~headers ~url (fun ~url -> Post (url, body))
+    compute ~headers ~url (fun ~path -> Post (path, body))
 end
 
 module type MOCK_API = Equinoxe.API with type 'a io = 'a
