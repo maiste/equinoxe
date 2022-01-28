@@ -139,9 +139,9 @@ let test_orga_get_all =
   in
   let module E = (val mock_friendly [ (Get "organizations", raw_json) ]) in
   let t = E.create ~address ~token () in
-  let orgas = E.Orga.get_all t in
+  let open E.Orga in
+  let orgas = get_all t in
   let expected =
-    let open E.Orga in
     [
       {
         id = id_of_string "mock id 1";
@@ -163,7 +163,6 @@ let test_orga_get_all =
   in
   List.iter2
     (fun expected orga ->
-      let open E.Orga in
       Alcotest.(check string) "name" expected.name orga.name;
       Alcotest.(check string) "account id" expected.account_id orga.account_id;
       Alcotest.(check string) "website" expected.website orga.website;
@@ -171,7 +170,7 @@ let test_orga_get_all =
         "maintenance email" expected.maintenance_email orga.maintenance_email;
       Alcotest.(check int)
         "max projects" expected.max_projects orga.max_projects;
-      assert (expected.E.Orga.id = orga.E.Orga.id))
+      assert (expected.id = orga.id))
     expected orgas
 
 let test_orga_get_from =
@@ -238,26 +237,25 @@ let test_orga_get_from =
   (val mock_friendly [ (Get "organizations/mock-id-1", raw_json) ])
   in
   let t = E.create ~address ~token () in
-  let requested_id = E.Orga.id_of_string "mock-id-1" in
-  let orga = E.Orga.get_from t requested_id in
-  let expected =
-    E.Orga.
-      {
-        id = requested_id;
-        name = "Mock Orga 1";
-        account_id = "mock account id 1";
-        website = "";
-        maintenance_email = "admin@mock1.fr";
-        max_projects = 1;
-      }
-  in
   let open E.Orga in
+  let requested_id = id_of_string "mock-id-1" in
+  let orga = get_from t requested_id in
+  let expected =
+    {
+      id = requested_id;
+      name = "Mock Orga 1";
+      account_id = "mock account id 1";
+      website = "";
+      maintenance_email = "admin@mock1.fr";
+      max_projects = 1;
+    }
+  in
   Alcotest.(check string) "name" expected.name orga.name;
   Alcotest.(check string) "account id" expected.account_id orga.account_id;
   Alcotest.(check string) "website" expected.website orga.website;
   Alcotest.(check string)
     "maintenance email" expected.maintenance_email orga.maintenance_email;
   Alcotest.(check int) "max projects" expected.max_projects orga.max_projects;
-  assert (expected.E.Orga.id = orga.E.Orga.id)
+  assert (expected.id = orga.id)
 
 let tests = [ test_orga_get_all; test_orga_get_from ]
