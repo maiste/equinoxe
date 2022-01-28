@@ -523,10 +523,10 @@ let test_post_projects_id_devices =
       }|}
   in
   let device1 =
-    {|{"facility":"any","metro":"DC","plan":"c3.small.x86","operating_system":"debian_10","hostname":"device1"}|}
+    {|{"metro":"DC","plan":"c3.small.x86","operating_system":"debian_10","hostname":"device1"}|}
   in
   let device2 =
-    {|{"facility":"any","metro":"AM","plan":"c3.medium.x86","operating_system":"ubuntu_21_04","hostname":"device2"}|}
+    {|{"metro":"AM","plan":"c3.medium.x86","operating_system":"ubuntu_21_04","hostname":"device2"}|}
   in
   let module E =
   (val mock
