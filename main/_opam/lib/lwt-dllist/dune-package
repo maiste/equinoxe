@@ -1,0 +1,19 @@
+(lang dune 2.9)
+(name lwt-dllist)
+(version 1.0.1)
+(library
+ (name lwt-dllist)
+ (kind normal)
+ (synopsis "Mutable doubly-linked list")
+ (archives (byte lwt_dllist.cma) (native lwt_dllist.cmxa))
+ (plugins (byte lwt_dllist.cma) (native lwt_dllist.cmxs))
+ (native_archives lwt_dllist.a)
+ (main_module_name Lwt_dllist)
+ (modes byte native)
+ (modules
+  (singleton
+   (name Lwt_dllist)
+   (obj_name lwt_dllist)
+   (visibility public)
+   (impl)
+   (intf))))

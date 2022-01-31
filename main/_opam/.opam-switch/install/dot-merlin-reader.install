@@ -1,0 +1,12 @@
+opam-version: "2.0"
+lib: [
+  "_build/install/default/lib/dot-merlin-reader/META"
+  "_build/install/default/lib/dot-merlin-reader/dune-package"
+  "_build/install/default/lib/dot-merlin-reader/opam"
+]
+bin: "_build/install/default/bin/dot-merlin-reader"
+doc: [
+  "_build/install/default/doc/dot-merlin-reader/CHANGES.md"
+  "_build/install/default/doc/dot-merlin-reader/LICENSE"
+  "_build/install/default/doc/dot-merlin-reader/README.md"
+]

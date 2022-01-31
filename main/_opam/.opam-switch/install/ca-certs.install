@@ -1,0 +1,23 @@
+opam-version: "2.0"
+lib: [
+  "_build/install/default/lib/ca-certs/META"
+  "_build/install/default/lib/ca-certs/ca_certs.a"
+  "_build/install/default/lib/ca-certs/ca_certs.cma"
+  "_build/install/default/lib/ca-certs/ca_certs.cmi"
+  "_build/install/default/lib/ca-certs/ca_certs.cmt"
+  "_build/install/default/lib/ca-certs/ca_certs.cmti"
+  "_build/install/default/lib/ca-certs/ca_certs.cmx"
+  "_build/install/default/lib/ca-certs/ca_certs.cmxa"
+  "_build/install/default/lib/ca-certs/ca_certs.ml"
+  "_build/install/default/lib/ca-certs/ca_certs.mli"
+  "_build/install/default/lib/ca-certs/dune-package"
+  "_build/install/default/lib/ca-certs/libca_certs_stubs.a"
+  "_build/install/default/lib/ca-certs/opam"
+]
+stublibs: "_build/install/default/lib/stublibs/dllca_certs_stubs.so"
+doc: [
+  "_build/install/default/doc/ca-certs/CHANGES.md"
+  "_build/install/default/doc/ca-certs/LICENSE.md"
+  "_build/install/default/doc/ca-certs/README.md"
+]
+libexec: "_build/install/default/lib/ca-certs/ca_certs.cmxs"

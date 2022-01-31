@@ -1,0 +1,21 @@
+opam-version: "2.0"
+lib: [
+  "_build/install/default/lib/metrics/META"
+  "_build/install/default/lib/metrics/dune-package"
+  "_build/install/default/lib/metrics/metrics.a"
+  "_build/install/default/lib/metrics/metrics.cma"
+  "_build/install/default/lib/metrics/metrics.cmi"
+  "_build/install/default/lib/metrics/metrics.cmt"
+  "_build/install/default/lib/metrics/metrics.cmti"
+  "_build/install/default/lib/metrics/metrics.cmx"
+  "_build/install/default/lib/metrics/metrics.cmxa"
+  "_build/install/default/lib/metrics/metrics.ml"
+  "_build/install/default/lib/metrics/metrics.mli"
+  "_build/install/default/lib/metrics/opam"
+]
+doc: [
+  "_build/install/default/doc/metrics/CHANGES.md"
+  "_build/install/default/doc/metrics/LICENSE.md"
+  "_build/install/default/doc/metrics/README.md"
+]
+libexec: "_build/install/default/lib/metrics/metrics.cmxs"

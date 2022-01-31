@@ -1,0 +1,43 @@
+opam-version: "2.0"
+lib: [
+  "_build/install/default/lib/arp/META"
+  "_build/install/default/lib/arp/arp.a"
+  "_build/install/default/lib/arp/arp.cma"
+  "_build/install/default/lib/arp/arp.cmxa"
+  "_build/install/default/lib/arp/arp_handler.cmi"
+  "_build/install/default/lib/arp/arp_handler.cmt"
+  "_build/install/default/lib/arp/arp_handler.cmti"
+  "_build/install/default/lib/arp/arp_handler.cmx"
+  "_build/install/default/lib/arp/arp_handler.ml"
+  "_build/install/default/lib/arp/arp_handler.mli"
+  "_build/install/default/lib/arp/arp_packet.cmi"
+  "_build/install/default/lib/arp/arp_packet.cmt"
+  "_build/install/default/lib/arp/arp_packet.cmti"
+  "_build/install/default/lib/arp/arp_packet.cmx"
+  "_build/install/default/lib/arp/arp_packet.ml"
+  "_build/install/default/lib/arp/arp_packet.mli"
+  "_build/install/default/lib/arp/dune-package"
+  "_build/install/default/lib/arp/mirage/arp.cmi" {"mirage/arp.cmi"}
+  "_build/install/default/lib/arp/mirage/arp.cmt" {"mirage/arp.cmt"}
+  "_build/install/default/lib/arp/mirage/arp.cmti" {"mirage/arp.cmti"}
+  "_build/install/default/lib/arp/mirage/arp.cmx" {"mirage/arp.cmx"}
+  "_build/install/default/lib/arp/mirage/arp.ml" {"mirage/arp.ml"}
+  "_build/install/default/lib/arp/mirage/arp.mli" {"mirage/arp.mli"}
+  "_build/install/default/lib/arp/mirage/arp_mirage.a"
+    {"mirage/arp_mirage.a"}
+  "_build/install/default/lib/arp/mirage/arp_mirage.cma"
+    {"mirage/arp_mirage.cma"}
+  "_build/install/default/lib/arp/mirage/arp_mirage.cmxa"
+    {"mirage/arp_mirage.cmxa"}
+  "_build/install/default/lib/arp/opam"
+]
+doc: [
+  "_build/install/default/doc/arp/CHANGES.md"
+  "_build/install/default/doc/arp/LICENSE.md"
+  "_build/install/default/doc/arp/README.md"
+]
+libexec: [
+  "_build/install/default/lib/arp/arp.cmxs"
+  "_build/install/default/lib/arp/mirage/arp_mirage.cmxs"
+    {"mirage/arp_mirage.cmxs"}
+]

@@ -1,0 +1,7 @@
+version = "v0.14.0"
+description = ""
+requires = "base.caml sexplib0"
+archive(byte) = "parsexp.cma"
+archive(native) = "parsexp.cmxa"
+plugin(byte) = "parsexp.cma"
+plugin(native) = "parsexp.cmxs"

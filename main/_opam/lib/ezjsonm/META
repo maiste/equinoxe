@@ -1,0 +1,7 @@
+version = "1.3.0"
+description = ""
+requires = "hex jsonm sexplib0 uutf"
+archive(byte) = "ezjsonm.cma"
+archive(native) = "ezjsonm.cmxa"
+plugin(byte) = "ezjsonm.cma"
+plugin(native) = "ezjsonm.cmxs"

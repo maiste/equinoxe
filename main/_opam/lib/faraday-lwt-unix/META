@@ -1,0 +1,7 @@
+version = "0.8.1"
+description = ""
+requires = "faraday faraday-lwt lwt lwt.unix"
+archive(byte) = "faraday_lwt_unix.cma"
+archive(native) = "faraday_lwt_unix.cmxa"
+plugin(byte) = "faraday_lwt_unix.cma"
+plugin(native) = "faraday_lwt_unix.cmxs"

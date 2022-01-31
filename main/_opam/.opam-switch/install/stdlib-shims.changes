@@ -1,0 +1,14 @@
+opam-version: "2.0"
+added: [
+  "doc/stdlib-shims" {"D"}
+  "doc/stdlib-shims/CHANGES.md" {"F:S485T1643359348.72"}
+  "doc/stdlib-shims/LICENSE" {"F:S27179T1643359348.72"}
+  "doc/stdlib-shims/README.md" {"F:S451T1643359348.72"}
+  "lib/stdlib-shims" {"D"}
+  "lib/stdlib-shims/META" {"F:S192T1643359348.72"}
+  "lib/stdlib-shims/dune-package" {"F:S267T1643359348.72"}
+  "lib/stdlib-shims/opam" {"F:S791T1643359348.72"}
+  "lib/stdlib-shims/stdlib_shims.cma" {"F:S42T1643359348.72"}
+  "lib/stdlib-shims/stdlib_shims.cmxa" {"F:S36T1643359348.72"}
+  "lib/stdlib-shims/stdlib_shims.cmxs" {"F:S15576T1643359348.72"}
+]

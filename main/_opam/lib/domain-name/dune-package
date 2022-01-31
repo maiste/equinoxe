@@ -1,0 +1,18 @@
+(lang dune 2.9)
+(name domain-name)
+(version 0.4.0)
+(library
+ (name domain-name)
+ (kind normal)
+ (archives (byte domain_name.cma) (native domain_name.cmxa))
+ (plugins (byte domain_name.cma) (native domain_name.cmxs))
+ (native_archives domain_name.a)
+ (main_module_name Domain_name)
+ (modes byte native)
+ (modules
+  (singleton
+   (name Domain_name)
+   (obj_name domain_name)
+   (visibility public)
+   (impl)
+   (intf))))

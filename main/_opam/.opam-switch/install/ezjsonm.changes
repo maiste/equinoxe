@@ -1,0 +1,21 @@
+opam-version: "2.0"
+added: [
+  "doc/ezjsonm" {"D"}
+  "doc/ezjsonm/CHANGES.md" {"F:S2089T1643359350.56"}
+  "doc/ezjsonm/LICENSE" {"F:S800T1643359350.56"}
+  "doc/ezjsonm/README.md" {"F:S934T1643359350.56"}
+  "lib/ezjsonm" {"D"}
+  "lib/ezjsonm/META" {"F:S195T1643359350.56"}
+  "lib/ezjsonm/dune-package" {"F:S387T1643359350.56"}
+  "lib/ezjsonm/ezjsonm.a" {"F:S66734T1643359350.56"}
+  "lib/ezjsonm/ezjsonm.cma" {"F:S100206T1643359350.56"}
+  "lib/ezjsonm/ezjsonm.cmi" {"F:S13495T1643359350.56"}
+  "lib/ezjsonm/ezjsonm.cmt" {"F:S194456T1643359350.56"}
+  "lib/ezjsonm/ezjsonm.cmti" {"F:S64710T1643359350.56"}
+  "lib/ezjsonm/ezjsonm.cmx" {"F:S9722T1643359350.56"}
+  "lib/ezjsonm/ezjsonm.cmxa" {"F:S1272T1643359350.56"}
+  "lib/ezjsonm/ezjsonm.cmxs" {"F:S83296T1643359350.56"}
+  "lib/ezjsonm/ezjsonm.ml" {"F:S11156T1643359350.56"}
+  "lib/ezjsonm/ezjsonm.mli" {"F:S8733T1643359350.56"}
+  "lib/ezjsonm/opam" {"F:S1073T1643359350.56"}
+]

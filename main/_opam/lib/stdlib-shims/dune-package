@@ -1,0 +1,10 @@
+(lang dune 2.9)
+(name stdlib-shims)
+(version 0.3.0)
+(library
+ (name stdlib-shims)
+ (kind normal)
+ (archives (byte stdlib_shims.cma) (native stdlib_shims.cmxa))
+ (plugins (byte stdlib_shims.cma) (native stdlib_shims.cmxs))
+ (modes byte native)
+ (modules (unwrapped)))

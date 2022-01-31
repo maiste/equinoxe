@@ -1,0 +1,7 @@
+version = "0.1.3"
+description = ""
+requires = "cstruct"
+archive(byte) = "randomconv.cma"
+archive(native) = "randomconv.cmxa"
+plugin(byte) = "randomconv.cma"
+plugin(native) = "randomconv.cmxs"

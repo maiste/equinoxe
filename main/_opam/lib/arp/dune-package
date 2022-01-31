@@ -1,0 +1,30 @@
+(lang dune 2.9)
+(name arp)
+(version 3.0.0)
+(library
+ (name arp)
+ (kind normal)
+ (synopsis "Address Resolution Protocol purely in OCaml")
+ (archives (byte arp.cma) (native arp.cmxa))
+ (plugins (byte arp.cma) (native arp.cmxs))
+ (native_archives arp.a)
+ (requires cstruct logs ipaddr macaddr)
+ (modes byte native)
+ (modules
+  (unwrapped
+   ((name Arp_handler)
+    (obj_name arp_handler)
+    (visibility public)
+    (impl)
+    (intf))
+   ((name Arp_packet) (obj_name arp_packet) (visibility public) (impl) (intf)))))
+(library
+ (name arp.mirage)
+ (kind normal)
+ (archives (byte mirage/arp_mirage.cma) (native mirage/arp_mirage.cmxa))
+ (plugins (byte mirage/arp_mirage.cma) (native mirage/arp_mirage.cmxs))
+ (native_archives mirage/arp_mirage.a)
+ (requires arp ethernet mirage-time lwt logs duration mirage-profile)
+ (modes byte native)
+ (modules
+  (singleton (name Arp) (obj_name arp) (visibility public) (impl) (intf))))

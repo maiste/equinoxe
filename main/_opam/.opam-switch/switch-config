@@ -1,0 +1,10 @@
+opam-version: "2.0"
+synopsis: "/home/maiste/Documents/e/equinoxe"
+opam-root: "/home/maiste/.opam"
+paths {
+  
+}
+variables {
+  user: "maiste"
+  group: "maiste"
+}

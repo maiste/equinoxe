@@ -1,0 +1,45 @@
+(lang dune 2.9)
+(name base64)
+(version 3.5.0)
+(library
+ (name base64)
+ (kind normal)
+ (archives (byte base64.cma) (native base64.cmxa))
+ (plugins (byte base64.cma) (native base64.cmxs))
+ (native_archives base64.a)
+ (requires bytes)
+ (main_module_name Base64)
+ (modes byte native)
+ (modules
+  (wrapped
+   (main_module_name Base64)
+   (modules
+    ((name Base64) (obj_name base64) (visibility public) (impl) (intf))
+    ((name Unsafe) (obj_name base64__Unsafe) (visibility public) (impl)))
+   (alias_module
+    (name Base64__)
+    (obj_name base64__)
+    (visibility public)
+    (kind alias)
+    (impl))
+   (wrapped true))))
+(library
+ (name base64.rfc2045)
+ (kind normal)
+ (archives
+  (byte rfc2045/base64_rfc2045.cma)
+  (native rfc2045/base64_rfc2045.cmxa))
+ (plugins
+  (byte rfc2045/base64_rfc2045.cma)
+  (native rfc2045/base64_rfc2045.cmxs))
+ (native_archives rfc2045/base64_rfc2045.a)
+ (requires bytes)
+ (main_module_name Base64_rfc2045)
+ (modes byte native)
+ (modules
+  (singleton
+   (name Base64_rfc2045)
+   (obj_name base64_rfc2045)
+   (visibility public)
+   (impl)
+   (intf))))

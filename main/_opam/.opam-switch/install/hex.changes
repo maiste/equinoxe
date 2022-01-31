@@ -1,0 +1,21 @@
+opam-version: "2.0"
+added: [
+  "doc/hex" {"D"}
+  "doc/hex/CHANGES.md" {"F:S1823T1643359345.28"}
+  "doc/hex/LICENSE.md" {"F:S874T1643359345.28"}
+  "doc/hex/README.md" {"F:S601T1643359345.28"}
+  "lib/hex" {"D"}
+  "lib/hex/META" {"F:S179T1643359345.27"}
+  "lib/hex/dune-package" {"F:S360T1643359345.27"}
+  "lib/hex/hex.a" {"F:S28506T1643359345.27"}
+  "lib/hex/hex.cma" {"F:S31075T1643359345.27"}
+  "lib/hex/hex.cmi" {"F:S2656T1643359345.27"}
+  "lib/hex/hex.cmt" {"F:S75420T1643359345.28"}
+  "lib/hex/hex.cmti" {"F:S17774T1643359345.28"}
+  "lib/hex/hex.cmx" {"F:S3485T1643359345.28"}
+  "lib/hex/hex.cmxa" {"F:S989T1643359345.28"}
+  "lib/hex/hex.cmxs" {"F:S42368T1643359345.28"}
+  "lib/hex/hex.ml" {"F:S6337T1643359345.28"}
+  "lib/hex/hex.mli" {"F:S3805T1643359345.28"}
+  "lib/hex/opam" {"F:S954T1643359345.28"}
+]

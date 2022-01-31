@@ -1,0 +1,7 @@
+version = "3.0.0"
+description = ""
+requires = "cstruct logs lwt macaddr mirage-net mirage-profile stdlib-shims"
+archive(byte) = "ethernet.cma"
+archive(native) = "ethernet.cmxa"
+plugin(byte) = "ethernet.cma"
+plugin(native) = "ethernet.cmxs"

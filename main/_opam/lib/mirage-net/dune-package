@@ -1,0 +1,19 @@
+(lang dune 2.9)
+(name mirage-net)
+(version 4.0.0)
+(library
+ (name mirage-net)
+ (kind normal)
+ (archives (byte mirage_net.cma) (native mirage_net.cmxa))
+ (plugins (byte mirage_net.cma) (native mirage_net.cmxs))
+ (native_archives mirage_net.a)
+ (requires fmt cstruct macaddr lwt)
+ (main_module_name Mirage_net)
+ (modes byte native)
+ (modules
+  (singleton
+   (name Mirage_net)
+   (obj_name mirage_net)
+   (visibility public)
+   (impl)
+   (intf))))

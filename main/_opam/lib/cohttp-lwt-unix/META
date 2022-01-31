@@ -1,0 +1,18 @@
+version = "5.0.0"
+description = "Lwt/Unix backend for Cohttp"
+requires =
+"cohttp
+ cohttp-lwt
+ conduit-lwt
+ conduit-lwt-unix
+ fmt
+ logs
+ logs.fmt
+ logs.lwt
+ lwt.unix
+ magic-mime
+ ppx_sexp_conv.runtime-lib"
+archive(byte) = "cohttp_lwt_unix.cma"
+archive(native) = "cohttp_lwt_unix.cmxa"
+plugin(byte) = "cohttp_lwt_unix.cma"
+plugin(native) = "cohttp_lwt_unix.cmxs"

@@ -1,0 +1,206 @@
+(lang dune 2.9)
+(name lwt)
+(version 5.5.0)
+(library
+ (name lwt)
+ (kind normal)
+ (synopsis "Monadic promises and concurrent I/O")
+ (archives (byte lwt.cma) (native lwt.cmxa))
+ (plugins (byte lwt.cma) (native lwt.cmxs))
+ (native_archives lwt.a)
+ (requires bytes result seq)
+ (modes byte native)
+ (modules
+  (unwrapped
+   ((name Lwt) (obj_name lwt) (visibility public) (impl) (intf))
+   ((name Lwt_condition)
+    (obj_name lwt_condition)
+    (visibility public)
+    (impl)
+    (intf))
+   ((name Lwt_list) (obj_name lwt_list) (visibility public) (impl) (intf))
+   ((name Lwt_mutex) (obj_name lwt_mutex) (visibility public) (impl) (intf))
+   ((name Lwt_mvar) (obj_name lwt_mvar) (visibility public) (impl) (intf))
+   ((name Lwt_pool) (obj_name lwt_pool) (visibility public) (impl) (intf))
+   ((name Lwt_pqueue) (obj_name lwt_pqueue) (visibility public) (impl) (intf))
+   ((name Lwt_result) (obj_name lwt_result) (visibility public) (impl) (intf))
+   ((name Lwt_seq) (obj_name lwt_seq) (visibility public) (impl) (intf))
+   ((name Lwt_sequence)
+    (obj_name lwt_sequence)
+    (visibility public)
+    (impl)
+    (intf))
+   ((name Lwt_stream) (obj_name lwt_stream) (visibility public) (impl) (intf))
+   ((name Lwt_switch) (obj_name lwt_switch) (visibility public) (impl) (intf)))))
+(library
+ (name lwt.unix)
+ (kind normal)
+ (synopsis "Unix support for Lwt")
+ (archives (byte unix/lwt_unix.cma) (native unix/lwt_unix.cmxa))
+ (plugins (byte unix/lwt_unix.cma) (native unix/lwt_unix.cmxs))
+ (foreign_objects
+  unix/lwt_libev_stubs.o
+  unix/lwt_process_stubs.o
+  unix/lwt_unix_stubs.o
+  unix/unix_accept4.o
+  unix/unix_access_job.o
+  unix/unix_bind_job.o
+  unix/unix_bytes_read.o
+  unix/unix_bytes_read_job.o
+  unix/unix_bytes_recv.o
+  unix/unix_bytes_recvfrom.o
+  unix/unix_bytes_send.o
+  unix/unix_bytes_sendto.o
+  unix/unix_bytes_sendto_byte.o
+  unix/unix_bytes_write.o
+  unix/unix_bytes_write_job.o
+  unix/unix_chdir_job.o
+  unix/unix_chmod_job.o
+  unix/unix_chown_job.o
+  unix/unix_chroot_job.o
+  unix/unix_close_job.o
+  unix/unix_closedir_job.o
+  unix/unix_fchmod_job.o
+  unix/unix_fchown_job.o
+  unix/unix_fdatasync_job.o
+  unix/unix_fstat_64_job.o
+  unix/unix_fstat_job.o
+  unix/unix_fsync_job.o
+  unix/unix_ftruncate_job.o
+  unix/unix_get_affinity.o
+  unix/unix_get_cpu.o
+  unix/unix_get_credentials.o
+  unix/unix_get_network_information_utils.o
+  unix/unix_get_page_size.o
+  unix/unix_get_pw_gr_nam_id_job.o
+  unix/unix_getaddrinfo_job.o
+  unix/unix_getcwd_job.o
+  unix/unix_gethostbyaddr_job.o
+  unix/unix_gethostbyname_job.o
+  unix/unix_gethostname_job.o
+  unix/unix_getlogin_job.o
+  unix/unix_getnameinfo_job.o
+  unix/unix_getprotoby_getservby_job.o
+  unix/unix_guess_blocking_job.o
+  unix/unix_invalidate_dir.o
+  unix/unix_iov_max.o
+  unix/unix_isatty_job.o
+  unix/unix_link_job.o
+  unix/unix_lockf_job.o
+  unix/unix_lseek_job.o
+  unix/unix_lstat_64_job.o
+  unix/unix_lstat_job.o
+  unix/unix_madvise.o
+  unix/unix_mcast_modify_membership.o
+  unix/unix_mcast_set_loop.o
+  unix/unix_mcast_set_ttl.o
+  unix/unix_mcast_utils.o
+  unix/unix_mincore.o
+  unix/unix_mkdir_job.o
+  unix/unix_mkfifo_job.o
+  unix/unix_not_available.o
+  unix/unix_open_job.o
+  unix/unix_opendir_job.o
+  unix/unix_pread.o
+  unix/unix_pread_job.o
+  unix/unix_pwrite.o
+  unix/unix_pwrite_job.o
+  unix/unix_read.o
+  unix/unix_read_job.o
+  unix/unix_readable.o
+  unix/unix_readdir_job.o
+  unix/unix_readdir_n_job.o
+  unix/unix_readlink_job.o
+  unix/unix_readv.o
+  unix/unix_readv_job.o
+  unix/unix_readv_writev_utils.o
+  unix/unix_recv.o
+  unix/unix_recv_msg.o
+  unix/unix_recv_send_utils.o
+  unix/unix_recvfrom.o
+  unix/unix_rename_job.o
+  unix/unix_rewinddir_job.o
+  unix/unix_rmdir_job.o
+  unix/unix_send.o
+  unix/unix_send_msg.o
+  unix/unix_send_msg_byte.o
+  unix/unix_sendto.o
+  unix/unix_sendto_byte.o
+  unix/unix_set_affinity.o
+  unix/unix_somaxconn.o
+  unix/unix_stat_64_job.o
+  unix/unix_stat_job.o
+  unix/unix_stat_job_utils.o
+  unix/unix_symlink_job.o
+  unix/unix_tcdrain_job.o
+  unix/unix_tcflow_job.o
+  unix/unix_tcflush_job.o
+  unix/unix_tcgetattr_job.o
+  unix/unix_tcsendbreak_job.o
+  unix/unix_tcsetattr_job.o
+  unix/unix_termios_conversion.o
+  unix/unix_truncate_job.o
+  unix/unix_unlink_job.o
+  unix/unix_utimes_job.o
+  unix/unix_valid_dir.o
+  unix/unix_wait4.o
+  unix/unix_wait_mincore_job.o
+  unix/unix_writable.o
+  unix/unix_write.o
+  unix/unix_write_job.o
+  unix/unix_writev.o
+  unix/unix_writev_job.o
+  unix/windows_bytes_read.o
+  unix/windows_bytes_read_job.o
+  unix/windows_bytes_write.o
+  unix/windows_bytes_write_job.o
+  unix/windows_fsync_job.o
+  unix/windows_get_page_size.o
+  unix/windows_is_socket.o
+  unix/windows_not_available.o
+  unix/windows_pread.o
+  unix/windows_pread_job.o
+  unix/windows_pwrite.o
+  unix/windows_pwrite_job.o
+  unix/windows_read.o
+  unix/windows_read_job.o
+  unix/windows_somaxconn.o
+  unix/windows_system_job.o
+  unix/windows_write.o
+  unix/windows_write_job.o)
+ (foreign_archives unix/liblwt_unix_stubs.a)
+ (native_archives unix/lwt_unix.a)
+ (requires bigarray lwt mmap ocplib-endian.bigstring threads unix)
+ (modes byte native)
+ (modules
+  (unwrapped
+   ((name Lwt_bytes) (obj_name lwt_bytes) (visibility public) (impl) (intf))
+   ((name Lwt_config) (obj_name lwt_config) (visibility public) (impl))
+   ((name Lwt_engine) (obj_name lwt_engine) (visibility public) (impl) (intf))
+   ((name Lwt_features) (obj_name lwt_features) (visibility public) (impl))
+   ((name Lwt_fmt) (obj_name lwt_fmt) (visibility public) (impl) (intf))
+   ((name Lwt_gc) (obj_name lwt_gc) (visibility public) (impl) (intf))
+   ((name Lwt_io) (obj_name lwt_io) (visibility public) (impl) (intf))
+   ((name Lwt_main) (obj_name lwt_main) (visibility public) (impl) (intf))
+   ((name Lwt_preemptive)
+    (obj_name lwt_preemptive)
+    (visibility public)
+    (impl)
+    (intf))
+   ((name Lwt_process)
+    (obj_name lwt_process)
+    (visibility public)
+    (impl)
+    (intf))
+   ((name Lwt_sys) (obj_name lwt_sys) (visibility public) (impl) (intf))
+   ((name Lwt_throttle)
+    (obj_name lwt_throttle)
+    (visibility public)
+    (impl)
+    (intf))
+   ((name Lwt_timeout)
+    (obj_name lwt_timeout)
+    (visibility public)
+    (impl)
+    (intf))
+   ((name Lwt_unix) (obj_name lwt_unix) (visibility public) (impl) (intf)))))

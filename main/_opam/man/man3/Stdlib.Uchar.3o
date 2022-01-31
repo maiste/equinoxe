@@ -1,0 +1,355 @@
+.TH "Stdlib.Uchar" 3 2022-01-28 OCamldoc "OCaml library"
+.SH NAME
+Stdlib.Uchar \- no description
+.SH Module
+Module   Stdlib.Uchar
+.SH Documentation
+.sp
+Module
+.BI "Uchar"
+ : 
+.B (module Stdlib__Uchar)
+
+.sp
+
+.sp
+
+.sp
+.sp
+.I type t 
+
+.sp
+The type for Unicode characters\&.
+.sp
+A value of this type represents a Unicode
+scalar
+value which is an integer in the ranges 
+.ft B
+0x0000
+.ft R
+\&.\&.\&.
+.ft B
+0xD7FF
+.ft R
+or
+.ft B
+0xE000
+.ft R
+\&.\&.\&.
+.ft B
+0x10FFFF
+.ft R
+\&.
+
+.sp
+
+.I val min 
+: 
+.B t
+.sp
+
+.ft B
+min
+.ft R
+is U+0000\&.
+
+.sp
+
+.I val max 
+: 
+.B t
+.sp
+
+.ft B
+max
+.ft R
+is U+10FFFF\&.
+
+.sp
+
+.I val bom 
+: 
+.B t
+.sp
+
+.ft B
+bom
+.ft R
+is U+FEFF, the
+byte order mark (BOM)
+character\&.
+
+.sp
+.B "Since"
+4.06.0
+
+.sp
+
+.I val rep 
+: 
+.B t
+.sp
+
+.ft B
+rep
+.ft R
+is U+FFFD, the
+replacement
+character\&.
+
+.sp
+.B "Since"
+4.06.0
+
+.sp
+
+.I val succ 
+: 
+.B t -> t
+.sp
+
+.ft B
+succ u
+.ft R
+is the scalar value after 
+.ft B
+u
+.ft R
+in the set of Unicode scalar
+values\&.
+
+.sp
+.B "Raises Invalid_argument"
+if 
+.ft B
+u
+.ft R
+is 
+.ft B
+Uchar\&.max
+.ft R
+\&.
+
+.sp
+
+.I val pred 
+: 
+.B t -> t
+.sp
+
+.ft B
+pred u
+.ft R
+is the scalar value before 
+.ft B
+u
+.ft R
+in the set of Unicode scalar
+values\&.
+
+.sp
+.B "Raises Invalid_argument"
+if 
+.ft B
+u
+.ft R
+is 
+.ft B
+Uchar\&.min
+.ft R
+\&.
+
+.sp
+
+.I val is_valid 
+: 
+.B int -> bool
+.sp
+
+.ft B
+is_valid n
+.ft R
+is 
+.ft B
+true
+.ft R
+if and only if 
+.ft B
+n
+.ft R
+is a Unicode scalar value
+(i\&.e\&. in the ranges 
+.ft B
+0x0000
+.ft R
+\&.\&.\&.
+.ft B
+0xD7FF
+.ft R
+or 
+.ft B
+0xE000
+.ft R
+\&.\&.\&.
+.ft B
+0x10FFFF
+.ft R
+)\&.
+
+.sp
+
+.I val of_int 
+: 
+.B int -> t
+.sp
+
+.ft B
+of_int i
+.ft R
+is 
+.ft B
+i
+.ft R
+as a Unicode character\&.
+
+.sp
+.B "Raises Invalid_argument"
+if 
+.ft B
+i
+.ft R
+does not satisfy 
+.ft B
+Uchar\&.is_valid
+.ft R
+\&.
+
+.sp
+
+.I val to_int 
+: 
+.B t -> int
+.sp
+
+.ft B
+to_int u
+.ft R
+is 
+.ft B
+u
+.ft R
+as an integer\&.
+
+.sp
+
+.I val is_char 
+: 
+.B t -> bool
+.sp
+
+.ft B
+is_char u
+.ft R
+is 
+.ft B
+true
+.ft R
+if and only if 
+.ft B
+u
+.ft R
+is a latin1 OCaml character\&.
+
+.sp
+
+.I val of_char 
+: 
+.B char -> t
+.sp
+
+.ft B
+of_char c
+.ft R
+is 
+.ft B
+c
+.ft R
+as a Unicode character\&.
+
+.sp
+
+.I val to_char 
+: 
+.B t -> char
+.sp
+
+.ft B
+to_char u
+.ft R
+is 
+.ft B
+u
+.ft R
+as an OCaml latin1 character\&.
+
+.sp
+.B "Raises Invalid_argument"
+if 
+.ft B
+u
+.ft R
+does not satisfy 
+.ft B
+Uchar\&.is_char
+.ft R
+\&.
+
+.sp
+
+.I val equal 
+: 
+.B t -> t -> bool
+.sp
+
+.ft B
+equal u u\&'
+.ft R
+is 
+.ft B
+u = u\&'
+.ft R
+\&.
+
+.sp
+
+.I val compare 
+: 
+.B t -> t -> int
+.sp
+
+.ft B
+compare u u\&'
+.ft R
+is 
+.ft B
+Stdlib\&.compare u u\&'
+.ft R
+\&.
+
+.sp
+
+.I val hash 
+: 
+.B t -> int
+.sp
+
+.ft B
+hash u
+.ft R
+associates a non\-negative integer to 
+.ft B
+u
+.ft R
+\&.
+
+.sp

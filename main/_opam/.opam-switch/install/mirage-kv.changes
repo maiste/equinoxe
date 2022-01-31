@@ -1,0 +1,21 @@
+opam-version: "2.0"
+added: [
+  "doc/mirage-kv" {"D"}
+  "doc/mirage-kv/CHANGES.md" {"F:S1229T1643359370.28"}
+  "doc/mirage-kv/LICENSE.md" {"F:S697T1643359370.28"}
+  "doc/mirage-kv/README.md" {"F:S938T1643359370.28"}
+  "lib/mirage-kv" {"D"}
+  "lib/mirage-kv/META" {"F:S187T1643359370.28"}
+  "lib/mirage-kv/dune-package" {"F:S419T1643359370.28"}
+  "lib/mirage-kv/mirage_kv.a" {"F:S16578T1643359370.28"}
+  "lib/mirage-kv/mirage_kv.cma" {"F:S16843T1643359370.28"}
+  "lib/mirage-kv/mirage_kv.cmi" {"F:S6847T1643359370.28"}
+  "lib/mirage-kv/mirage_kv.cmt" {"F:S42774T1643359370.28"}
+  "lib/mirage-kv/mirage_kv.cmti" {"F:S39910T1643359370.28"}
+  "lib/mirage-kv/mirage_kv.cmx" {"F:S2394T1643359370.28"}
+  "lib/mirage-kv/mirage_kv.cmxa" {"F:S826T1643359370.28"}
+  "lib/mirage-kv/mirage_kv.cmxs" {"F:S28800T1643359370.28"}
+  "lib/mirage-kv/mirage_kv.ml" {"F:S3181T1643359370.28"}
+  "lib/mirage-kv/mirage_kv.mli" {"F:S7625T1643359370.28"}
+  "lib/mirage-kv/opam" {"F:S887T1643359370.28"}
+]

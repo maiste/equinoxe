@@ -1,0 +1,7 @@
+version = "1.2.0"
+description = ""
+requires = ""
+archive(byte) = "magic_mime_library.cma"
+archive(native) = "magic_mime_library.cmxa"
+plugin(byte) = "magic_mime_library.cma"
+plugin(native) = "magic_mime_library.cmxs"

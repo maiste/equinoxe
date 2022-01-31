@@ -1,0 +1,7 @@
+version = "v0.14.0"
+description = ""
+requires = "yojson"
+archive(byte) = "ppx_yojson_conv_lib.cma"
+archive(native) = "ppx_yojson_conv_lib.cmxa"
+plugin(byte) = "ppx_yojson_conv_lib.cma"
+plugin(native) = "ppx_yojson_conv_lib.cmxs"

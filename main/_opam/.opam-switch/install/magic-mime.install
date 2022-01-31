@@ -1,0 +1,27 @@
+opam-version: "2.0"
+lib: [
+  "_build/install/default/lib/magic-mime/META"
+  "_build/install/default/lib/magic-mime/dune-package"
+  "_build/install/default/lib/magic-mime/magic_mime.cmi"
+  "_build/install/default/lib/magic-mime/magic_mime.cmt"
+  "_build/install/default/lib/magic-mime/magic_mime.cmti"
+  "_build/install/default/lib/magic-mime/magic_mime.cmx"
+  "_build/install/default/lib/magic-mime/magic_mime.ml"
+  "_build/install/default/lib/magic-mime/magic_mime.mli"
+  "_build/install/default/lib/magic-mime/magic_mime_library.a"
+  "_build/install/default/lib/magic-mime/magic_mime_library.cma"
+  "_build/install/default/lib/magic-mime/magic_mime_library.cmxa"
+  "_build/install/default/lib/magic-mime/mime_types.cmi"
+  "_build/install/default/lib/magic-mime/mime_types.cmt"
+  "_build/install/default/lib/magic-mime/mime_types.cmti"
+  "_build/install/default/lib/magic-mime/mime_types.cmx"
+  "_build/install/default/lib/magic-mime/mime_types.ml"
+  "_build/install/default/lib/magic-mime/mime_types.mli"
+  "_build/install/default/lib/magic-mime/opam"
+]
+doc: [
+  "_build/install/default/doc/magic-mime/CHANGES.md"
+  "_build/install/default/doc/magic-mime/LICENSE.md"
+  "_build/install/default/doc/magic-mime/README.md"
+]
+libexec: "_build/install/default/lib/magic-mime/magic_mime_library.cmxs"

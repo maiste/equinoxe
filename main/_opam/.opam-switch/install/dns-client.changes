@@ -1,0 +1,77 @@
+opam-version: "2.0"
+added: [
+  "bin/dns-client.unix" {"F:S5235576T1643359396.57"}
+  "doc/dns-client" {"D"}
+  "doc/dns-client/CHANGES.md" {"F:S27710T1643359396.57"}
+  "doc/dns-client/LICENSE.md" {"F:S1303T1643359396.57"}
+  "doc/dns-client/README.md" {"F:S8223T1643359396.57"}
+  "lib/dns-client" {"D"}
+  "lib/dns-client/META" {"F:S1709T1643359396.57"}
+  "lib/dns-client/dns_client.a" {"F:S55446T1643359396.57"}
+  "lib/dns-client/dns_client.cma" {"F:S60650T1643359396.57"}
+  "lib/dns-client/dns_client.cmi" {"F:S6282T1643359396.57"}
+  "lib/dns-client/dns_client.cmt" {"F:S153328T1643359396.57"}
+  "lib/dns-client/dns_client.cmti" {"F:S37792T1643359396.57"}
+  "lib/dns-client/dns_client.cmx" {"F:S2754T1643359396.57"}
+  "lib/dns-client/dns_client.cmxa" {"F:S1389T1643359396.57"}
+  "lib/dns-client/dns_client.cmxs" {"F:S73888T1643359396.57"}
+  "lib/dns-client/dns_client.ml" {"F:S11602T1643359396.57"}
+  "lib/dns-client/dns_client.mli" {"F:S7211T1643359396.57"}
+  "lib/dns-client/dune-package" {"F:S2769T1643359396.57"}
+  "lib/dns-client/lwt/dns_client_lwt.a" {"F:S74858T1643359396.57"}
+  "lib/dns-client/lwt/dns_client_lwt.cma" {"F:S84502T1643359396.57"}
+  "lib/dns-client/lwt/dns_client_lwt.cmi" {"F:S7662T1643359396.57"}
+  "lib/dns-client/lwt/dns_client_lwt.cmt" {"F:S183136T1643359396.57"}
+  "lib/dns-client/lwt/dns_client_lwt.cmti" {"F:S27126T1643359396.57"}
+  "lib/dns-client/lwt/dns_client_lwt.cmx" {"F:S11203T1643359396.57"}
+  "lib/dns-client/lwt/dns_client_lwt.cmxa" {"F:S5088T1643359396.57"}
+  "lib/dns-client/lwt/dns_client_lwt.cmxs" {"F:S95968T1643359396.57"}
+  "lib/dns-client/lwt/dns_client_lwt.ml" {"F:S12552T1643359396.57"}
+  "lib/dns-client/lwt/dns_client_lwt.mli" {"F:S622T1643359396.57"}
+  "lib/dns-client/mirage/dns_client_mirage.a" {"F:S58634T1643359396.57"}
+  "lib/dns-client/mirage/dns_client_mirage.cma" {"F:S81240T1643359396.57"}
+  "lib/dns-client/mirage/dns_client_mirage.cmi" {"F:S8180T1643359396.57"}
+  "lib/dns-client/mirage/dns_client_mirage.cmt" {"F:S174902T1643359396.57"}
+  "lib/dns-client/mirage/dns_client_mirage.cmti" {"F:S27609T1643359396.57"}
+  "lib/dns-client/mirage/dns_client_mirage.cmx" {"F:S9807T1643359396.57"}
+  "lib/dns-client/mirage/dns_client_mirage.cmxa" {"F:S4748T1643359396.57"}
+  "lib/dns-client/mirage/dns_client_mirage.cmxs" {"F:S80568T1643359396.57"}
+  "lib/dns-client/mirage/dns_client_mirage.ml" {"F:S11438T1643359396.57"}
+  "lib/dns-client/mirage/dns_client_mirage.mli" {"F:S387T1643359396.57"}
+  "lib/dns-client/opam" {"F:S1059T1643359396.57"}
+  "lib/dns-client/resolvconf/.private/resolvconf_lexer.cmi"
+    {"F:S949T1643359396.57"}
+  "lib/dns-client/resolvconf/.private/resolvconf_lexer.cmt"
+    {"F:S17513T1643359396.57"}
+  "lib/dns-client/resolvconf/.private/resolvconf_parser.cmi"
+    {"F:S1209T1643359396.57"}
+  "lib/dns-client/resolvconf/.private/resolvconf_parser.cmt"
+    {"F:S29273T1643359396.57"}
+  "lib/dns-client/resolvconf/.private/resolvconf_parser.cmti"
+    {"F:S5478T1643359396.57"}
+  "lib/dns-client/resolvconf/dns_resolvconf.cmi" {"F:S791T1643359396.57"}
+  "lib/dns-client/resolvconf/dns_resolvconf.cmt" {"F:S8072T1643359396.57"}
+  "lib/dns-client/resolvconf/dns_resolvconf.cmti" {"F:S4169T1643359396.57"}
+  "lib/dns-client/resolvconf/dns_resolvconf.cmx" {"F:S1029T1643359396.57"}
+  "lib/dns-client/resolvconf/dns_resolvconf.ml" {"F:S344T1643359396.57"}
+  "lib/dns-client/resolvconf/dns_resolvconf.mli" {"F:S85T1643359396.57"}
+  "lib/dns-client/resolvconf/dns_resolvconv.a" {"F:S30024T1643359396.57"}
+  "lib/dns-client/resolvconf/dns_resolvconv.cma" {"F:S26858T1643359396.57"}
+  "lib/dns-client/resolvconf/dns_resolvconv.cmxa" {"F:S2347T1643359396.57"}
+  "lib/dns-client/resolvconf/dns_resolvconv.cmxs" {"F:S40344T1643359396.57"}
+  "lib/dns-client/resolvconf/resolvconf_lexer.cmx" {"F:S3660T1643359396.57"}
+  "lib/dns-client/resolvconf/resolvconf_lexer.ml" {"F:S14303T1643359396.57"}
+  "lib/dns-client/resolvconf/resolvconf_parser.cmx" {"F:S2838T1643359396.57"}
+  "lib/dns-client/resolvconf/resolvconf_parser.ml" {"F:S9218T1643359396.57"}
+  "lib/dns-client/resolvconf/resolvconf_parser.mli" {"F:S214T1643359396.57"}
+  "lib/dns-client/unix/dns_client_unix.a" {"F:S22422T1643359396.57"}
+  "lib/dns-client/unix/dns_client_unix.cma" {"F:S27105T1643359396.57"}
+  "lib/dns-client/unix/dns_client_unix.cmi" {"F:S4965T1643359396.57"}
+  "lib/dns-client/unix/dns_client_unix.cmt" {"F:S55072T1643359396.57"}
+  "lib/dns-client/unix/dns_client_unix.cmti" {"F:S19052T1643359396.57"}
+  "lib/dns-client/unix/dns_client_unix.cmx" {"F:S3792T1643359396.57"}
+  "lib/dns-client/unix/dns_client_unix.cmxa" {"F:S1949T1643359396.57"}
+  "lib/dns-client/unix/dns_client_unix.cmxs" {"F:S40736T1643359396.57"}
+  "lib/dns-client/unix/dns_client_unix.ml" {"F:S4407T1643359396.57"}
+  "lib/dns-client/unix/dns_client_unix.mli" {"F:S469T1643359396.57"}
+]

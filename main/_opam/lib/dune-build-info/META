@@ -1,0 +1,7 @@
+version = "2.9.1"
+description = ""
+requires = ""
+archive(byte) = "build_info.cma"
+archive(native) = "build_info.cmxa"
+plugin(byte) = "build_info.cma"
+plugin(native) = "build_info.cmxs"

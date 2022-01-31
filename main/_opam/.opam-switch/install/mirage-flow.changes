@@ -1,0 +1,21 @@
+opam-version: "2.0"
+added: [
+  "doc/mirage-flow" {"D"}
+  "doc/mirage-flow/CHANGES.md" {"F:S2083T1643359369.91"}
+  "doc/mirage-flow/LICENSE.md" {"F:S694T1643359369.91"}
+  "doc/mirage-flow/README.md" {"F:S1042T1643359369.91"}
+  "lib/mirage-flow" {"D"}
+  "lib/mirage-flow/META" {"F:S203T1643359369.9"}
+  "lib/mirage-flow/dune-package" {"F:S447T1643359369.9"}
+  "lib/mirage-flow/mirage_flow.a" {"F:S13570T1643359369.91"}
+  "lib/mirage-flow/mirage_flow.cma" {"F:S10913T1643359369.91"}
+  "lib/mirage-flow/mirage_flow.cmi" {"F:S2925T1643359369.91"}
+  "lib/mirage-flow/mirage_flow.cmt" {"F:S28451T1643359369.91"}
+  "lib/mirage-flow/mirage_flow.cmti" {"F:S20394T1643359369.91"}
+  "lib/mirage-flow/mirage_flow.cmx" {"F:S2124T1643359369.91"}
+  "lib/mirage-flow/mirage_flow.cmxa" {"F:S996T1643359369.91"}
+  "lib/mirage-flow/mirage_flow.cmxs" {"F:S27744T1643359369.91"}
+  "lib/mirage-flow/mirage_flow.ml" {"F:S2342T1643359369.91"}
+  "lib/mirage-flow/mirage_flow.mli" {"F:S4614T1643359369.91"}
+  "lib/mirage-flow/opam" {"F:S796T1643359369.91"}
+]

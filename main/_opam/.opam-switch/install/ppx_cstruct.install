@@ -1,0 +1,24 @@
+opam-version: "2.0"
+lib: [
+  "_build/install/default/lib/ppx_cstruct/META"
+  "_build/install/default/lib/ppx_cstruct/dune-package"
+  "_build/install/default/lib/ppx_cstruct/opam"
+  "_build/install/default/lib/ppx_cstruct/ppx_cstruct.a"
+  "_build/install/default/lib/ppx_cstruct/ppx_cstruct.cma"
+  "_build/install/default/lib/ppx_cstruct/ppx_cstruct.cmi"
+  "_build/install/default/lib/ppx_cstruct/ppx_cstruct.cmt"
+  "_build/install/default/lib/ppx_cstruct/ppx_cstruct.cmti"
+  "_build/install/default/lib/ppx_cstruct/ppx_cstruct.cmx"
+  "_build/install/default/lib/ppx_cstruct/ppx_cstruct.cmxa"
+  "_build/install/default/lib/ppx_cstruct/ppx_cstruct.ml"
+  "_build/install/default/lib/ppx_cstruct/ppx_cstruct.mli"
+]
+doc: [
+  "_build/install/default/doc/ppx_cstruct/CHANGES.md"
+  "_build/install/default/doc/ppx_cstruct/LICENSE.md"
+  "_build/install/default/doc/ppx_cstruct/README.md"
+]
+libexec: [
+  "_build/install/default/lib/ppx_cstruct/ppx.exe"
+  "_build/install/default/lib/ppx_cstruct/ppx_cstruct.cmxs"
+]

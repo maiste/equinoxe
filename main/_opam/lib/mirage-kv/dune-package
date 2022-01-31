@@ -1,0 +1,19 @@
+(lang dune 2.9)
+(name mirage-kv)
+(version 4.0.0)
+(library
+ (name mirage-kv)
+ (kind normal)
+ (archives (byte mirage_kv.cma) (native mirage_kv.cmxa))
+ (plugins (byte mirage_kv.cma) (native mirage_kv.cmxs))
+ (native_archives mirage_kv.a)
+ (requires fmt lwt)
+ (main_module_name Mirage_kv)
+ (modes byte native)
+ (modules
+  (singleton
+   (name Mirage_kv)
+   (obj_name mirage_kv)
+   (visibility public)
+   (impl)
+   (intf))))

@@ -1,0 +1,7 @@
+description = "Compatibility library for OCaml's Uchar module"
+version = "0.0.2"
+
+archive(byte) = "uchar.cma"
+archive(byte,plugin) = "uchar.cma"
+archive(native) = "uchar.cmxa"
+archive(native,plugin) = "uchar.cmxs"

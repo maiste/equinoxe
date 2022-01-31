@@ -1,0 +1,6 @@
+description = ""
+requires = "equinoxe http-lwt-client"
+archive(byte) = "equinoxe_hlc.cma"
+archive(native) = "equinoxe_hlc.cmxa"
+plugin(byte) = "equinoxe_hlc.cma"
+plugin(native) = "equinoxe_hlc.cmxs"

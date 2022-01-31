@@ -1,0 +1,7 @@
+version = "1.0.0"
+description = ""
+requires = ""
+archive(byte) = "either.cma"
+archive(native) = "either.cmxa"
+plugin(byte) = "either.cma"
+plugin(native) = "either.cmxs"

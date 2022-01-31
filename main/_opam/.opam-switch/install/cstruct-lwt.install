@@ -1,0 +1,21 @@
+opam-version: "2.0"
+lib: [
+  "_build/install/default/lib/cstruct-lwt/META"
+  "_build/install/default/lib/cstruct-lwt/cstruct_lwt.a"
+  "_build/install/default/lib/cstruct-lwt/cstruct_lwt.cma"
+  "_build/install/default/lib/cstruct-lwt/cstruct_lwt.cmxa"
+  "_build/install/default/lib/cstruct-lwt/dune-package"
+  "_build/install/default/lib/cstruct-lwt/lwt_cstruct.cmi"
+  "_build/install/default/lib/cstruct-lwt/lwt_cstruct.cmt"
+  "_build/install/default/lib/cstruct-lwt/lwt_cstruct.cmti"
+  "_build/install/default/lib/cstruct-lwt/lwt_cstruct.cmx"
+  "_build/install/default/lib/cstruct-lwt/lwt_cstruct.ml"
+  "_build/install/default/lib/cstruct-lwt/lwt_cstruct.mli"
+  "_build/install/default/lib/cstruct-lwt/opam"
+]
+doc: [
+  "_build/install/default/doc/cstruct-lwt/CHANGES.md"
+  "_build/install/default/doc/cstruct-lwt/LICENSE.md"
+  "_build/install/default/doc/cstruct-lwt/README.md"
+]
+libexec: "_build/install/default/lib/cstruct-lwt/cstruct_lwt.cmxs"

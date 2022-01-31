@@ -1,0 +1,19 @@
+(lang dune 2.9)
+(name happy-eyeballs)
+(version 0.1.3)
+(library
+ (name happy-eyeballs)
+ (kind normal)
+ (archives (byte happy_eyeballs.cma) (native happy_eyeballs.cmxa))
+ (plugins (byte happy_eyeballs.cma) (native happy_eyeballs.cmxs))
+ (native_archives happy_eyeballs.a)
+ (requires domain-name ipaddr fmt duration logs)
+ (main_module_name Happy_eyeballs)
+ (modes byte native)
+ (modules
+  (singleton
+   (name Happy_eyeballs)
+   (obj_name happy_eyeballs)
+   (visibility public)
+   (impl)
+   (intf))))

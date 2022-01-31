@@ -1,0 +1,7 @@
+version = "3.4.0"
+description = ""
+requires = ""
+archive(byte) = "ocaml_version.cma"
+archive(native) = "ocaml_version.cmxa"
+plugin(byte) = "ocaml_version.cma"
+plugin(native) = "ocaml_version.cmxs"

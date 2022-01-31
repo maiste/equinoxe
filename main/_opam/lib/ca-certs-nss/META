@@ -1,0 +1,7 @@
+version = "v3.74"
+description = ""
+requires = "mirage-clock mirage-crypto x509"
+archive(byte) = "ca_certs_nss.cma"
+archive(native) = "ca_certs_nss.cmxa"
+plugin(byte) = "ca_certs_nss.cma"
+plugin(native) = "ca_certs_nss.cmxs"

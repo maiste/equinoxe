@@ -1,0 +1,21 @@
+opam-version: "2.0"
+added: [
+  "doc/mirage-net" {"D"}
+  "doc/mirage-net/CHANGES.md" {"F:S1426T1643359370.48"}
+  "doc/mirage-net/LICENSE.md" {"F:S694T1643359370.48"}
+  "doc/mirage-net/README.md" {"F:S579T1643359370.48"}
+  "lib/mirage-net" {"D"}
+  "lib/mirage-net/META" {"F:S207T1643359370.48"}
+  "lib/mirage-net/dune-package" {"F:S445T1643359370.48"}
+  "lib/mirage-net/mirage_net.a" {"F:S7568T1643359370.48"}
+  "lib/mirage-net/mirage_net.cma" {"F:S8349T1643359370.48"}
+  "lib/mirage-net/mirage_net.cmi" {"F:S3273T1643359370.48"}
+  "lib/mirage-net/mirage_net.cmt" {"F:S18266T1643359370.48"}
+  "lib/mirage-net/mirage_net.cmti" {"F:S20015T1643359370.48"}
+  "lib/mirage-net/mirage_net.cmx" {"F:S1129T1643359370.48"}
+  "lib/mirage-net/mirage_net.cmxa" {"F:S959T1643359370.48"}
+  "lib/mirage-net/mirage_net.cmxs" {"F:S19816T1643359370.48"}
+  "lib/mirage-net/mirage_net.ml" {"F:S2185T1643359370.48"}
+  "lib/mirage-net/mirage_net.mli" {"F:S3808T1643359370.48"}
+  "lib/mirage-net/opam" {"F:S944T1643359370.48"}
+]

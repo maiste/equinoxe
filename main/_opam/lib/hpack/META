@@ -1,0 +1,6 @@
+description = ""
+requires = "angstrom faraday"
+archive(byte) = "hpack.cma"
+archive(native) = "hpack.cmxa"
+plugin(byte) = "hpack.cma"
+plugin(native) = "hpack.cmxs"

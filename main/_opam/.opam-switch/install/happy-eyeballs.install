@@ -1,0 +1,21 @@
+opam-version: "2.0"
+lib: [
+  "_build/install/default/lib/happy-eyeballs/META"
+  "_build/install/default/lib/happy-eyeballs/dune-package"
+  "_build/install/default/lib/happy-eyeballs/happy_eyeballs.a"
+  "_build/install/default/lib/happy-eyeballs/happy_eyeballs.cma"
+  "_build/install/default/lib/happy-eyeballs/happy_eyeballs.cmi"
+  "_build/install/default/lib/happy-eyeballs/happy_eyeballs.cmt"
+  "_build/install/default/lib/happy-eyeballs/happy_eyeballs.cmti"
+  "_build/install/default/lib/happy-eyeballs/happy_eyeballs.cmx"
+  "_build/install/default/lib/happy-eyeballs/happy_eyeballs.cmxa"
+  "_build/install/default/lib/happy-eyeballs/happy_eyeballs.ml"
+  "_build/install/default/lib/happy-eyeballs/happy_eyeballs.mli"
+  "_build/install/default/lib/happy-eyeballs/opam"
+]
+doc: [
+  "_build/install/default/doc/happy-eyeballs/CHANGES.md"
+  "_build/install/default/doc/happy-eyeballs/LICENSE.md"
+  "_build/install/default/doc/happy-eyeballs/README.md"
+]
+libexec: "_build/install/default/lib/happy-eyeballs/happy_eyeballs.cmxs"

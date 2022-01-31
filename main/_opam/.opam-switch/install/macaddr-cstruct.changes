@@ -1,0 +1,21 @@
+opam-version: "2.0"
+added: [
+  "doc/macaddr-cstruct" {"D"}
+  "doc/macaddr-cstruct/CHANGES.md" {"F:S11234T1643359345.21"}
+  "doc/macaddr-cstruct/LICENSE.md" {"F:S833T1643359345.21"}
+  "doc/macaddr-cstruct/README.md" {"F:S2677T1643359345.22"}
+  "lib/macaddr-cstruct" {"D"}
+  "lib/macaddr-cstruct/META" {"F:S219T1643359345.21"}
+  "lib/macaddr-cstruct/dune-package" {"F:S487T1643359345.21"}
+  "lib/macaddr-cstruct/macaddr_cstruct.a" {"F:S8474T1643359345.21"}
+  "lib/macaddr-cstruct/macaddr_cstruct.cma" {"F:S7274T1643359345.21"}
+  "lib/macaddr-cstruct/macaddr_cstruct.cmi" {"F:S1271T1643359345.21"}
+  "lib/macaddr-cstruct/macaddr_cstruct.cmt" {"F:S13863T1643359345.21"}
+  "lib/macaddr-cstruct/macaddr_cstruct.cmti" {"F:S7975T1643359345.21"}
+  "lib/macaddr-cstruct/macaddr_cstruct.cmx" {"F:S1266T1643359345.21"}
+  "lib/macaddr-cstruct/macaddr_cstruct.cmxa" {"F:S637T1643359345.21"}
+  "lib/macaddr-cstruct/macaddr_cstruct.cmxs" {"F:S24192T1643359345.21"}
+  "lib/macaddr-cstruct/macaddr_cstruct.ml" {"F:S1531T1643359345.21"}
+  "lib/macaddr-cstruct/macaddr_cstruct.mli" {"F:S1644T1643359345.21"}
+  "lib/macaddr-cstruct/opam" {"F:S773T1643359345.21"}
+]

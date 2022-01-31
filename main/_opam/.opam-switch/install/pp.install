@@ -1,0 +1,21 @@
+opam-version: "2.0"
+lib: [
+  "_build/install/default/lib/pp/META"
+  "_build/install/default/lib/pp/dune-package"
+  "_build/install/default/lib/pp/opam"
+  "_build/install/default/lib/pp/pp.a"
+  "_build/install/default/lib/pp/pp.cma"
+  "_build/install/default/lib/pp/pp.cmi"
+  "_build/install/default/lib/pp/pp.cmt"
+  "_build/install/default/lib/pp/pp.cmti"
+  "_build/install/default/lib/pp/pp.cmx"
+  "_build/install/default/lib/pp/pp.cmxa"
+  "_build/install/default/lib/pp/pp.ml"
+  "_build/install/default/lib/pp/pp.mli"
+]
+doc: [
+  "_build/install/default/doc/pp/CHANGES.md"
+  "_build/install/default/doc/pp/LICENSE.md"
+  "_build/install/default/doc/pp/README.md"
+]
+libexec: "_build/install/default/lib/pp/pp.cmxs"

@@ -1,0 +1,54 @@
+(lang dune 2.9)
+(name uri)
+(version 4.2.0)
+(library
+ (name uri)
+ (kind normal)
+ (archives (byte uri.cma) (native uri.cmxa))
+ (plugins (byte uri.cma) (native uri.cmxs))
+ (native_archives uri.a)
+ (requires stringext angstrom)
+ (main_module_name Uri)
+ (modes byte native)
+ (modules
+  (singleton (name Uri) (obj_name uri) (visibility public) (impl) (intf))))
+(library
+ (name uri.services)
+ (kind normal)
+ (archives
+  (byte services/uri_services.cma)
+  (native services/uri_services.cmxa))
+ (plugins
+  (byte services/uri_services.cma)
+  (native services/uri_services.cmxs))
+ (native_archives services/uri_services.a)
+ (requires uri)
+ (main_module_name Uri_services)
+ (modes byte native)
+ (modules
+  (singleton
+   (name Uri_services)
+   (obj_name uri_services)
+   (visibility public)
+   (impl)
+   (intf))))
+(library
+ (name uri.services_full)
+ (kind normal)
+ (archives
+  (byte services_full/uri_services_full.cma)
+  (native services_full/uri_services_full.cmxa))
+ (plugins
+  (byte services_full/uri_services_full.cma)
+  (native services_full/uri_services_full.cmxs))
+ (native_archives services_full/uri_services_full.a)
+ (requires uri)
+ (main_module_name Uri_services_full)
+ (modes byte native)
+ (modules
+  (singleton
+   (name Uri_services_full)
+   (obj_name uri_services_full)
+   (visibility public)
+   (impl)
+   (intf))))

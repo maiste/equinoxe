@@ -1,0 +1,16 @@
+version = "0.0.5"
+description = ""
+requires =
+"base64
+ ca-certs
+ faraday-lwt-unix
+ h2
+ happy-eyeballs-lwt
+ httpaf
+ logs
+ lwt.unix
+ tls.lwt"
+archive(byte) = "http_lwt_client.cma"
+archive(native) = "http_lwt_client.cmxa"
+plugin(byte) = "http_lwt_client.cma"
+plugin(native) = "http_lwt_client.cmxs"

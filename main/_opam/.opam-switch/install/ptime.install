@@ -1,0 +1,40 @@
+opam-version: "2.0"
+lib: [
+  "_build/opam" {"opam"}
+  "_build/pkg/META" {"META"}
+  "_build/src-os/libptime_clock_stubs.a" {"clock/os/libptime_clock_stubs.a"}
+  "_build/src-os/ptime_clock.a" {"clock/os/ptime_clock.a"}
+  "_build/src-os/ptime_clock.cma" {"clock/os/ptime_clock.cma"}
+  "_build/src-os/ptime_clock.cmi" {"clock/os/ptime_clock.cmi"}
+  "?_build/src-os/ptime_clock.cmti" {"clock/os/ptime_clock.cmti"}
+  "_build/src-os/ptime_clock.cmx" {"clock/os/ptime_clock.cmx"}
+  "_build/src-os/ptime_clock.cmxa" {"clock/os/ptime_clock.cmxa"}
+  "_build/src-os/ptime_clock.cmxs" {"clock/os/ptime_clock.cmxs"}
+  "_build/src-os/ptime_clock.mli" {"clock/os/ptime_clock.mli"}
+  "_build/src/ptime.a" {"ptime.a"}
+  "_build/src/ptime.cma" {"ptime.cma"}
+  "_build/src/ptime.cmi" {"ptime.cmi"}
+  "?_build/src/ptime.cmti" {"ptime.cmti"}
+  "_build/src/ptime.cmx" {"ptime.cmx"}
+  "_build/src/ptime.cmxa" {"ptime.cmxa"}
+  "_build/src/ptime.cmxs" {"ptime.cmxs"}
+  "_build/src/ptime.mli" {"ptime.mli"}
+  "_build/src/ptime_clock.cmi" {"clock/ptime_clock.cmi"}
+  "?_build/src/ptime_clock.cmti" {"clock/ptime_clock.cmti"}
+  "_build/src/ptime_clock.mli" {"clock/ptime_clock.mli"}
+  "_build/src/ptime_top.a" {"top/ptime_top.a"}
+  "_build/src/ptime_top.cma" {"top/ptime_top.cma"}
+  "_build/src/ptime_top.cmx" {"top/ptime_top.cmx"}
+  "_build/src/ptime_top.cmxa" {"top/ptime_top.cmxa"}
+  "_build/src/ptime_top.cmxs" {"top/ptime_top.cmxs"}
+  "_build/src/ptime_top_init.ml" {"ptime_top_init.ml"}
+]
+stublibs: "_build/src-os/dllptime_clock_stubs.so" {"dllptime_clock_stubs.so"}
+doc: [
+  "_build/CHANGES.md" {"CHANGES.md"}
+  "_build/LICENSE.md" {"LICENSE.md"}
+  "_build/README.md" {"README.md"}
+  "_build/test-jsoo/min_clock_jsoo.html" {"min_clock_jsoo.html"}
+  "_build/test-jsoo/min_clock_jsoo.ml" {"min_clock_jsoo.ml"}
+  "_build/test-os/min_clock_os.ml" {"min_clock_os.ml"}
+]

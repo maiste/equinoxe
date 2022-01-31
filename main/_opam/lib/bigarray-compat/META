@@ -1,0 +1,7 @@
+version = "1.0.0"
+description = ""
+requires = ""
+archive(byte) = "bigarray_compat.cma"
+archive(native) = "bigarray_compat.cmxa"
+plugin(byte) = "bigarray_compat.cma"
+plugin(native) = "bigarray_compat.cmxs"

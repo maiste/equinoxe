@@ -1,0 +1,14 @@
+(lang dune 2.9)
+(name magic-mime)
+(version 1.2.0)
+(library
+ (name magic-mime)
+ (kind normal)
+ (archives (byte magic_mime_library.cma) (native magic_mime_library.cmxa))
+ (plugins (byte magic_mime_library.cma) (native magic_mime_library.cmxs))
+ (native_archives magic_mime_library.a)
+ (modes byte native)
+ (modules
+  (unwrapped
+   ((name Magic_mime) (obj_name magic_mime) (visibility public) (impl) (intf))
+   ((name Mime_types) (obj_name mime_types) (visibility public) (impl) (intf)))))

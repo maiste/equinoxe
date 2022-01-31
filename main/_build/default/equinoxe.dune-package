@@ -1,0 +1,28 @@
+(lang dune 2.9)
+(name equinoxe)
+(library
+ (name equinoxe)
+ (kind normal)
+ (archives (byte equinoxe.cma) (native equinoxe.cmxa))
+ (plugins (byte equinoxe.cma) (native equinoxe.cmxs))
+ (native_archives equinoxe.a)
+ (requires ezjsonm odate unix lwt)
+ (main_module_name Equinoxe)
+ (modes byte native)
+ (modules
+  (wrapped
+   (main_module_name Equinoxe)
+   (modules
+    ((name Backend) (obj_name equinoxe__Backend) (visibility public) (impl))
+    ((name Equinoxe) (obj_name equinoxe) (visibility public) (impl) (intf))
+    ((name Equinoxe_intf)
+     (obj_name equinoxe__Equinoxe_intf)
+     (visibility public)
+     (impl)))
+   (alias_module
+    (name Equinoxe__)
+    (obj_name equinoxe__)
+    (visibility public)
+    (kind alias)
+    (impl))
+   (wrapped true))))

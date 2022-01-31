@@ -1,0 +1,33 @@
+(lang dune 2.9)
+(name macaddr)
+(version 5.2.0)
+(library
+ (name macaddr)
+ (kind normal)
+ (archives (byte macaddr.cma) (native macaddr.cmxa))
+ (plugins (byte macaddr.cma) (native macaddr.cmxs))
+ (native_archives macaddr.a)
+ (main_module_name Macaddr)
+ (modes byte native)
+ (modules
+  (singleton
+   (name Macaddr)
+   (obj_name macaddr)
+   (visibility public)
+   (impl)
+   (intf))))
+(library
+ (name macaddr.top)
+ (kind normal)
+ (archives (byte top/macaddr_top.cma) (native top/macaddr_top.cmxa))
+ (plugins (byte top/macaddr_top.cma) (native top/macaddr_top.cmxs))
+ (native_archives top/macaddr_top.a)
+ (requires macaddr compiler-libs)
+ (main_module_name Macaddr_top)
+ (modes byte native)
+ (modules
+  (singleton
+   (name Macaddr_top)
+   (obj_name macaddr_top)
+   (visibility public)
+   (impl))))

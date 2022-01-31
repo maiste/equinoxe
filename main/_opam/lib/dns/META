@@ -1,0 +1,17 @@
+version = "6.1.4"
+description = ""
+requires = "cstruct domain-name fmt gmap ipaddr logs metrics ptime"
+archive(byte) = "dns.cma"
+archive(native) = "dns.cmxa"
+plugin(byte) = "dns.cma"
+plugin(native) = "dns.cmxs"
+package "cache" (
+  directory = "cache"
+  version = "6.1.4"
+  description = ""
+  requires = "dns domain-name duration lru metrics"
+  archive(byte) = "dns_cache.cma"
+  archive(native) = "dns_cache.cmxa"
+  plugin(byte) = "dns_cache.cma"
+  plugin(native) = "dns_cache.cmxs"
+)

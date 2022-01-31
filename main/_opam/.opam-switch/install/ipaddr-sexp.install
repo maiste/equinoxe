@@ -1,0 +1,21 @@
+opam-version: "2.0"
+lib: [
+  "_build/install/default/lib/ipaddr-sexp/META"
+  "_build/install/default/lib/ipaddr-sexp/dune-package"
+  "_build/install/default/lib/ipaddr-sexp/ipaddr_sexp.a"
+  "_build/install/default/lib/ipaddr-sexp/ipaddr_sexp.cma"
+  "_build/install/default/lib/ipaddr-sexp/ipaddr_sexp.cmi"
+  "_build/install/default/lib/ipaddr-sexp/ipaddr_sexp.cmt"
+  "_build/install/default/lib/ipaddr-sexp/ipaddr_sexp.cmti"
+  "_build/install/default/lib/ipaddr-sexp/ipaddr_sexp.cmx"
+  "_build/install/default/lib/ipaddr-sexp/ipaddr_sexp.cmxa"
+  "_build/install/default/lib/ipaddr-sexp/ipaddr_sexp.ml"
+  "_build/install/default/lib/ipaddr-sexp/ipaddr_sexp.mli"
+  "_build/install/default/lib/ipaddr-sexp/opam"
+]
+doc: [
+  "_build/install/default/doc/ipaddr-sexp/CHANGES.md"
+  "_build/install/default/doc/ipaddr-sexp/LICENSE.md"
+  "_build/install/default/doc/ipaddr-sexp/README.md"
+]
+libexec: "_build/install/default/lib/ipaddr-sexp/ipaddr_sexp.cmxs"

@@ -1,0 +1,7 @@
+version = "6.0.1"
+description = ""
+requires = "cstruct sexplib"
+archive(byte) = "cstruct_sexp.cma"
+archive(native) = "cstruct_sexp.cmxa"
+plugin(byte) = "cstruct_sexp.cma"
+plugin(native) = "cstruct_sexp.cmxs"

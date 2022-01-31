@@ -1,0 +1,25 @@
+opam-version: "2.0"
+lib: [
+  "_build/opam" {"opam"}
+  "_build/pkg/META" {"META"}
+  "_build/src/rresult.a" {"rresult.a"}
+  "_build/src/rresult.cma" {"rresult.cma"}
+  "_build/src/rresult.cmi" {"rresult.cmi"}
+  "?_build/src/rresult.cmti" {"rresult.cmti"}
+  "_build/src/rresult.cmx" {"rresult.cmx"}
+  "_build/src/rresult.cmxa" {"rresult.cmxa"}
+  "_build/src/rresult.cmxs" {"rresult.cmxs"}
+  "_build/src/rresult.mli" {"rresult.mli"}
+  "_build/src/rresult_top.a" {"rresult_top.a"}
+  "_build/src/rresult_top.cma" {"rresult_top.cma"}
+  "_build/src/rresult_top.cmx" {"rresult_top.cmx"}
+  "_build/src/rresult_top.cmxa" {"rresult_top.cmxa"}
+  "_build/src/rresult_top.cmxs" {"rresult_top.cmxs"}
+  "_build/src/rresult_top_init.ml" {"rresult_top_init.ml"}
+]
+doc: [
+  "_build/CHANGES.md" {"CHANGES.md"}
+  "_build/LICENSE.md" {"LICENSE.md"}
+  "_build/README.md" {"README.md"}
+  "_build/doc/index.mld" {"odoc-pages/index.mld"}
+]

@@ -1,0 +1,7 @@
+version = "5.0.0"
+description = ""
+requires = "astring ipaddr ipaddr-sexp ppx_sexp_conv.runtime-lib sexplib uri"
+archive(byte) = "conduit.cma"
+archive(native) = "conduit.cmxa"
+plugin(byte) = "conduit.cma"
+plugin(native) = "conduit.cmxs"

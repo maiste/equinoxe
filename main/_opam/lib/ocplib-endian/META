@@ -1,0 +1,17 @@
+description =
+"Optimised functions to read and write int16/32/64 from strings and bytes"
+requires = "bytes"
+archive(byte) = "ocplib_endian.cma"
+archive(native) = "ocplib_endian.cmxa"
+plugin(byte) = "ocplib_endian.cma"
+plugin(native) = "ocplib_endian.cmxs"
+package "bigstring" (
+  directory = "bigstring"
+  description =
+  "Optimised functions to read and write int16/32/64 from bigarrays"
+  requires = "bigarray bytes ocplib-endian"
+  archive(byte) = "ocplib_endian_bigstring.cma"
+  archive(native) = "ocplib_endian_bigstring.cmxa"
+  plugin(byte) = "ocplib_endian_bigstring.cma"
+  plugin(native) = "ocplib_endian_bigstring.cmxs"
+)

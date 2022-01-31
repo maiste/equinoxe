@@ -1,0 +1,18 @@
+(lang dune 2.9)
+(name mirage-time)
+(version 3.0.0)
+(library
+ (name mirage-time)
+ (kind normal)
+ (archives (byte mirage_time.cma) (native mirage_time.cmxa))
+ (plugins (byte mirage_time.cma) (native mirage_time.cmxs))
+ (native_archives mirage_time.a)
+ (requires lwt)
+ (main_module_name Mirage_time)
+ (modes byte native)
+ (modules
+  (singleton
+   (name Mirage_time)
+   (obj_name mirage_time)
+   (visibility public)
+   (impl))))

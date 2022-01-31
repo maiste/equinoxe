@@ -1,0 +1,19 @@
+(lang dune 2.9)
+(name macaddr-cstruct)
+(version 5.2.0)
+(library
+ (name macaddr-cstruct)
+ (kind normal)
+ (archives (byte macaddr_cstruct.cma) (native macaddr_cstruct.cmxa))
+ (plugins (byte macaddr_cstruct.cma) (native macaddr_cstruct.cmxs))
+ (native_archives macaddr_cstruct.a)
+ (requires macaddr cstruct)
+ (main_module_name Macaddr_cstruct)
+ (modes byte native)
+ (modules
+  (singleton
+   (name Macaddr_cstruct)
+   (obj_name macaddr_cstruct)
+   (visibility public)
+   (impl)
+   (intf))))

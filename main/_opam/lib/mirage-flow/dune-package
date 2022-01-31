@@ -1,0 +1,19 @@
+(lang dune 2.9)
+(name mirage-flow)
+(version 3.0.0)
+(library
+ (name mirage-flow)
+ (kind normal)
+ (archives (byte mirage_flow.cma) (native mirage_flow.cmxa))
+ (plugins (byte mirage_flow.cma) (native mirage_flow.cmxs))
+ (native_archives mirage_flow.a)
+ (requires fmt lwt cstruct)
+ (main_module_name Mirage_flow)
+ (modes byte native)
+ (modules
+  (singleton
+   (name Mirage_flow)
+   (obj_name mirage_flow)
+   (visibility public)
+   (impl)
+   (intf))))

@@ -1,0 +1,18 @@
+(lang dune 2.9)
+(name conduit-lwt)
+(version 5.0.0)
+(library
+ (name conduit-lwt)
+ (kind normal)
+ (archives (byte conduit_lwt.cma) (native conduit_lwt.cmxa))
+ (plugins (byte conduit_lwt.cma) (native conduit_lwt.cmxs))
+ (native_archives conduit_lwt.a)
+ (requires conduit lwt ppx_sexp_conv.runtime-lib)
+ (modes byte native)
+ (modules
+  (singleton
+   (name Resolver_lwt)
+   (obj_name resolver_lwt)
+   (visibility public)
+   (impl)
+   (intf))))

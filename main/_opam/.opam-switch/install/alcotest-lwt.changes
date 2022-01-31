@@ -1,0 +1,32 @@
+opam-version: "2.0"
+added: [
+  "doc/alcotest-lwt" {"D"}
+  "doc/alcotest-lwt/CHANGES.md" {"F:S13193T1643359372.82"}
+  "doc/alcotest-lwt/LICENSE.md" {"F:S761T1643359372.82"}
+  "doc/alcotest-lwt/README.md" {"F:S7962T1643359372.82"}
+  "lib/alcotest-lwt" {"D"}
+  "lib/alcotest-lwt/META" {"F:S238T1643359372.82"}
+  "lib/alcotest-lwt/alcotest_lwt.a" {"F:S15418T1643359372.82"}
+  "lib/alcotest-lwt/alcotest_lwt.cma" {"F:S25662T1643359372.82"}
+  "lib/alcotest-lwt/alcotest_lwt.cmi" {"F:S4337T1643359372.82"}
+  "lib/alcotest-lwt/alcotest_lwt.cmt" {"F:S45624T1643359372.82"}
+  "lib/alcotest-lwt/alcotest_lwt.cmti" {"F:S12652T1643359372.82"}
+  "lib/alcotest-lwt/alcotest_lwt.cmx" {"F:S2418T1643359372.82"}
+  "lib/alcotest-lwt/alcotest_lwt.cmxa" {"F:S3537T1643359372.82"}
+  "lib/alcotest-lwt/alcotest_lwt.cmxs" {"F:S29848T1643359372.82"}
+  "lib/alcotest-lwt/alcotest_lwt.ml" {"F:S1406T1643359372.82"}
+  "lib/alcotest-lwt/alcotest_lwt.mli" {"F:S1045T1643359372.82"}
+  "lib/alcotest-lwt/alcotest_lwt__.cmi" {"F:S283T1643359372.82"}
+  "lib/alcotest-lwt/alcotest_lwt__.cmt" {"F:S2673T1643359372.82"}
+  "lib/alcotest-lwt/alcotest_lwt__.cmx" {"F:S140T1643359372.82"}
+  "lib/alcotest-lwt/alcotest_lwt__.ml" {"F:S108T1643359372.82"}
+  "lib/alcotest-lwt/alcotest_lwt__Alcotest_lwt_intf.cmi"
+    {"F:S6344T1643359372.82"}
+  "lib/alcotest-lwt/alcotest_lwt__Alcotest_lwt_intf.cmt"
+    {"F:S19360T1643359372.82"}
+  "lib/alcotest-lwt/alcotest_lwt__Alcotest_lwt_intf.cmx"
+    {"F:S1605T1643359372.82"}
+  "lib/alcotest-lwt/alcotest_lwt_intf.ml" {"F:S503T1643359372.82"}
+  "lib/alcotest-lwt/dune-package" {"F:S817T1643359372.82"}
+  "lib/alcotest-lwt/opam" {"F:S808T1643359372.82"}
+]

@@ -1,0 +1,22 @@
+opam-version: "2.0"
+added: [
+  "bin/happy_eyeballs_client" {"F:S15788200T1643359397.46"}
+  "doc/happy-eyeballs-lwt" {"D"}
+  "doc/happy-eyeballs-lwt/CHANGES.md" {"F:S2703T1643359397.46"}
+  "doc/happy-eyeballs-lwt/LICENSE.md" {"F:S694T1643359397.46"}
+  "doc/happy-eyeballs-lwt/README.md" {"F:S802T1643359397.46"}
+  "lib/happy-eyeballs-lwt" {"D"}
+  "lib/happy-eyeballs-lwt/META" {"F:S263T1643359397.46"}
+  "lib/happy-eyeballs-lwt/dune-package" {"F:S549T1643359397.46"}
+  "lib/happy-eyeballs-lwt/happy_eyeballs_lwt.a" {"F:S38342T1643359397.46"}
+  "lib/happy-eyeballs-lwt/happy_eyeballs_lwt.cma" {"F:S39005T1643359397.46"}
+  "lib/happy-eyeballs-lwt/happy_eyeballs_lwt.cmi" {"F:S5216T1643359397.46"}
+  "lib/happy-eyeballs-lwt/happy_eyeballs_lwt.cmt" {"F:S89615T1643359397.46"}
+  "lib/happy-eyeballs-lwt/happy_eyeballs_lwt.cmti" {"F:S20577T1643359397.46"}
+  "lib/happy-eyeballs-lwt/happy_eyeballs_lwt.cmx" {"F:S6203T1643359397.46"}
+  "lib/happy-eyeballs-lwt/happy_eyeballs_lwt.cmxa" {"F:S4509T1643359397.46"}
+  "lib/happy-eyeballs-lwt/happy_eyeballs_lwt.cmxs" {"F:S59160T1643359397.46"}
+  "lib/happy-eyeballs-lwt/happy_eyeballs_lwt.ml" {"F:S5951T1643359397.46"}
+  "lib/happy-eyeballs-lwt/happy_eyeballs_lwt.mli" {"F:S1214T1643359397.46"}
+  "lib/happy-eyeballs-lwt/opam" {"F:S950T1643359397.46"}
+]

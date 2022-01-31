@@ -1,0 +1,39 @@
+opam-version: "2.0"
+added: [
+  "doc/base64" {"D"}
+  "doc/base64/CHANGES.md" {"F:S3789T1643359343.78"}
+  "doc/base64/LICENSE.md" {"F:S800T1643359343.78"}
+  "doc/base64/README.md" {"F:S714T1643359343.78"}
+  "lib/base64" {"D"}
+  "lib/base64/META" {"F:S439T1643359343.77"}
+  "lib/base64/base64.a" {"F:S36020T1643359343.77"}
+  "lib/base64/base64.cma" {"F:S55282T1643359343.77"}
+  "lib/base64/base64.cmi" {"F:S3123T1643359343.77"}
+  "lib/base64/base64.cmt" {"F:S122251T1643359343.77"}
+  "lib/base64/base64.cmti" {"F:S20188T1643359343.77"}
+  "lib/base64/base64.cmx" {"F:S3716T1643359343.77"}
+  "lib/base64/base64.cmxa" {"F:S1083T1643359343.77"}
+  "lib/base64/base64.cmxs" {"F:S51952T1643359343.78"}
+  "lib/base64/base64.ml" {"F:S10627T1643359343.77"}
+  "lib/base64/base64.mli" {"F:S4426T1643359343.77"}
+  "lib/base64/base64__.cmi" {"F:S205T1643359343.77"}
+  "lib/base64/base64__.cmt" {"F:S2451T1643359343.77"}
+  "lib/base64/base64__.cmx" {"F:S117T1643359343.77"}
+  "lib/base64/base64__.ml" {"F:S63T1643359343.77"}
+  "lib/base64/base64__Unsafe.cmi" {"F:S478T1643359343.77"}
+  "lib/base64/base64__Unsafe.cmt" {"F:S3170T1643359343.77"}
+  "lib/base64/base64__Unsafe.cmx" {"F:S206T1643359343.77"}
+  "lib/base64/dune-package" {"F:S1084T1643359343.77"}
+  "lib/base64/opam" {"F:S935T1643359343.77"}
+  "lib/base64/rfc2045/base64_rfc2045.a" {"F:S43148T1643359343.77"}
+  "lib/base64/rfc2045/base64_rfc2045.cma" {"F:S63637T1643359343.77"}
+  "lib/base64/rfc2045/base64_rfc2045.cmi" {"F:S2475T1643359343.77"}
+  "lib/base64/rfc2045/base64_rfc2045.cmt" {"F:S170688T1643359343.77"}
+  "lib/base64/rfc2045/base64_rfc2045.cmti" {"F:S19546T1643359343.77"}
+  "lib/base64/rfc2045/base64_rfc2045.cmx" {"F:S5537T1643359343.77"}
+  "lib/base64/rfc2045/base64_rfc2045.cmxa" {"F:S632T1643359343.77"}
+  "lib/base64/rfc2045/base64_rfc2045.cmxs" {"F:S54688T1643359343.78"}
+  "lib/base64/rfc2045/base64_rfc2045.ml" {"F:S15264T1643359343.77"}
+  "lib/base64/rfc2045/base64_rfc2045.mli" {"F:S4725T1643359343.77"}
+  "lib/base64/unsafe.ml" {"F:S94T1643359343.77"}
+]

@@ -1,0 +1,19 @@
+opam-version: "2.0"
+added: [
+  "doc/mirage-clock" {"D"}
+  "doc/mirage-clock/CHANGES.md" {"F:S2015T1643359344.71"}
+  "doc/mirage-clock/LICENSE.md" {"F:S787T1643359344.71"}
+  "doc/mirage-clock/README.md" {"F:S720T1643359344.71"}
+  "lib/mirage-clock" {"D"}
+  "lib/mirage-clock/META" {"F:S192T1643359344.71"}
+  "lib/mirage-clock/dune-package" {"F:S419T1643359344.71"}
+  "lib/mirage-clock/mirage_clock.a" {"F:S2182T1643359344.71"}
+  "lib/mirage-clock/mirage_clock.cma" {"F:S4034T1643359344.71"}
+  "lib/mirage-clock/mirage_clock.cmi" {"F:S891T1643359344.71"}
+  "lib/mirage-clock/mirage_clock.cmt" {"F:S8784T1643359344.71"}
+  "lib/mirage-clock/mirage_clock.cmx" {"F:S175T1643359344.71"}
+  "lib/mirage-clock/mirage_clock.cmxa" {"F:S181T1643359344.71"}
+  "lib/mirage-clock/mirage_clock.cmxs" {"F:S16352T1643359344.71"}
+  "lib/mirage-clock/mirage_clock.ml" {"F:S2242T1643359344.71"}
+  "lib/mirage-clock/opam" {"F:S934T1643359344.71"}
+]

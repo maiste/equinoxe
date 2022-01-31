@@ -1,0 +1,6 @@
+description = ""
+requires = "threads unix"
+archive(byte) = "spawn.cma"
+archive(native) = "spawn.cmxa"
+plugin(byte) = "spawn.cma"
+plugin(native) = "spawn.cmxs"

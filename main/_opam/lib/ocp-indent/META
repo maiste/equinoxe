@@ -1,0 +1,40 @@
+package "dynlink" (
+  directory = "dynlink"
+  version = "1.8.1"
+  description = ""
+  requires = "dynlink findlib ocp-indent.lexer ocp-indent.utils"
+  archive(byte) = "ocp_indent_dynlink.cma"
+  archive(native) = "ocp_indent_dynlink.cmxa"
+  plugin(byte) = "ocp_indent_dynlink.cma"
+  plugin(native) = "ocp_indent_dynlink.cmxs"
+)
+package "lexer" (
+  directory = "lexer"
+  version = "1.8.1"
+  description = ""
+  requires = ""
+  archive(byte) = "ocp_indent_lexer.cma"
+  archive(native) = "ocp_indent_lexer.cmxa"
+  plugin(byte) = "ocp_indent_lexer.cma"
+  plugin(native) = "ocp_indent_lexer.cmxs"
+)
+package "lib" (
+  directory = "lib"
+  version = "1.8.1"
+  description = ""
+  requires = "ocp-indent.utils"
+  archive(byte) = "ocp_indent_lib.cma"
+  archive(native) = "ocp_indent_lib.cmxa"
+  plugin(byte) = "ocp_indent_lib.cma"
+  plugin(native) = "ocp_indent_lib.cmxs"
+)
+package "utils" (
+  directory = "utils"
+  version = "1.8.1"
+  description = ""
+  requires = "bytes ocp-indent.lexer"
+  archive(byte) = "ocp_indent_utils.cma"
+  archive(native) = "ocp_indent_utils.cmxa"
+  plugin(byte) = "ocp_indent_utils.cma"
+  plugin(native) = "ocp_indent_utils.cmxs"
+)

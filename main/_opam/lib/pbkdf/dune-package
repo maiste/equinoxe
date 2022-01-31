@@ -1,0 +1,13 @@
+(lang dune 2.9)
+(name pbkdf)
+(library
+ (name pbkdf)
+ (kind normal)
+ (archives (byte pbkdf.cma) (native pbkdf.cmxa))
+ (plugins (byte pbkdf.cma) (native pbkdf.cmxs))
+ (native_archives pbkdf.a)
+ (requires cstruct mirage-crypto)
+ (main_module_name Pbkdf)
+ (modes byte native)
+ (modules
+  (singleton (name Pbkdf) (obj_name pbkdf) (visibility public) (impl) (intf))))

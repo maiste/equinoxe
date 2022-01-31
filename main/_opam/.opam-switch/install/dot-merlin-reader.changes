@@ -1,0 +1,12 @@
+opam-version: "2.0"
+added: [
+  "bin/dot-merlin-reader" {"F:S4203112T1643367970.23"}
+  "doc/dot-merlin-reader" {"D"}
+  "doc/dot-merlin-reader/CHANGES.md" {"F:S34346T1643367970.23"}
+  "doc/dot-merlin-reader/LICENSE" {"F:S1094T1643367970.23"}
+  "doc/dot-merlin-reader/README.md" {"F:S13466T1643367970.23"}
+  "lib/dot-merlin-reader" {"D"}
+  "lib/dot-merlin-reader/META" {"F:S0T1643367970.23"}
+  "lib/dot-merlin-reader/dune-package" {"F:S55T1643367970.23"}
+  "lib/dot-merlin-reader/opam" {"F:S630T1643367970.23"}
+]

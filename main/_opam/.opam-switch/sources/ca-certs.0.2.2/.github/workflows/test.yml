@@ -1,0 +1,24 @@
+name: ca-certs
+
+on: [push, pull_request]
+
+jobs:
+  tests:
+    name: Tests
+
+    strategy:
+      fail-fast: false
+      matrix:
+        ocaml-version: ["4.13.1", "4.12.1", "4.11.2"]
+        operating-system: [macos-latest, ubuntu-latest, windows-latest]
+
+    runs-on: ${{ matrix.operating-system }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Use OCaml ${{ matrix.ocaml-version }}
+        uses: ocaml/setup-ocaml@v2
+        with:
+          ocaml-version: ${{ matrix.ocaml-version }}

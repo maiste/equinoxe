@@ -1,0 +1,40 @@
+opam-version: "2.0"
+added: [
+  "doc/menhirSdk" {"D"}
+  "doc/menhirSdk/LICENSE" {"F:S45375T1643359344.58"}
+  "lib/menhirSdk" {"D"}
+  "lib/menhirSdk/META" {"F:S239T1643359344.57"}
+  "lib/menhirSdk/cmly_api.ml" {"F:S4726T1643359344.57"}
+  "lib/menhirSdk/cmly_format.ml" {"F:S3095T1643359344.58"}
+  "lib/menhirSdk/cmly_read.ml" {"F:S8958T1643359344.58"}
+  "lib/menhirSdk/cmly_read.mli" {"F:S1072T1643359344.58"}
+  "lib/menhirSdk/dune-package" {"F:S1051T1643359344.58"}
+  "lib/menhirSdk/keyword.ml" {"F:S3060T1643359344.58"}
+  "lib/menhirSdk/keyword.mli" {"F:S2985T1643359344.58"}
+  "lib/menhirSdk/menhirSdk.a" {"F:S70654T1643359344.58"}
+  "lib/menhirSdk/menhirSdk.cma" {"F:S101703T1643359344.58"}
+  "lib/menhirSdk/menhirSdk.cmi" {"F:S584T1643359344.58"}
+  "lib/menhirSdk/menhirSdk.cmt" {"F:S4137T1643359344.58"}
+  "lib/menhirSdk/menhirSdk.cmx" {"F:S217T1643359344.58"}
+  "lib/menhirSdk/menhirSdk.cmxa" {"F:S2575T1643359344.58"}
+  "lib/menhirSdk/menhirSdk.cmxs" {"F:S84144T1643359344.58"}
+  "lib/menhirSdk/menhirSdk.ml" {"F:S389T1643359344.58"}
+  "lib/menhirSdk/menhirSdk__Cmly_api.cmi" {"F:S11493T1643359344.58"}
+  "lib/menhirSdk/menhirSdk__Cmly_api.cmt" {"F:S48421T1643359344.58"}
+  "lib/menhirSdk/menhirSdk__Cmly_api.cmx" {"F:S489T1643359344.58"}
+  "lib/menhirSdk/menhirSdk__Cmly_format.cmi" {"F:S5401T1643359344.58"}
+  "lib/menhirSdk/menhirSdk__Cmly_format.cmt" {"F:S24176T1643359344.58"}
+  "lib/menhirSdk/menhirSdk__Cmly_format.cmx" {"F:S353T1643359344.58"}
+  "lib/menhirSdk/menhirSdk__Cmly_read.cmi" {"F:S798T1643359344.58"}
+  "lib/menhirSdk/menhirSdk__Cmly_read.cmt" {"F:S122157T1643359344.58"}
+  "lib/menhirSdk/menhirSdk__Cmly_read.cmti" {"F:S5262T1643359344.58"}
+  "lib/menhirSdk/menhirSdk__Cmly_read.cmx" {"F:S9969T1643359344.58"}
+  "lib/menhirSdk/menhirSdk__Keyword.cmi" {"F:S6938T1643359344.58"}
+  "lib/menhirSdk/menhirSdk__Keyword.cmt" {"F:S34036T1643359344.58"}
+  "lib/menhirSdk/menhirSdk__Keyword.cmti" {"F:S25894T1643359344.58"}
+  "lib/menhirSdk/menhirSdk__Keyword.cmx" {"F:S3662T1643359344.58"}
+  "lib/menhirSdk/menhirSdk__Version.cmi" {"F:S310T1643359344.58"}
+  "lib/menhirSdk/menhirSdk__Version.cmt" {"F:S2644T1643359344.58"}
+  "lib/menhirSdk/menhirSdk__Version.cmx" {"F:S250T1643359344.58"}
+  "lib/menhirSdk/version.ml" {"F:S25T1643359344.58"}
+]

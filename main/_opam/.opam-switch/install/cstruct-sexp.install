@@ -1,0 +1,21 @@
+opam-version: "2.0"
+lib: [
+  "_build/install/default/lib/cstruct-sexp/META"
+  "_build/install/default/lib/cstruct-sexp/cstruct_sexp.a"
+  "_build/install/default/lib/cstruct-sexp/cstruct_sexp.cma"
+  "_build/install/default/lib/cstruct-sexp/cstruct_sexp.cmi"
+  "_build/install/default/lib/cstruct-sexp/cstruct_sexp.cmt"
+  "_build/install/default/lib/cstruct-sexp/cstruct_sexp.cmti"
+  "_build/install/default/lib/cstruct-sexp/cstruct_sexp.cmx"
+  "_build/install/default/lib/cstruct-sexp/cstruct_sexp.cmxa"
+  "_build/install/default/lib/cstruct-sexp/cstruct_sexp.ml"
+  "_build/install/default/lib/cstruct-sexp/cstruct_sexp.mli"
+  "_build/install/default/lib/cstruct-sexp/dune-package"
+  "_build/install/default/lib/cstruct-sexp/opam"
+]
+doc: [
+  "_build/install/default/doc/cstruct-sexp/CHANGES.md"
+  "_build/install/default/doc/cstruct-sexp/LICENSE.md"
+  "_build/install/default/doc/cstruct-sexp/README.md"
+]
+libexec: "_build/install/default/lib/cstruct-sexp/cstruct_sexp.cmxs"

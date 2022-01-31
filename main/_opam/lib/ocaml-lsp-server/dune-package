@@ -1,0 +1,3 @@
+(lang dune 2.9)
+(name ocaml-lsp-server)
+(version 1.9.1)

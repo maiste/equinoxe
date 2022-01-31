@@ -1,0 +1,32 @@
+opam-version: "2.0"
+lib: [
+  "ocamlbuild.opam" {"opam"}
+  "META"
+  "src/signatures.mli" {"signatures.mli"}
+  "src/signatures.cmi" {"signatures.cmi"}
+  "src/signatures.cmti" {"signatures.cmti"}
+  "src/ocamlbuildlib.cma" {"ocamlbuildlib.cma"}
+  "src/ocamlbuild.cmo" {"ocamlbuild.cmo"}
+  "src/ocamlbuild_pack.cmi" {"ocamlbuild_pack.cmi"}
+  "src/ocamlbuild_plugin.cmi" {"ocamlbuild_plugin.cmi"}
+  "src/ocamlbuild_executor.cmi" {"ocamlbuild_executor.cmi"}
+  "src/ocamlbuild_unix_plugin.cmi" {"ocamlbuild_unix_plugin.cmi"}
+  "src/ocamlbuildlib.cmxa" {"ocamlbuildlib.cmxa"}
+  "src/ocamlbuildlib.a" {"ocamlbuildlib.a"}
+  "src/ocamlbuild.cmx" {"ocamlbuild.cmx"}
+  "src/ocamlbuild.o" {"ocamlbuild.o"}
+  "src/ocamlbuild_pack.cmx" {"ocamlbuild_pack.cmx"}
+  "src/ocamlbuild_plugin.cmx" {"ocamlbuild_plugin.cmx"}
+  "src/ocamlbuild_executor.cmx" {"ocamlbuild_executor.cmx"}
+  "src/ocamlbuild_unix_plugin.cmx" {"ocamlbuild_unix_plugin.cmx"}
+  "src/ocamlbuild_plugin.o" {"ocamlbuild_plugin.o"}
+  "src/ocamlbuild_executor.o" {"ocamlbuild_executor.o"}
+  "src/ocamlbuild_unix_plugin.o" {"ocamlbuild_unix_plugin.o"}
+]
+bin: [
+  "ocamlbuild.byte" {"ocamlbuild.byte"}
+  "ocamlbuild.native" {"ocamlbuild.native"}
+  "ocamlbuild.native" {"ocamlbuild"}
+]
+doc: ["LICENSE" "Changes" "Readme.md"]
+man: "man/ocamlbuild.1" {"man1/ocamlbuild.1"}

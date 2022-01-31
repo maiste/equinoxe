@@ -1,0 +1,19 @@
+(lang dune 2.9)
+(name easy-format)
+(version 1.3.2)
+(library
+ (name easy-format)
+ (kind normal)
+ (synopsis "Indentation made easy(ier)")
+ (archives (byte easy_format.cma) (native easy_format.cmxa))
+ (plugins (byte easy_format.cma) (native easy_format.cmxs))
+ (native_archives easy_format.a)
+ (main_module_name Easy_format)
+ (modes byte native)
+ (modules
+  (singleton
+   (name Easy_format)
+   (obj_name easy_format)
+   (visibility public)
+   (impl)
+   (intf))))

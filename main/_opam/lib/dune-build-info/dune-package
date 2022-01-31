@@ -1,0 +1,33 @@
+(lang dune 2.9)
+(name dune-build-info)
+(version 2.9.1)
+(library
+ (name dune-build-info)
+ (kind normal)
+ (archives (byte build_info.cma) (native build_info.cmxa))
+ (plugins (byte build_info.cma) (native build_info.cmxs))
+ (native_archives build_info.a)
+ (main_module_name Build_info)
+ (modes byte native)
+ (modules
+  (wrapped
+   (main_module_name Build_info)
+   (modules
+    ((name Build_info)
+     (obj_name build_info)
+     (visibility public)
+     (impl)
+     (intf))
+    ((name Build_info_data)
+     (obj_name build_info__Build_info_data)
+     (visibility public)
+     (intf)))
+   (alias_module
+    (name Build_info__)
+    (obj_name build_info__)
+    (visibility public)
+    (kind alias)
+    (impl))
+   (wrapped true)))
+ (special_builtin_support
+  (build_info (data_module Build_info_data) (api_version 1))))

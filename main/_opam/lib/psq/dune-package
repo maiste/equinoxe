@@ -1,0 +1,17 @@
+(lang dune 2.9)
+(name psq)
+(version 0.2.0)
+(library
+ (name psq)
+ (kind normal)
+ (synopsis "Functional Priority Search Queues")
+ (archives (byte psq.cma) (native psq.cmxa))
+ (plugins (byte psq.cma) (native psq.cmxs))
+ (native_archives psq.a)
+ (requires seq)
+ (modes byte native)
+ (obj_dir (private_dir .private))
+ (modules
+  (unwrapped
+   ((name Psq) (obj_name psq) (visibility public) (impl) (intf))
+   ((name Psq_list) (obj_name psq_list) (visibility private) (impl)))))

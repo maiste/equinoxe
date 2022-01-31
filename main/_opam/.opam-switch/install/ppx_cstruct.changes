@@ -1,0 +1,22 @@
+opam-version: "2.0"
+added: [
+  "doc/ppx_cstruct" {"D"}
+  "doc/ppx_cstruct/CHANGES.md" {"F:S20406T1643359389.07"}
+  "doc/ppx_cstruct/LICENSE.md" {"F:S1457T1643359389.07"}
+  "doc/ppx_cstruct/README.md" {"F:S7126T1643359389.07"}
+  "lib/ppx_cstruct" {"D"}
+  "lib/ppx_cstruct/META" {"F:S639T1643359389.06"}
+  "lib/ppx_cstruct/dune-package" {"F:S494T1643359389.06"}
+  "lib/ppx_cstruct/opam" {"F:S1379T1643359389.06"}
+  "lib/ppx_cstruct/ppx.exe" {"F:S18904192T1643359389.07"}
+  "lib/ppx_cstruct/ppx_cstruct.a" {"F:S165352T1643359389.06"}
+  "lib/ppx_cstruct/ppx_cstruct.cma" {"F:S273318T1643359389.06"}
+  "lib/ppx_cstruct/ppx_cstruct.cmi" {"F:S195T1643359389.06"}
+  "lib/ppx_cstruct/ppx_cstruct.cmt" {"F:S508479T1643359389.06"}
+  "lib/ppx_cstruct/ppx_cstruct.cmti" {"F:S3891T1643359389.06"}
+  "lib/ppx_cstruct/ppx_cstruct.cmx" {"F:S31432T1643359389.06"}
+  "lib/ppx_cstruct/ppx_cstruct.cmxa" {"F:S4411T1643359389.06"}
+  "lib/ppx_cstruct/ppx_cstruct.cmxs" {"F:S179440T1643359389.07"}
+  "lib/ppx_cstruct/ppx_cstruct.ml" {"F:S19902T1643359389.06"}
+  "lib/ppx_cstruct/ppx_cstruct.mli" {"F:S0T1643359389.06"}
+]

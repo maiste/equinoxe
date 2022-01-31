@@ -1,0 +1,51 @@
+(lang dune 2.9)
+(name conduit-lwt-unix)
+(version 5.0.0)
+(library
+ (name conduit-lwt-unix)
+ (kind normal)
+ (archives (byte conduit_lwt_unix.cma) (native conduit_lwt_unix.cmxa))
+ (plugins (byte conduit_lwt_unix.cma) (native conduit_lwt_unix.cmxs))
+ (native_archives conduit_lwt_unix.a)
+ (requires
+  conduit-lwt
+  lwt.unix
+  uri.services
+  ipaddr-sexp
+  ipaddr.unix
+  logs
+  tls.lwt
+  ca-certs
+  ppx_sexp_conv.runtime-lib)
+ (modes byte native)
+ (modules
+  (unwrapped
+   ((name Conduit_lwt_launchd)
+    (obj_name conduit_lwt_launchd)
+    (visibility public)
+    (impl))
+   ((name Conduit_lwt_server)
+    (obj_name conduit_lwt_server)
+    (visibility public)
+    (impl)
+    (intf))
+   ((name Conduit_lwt_tls)
+    (obj_name conduit_lwt_tls)
+    (visibility public)
+    (impl)
+    (intf))
+   ((name Conduit_lwt_unix)
+    (obj_name conduit_lwt_unix)
+    (visibility public)
+    (impl)
+    (intf))
+   ((name Conduit_lwt_unix_ssl)
+    (obj_name conduit_lwt_unix_ssl)
+    (visibility public)
+    (impl)
+    (intf))
+   ((name Resolver_lwt_unix)
+    (obj_name resolver_lwt_unix)
+    (visibility public)
+    (impl)
+    (intf)))))

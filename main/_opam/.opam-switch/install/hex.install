@@ -1,0 +1,21 @@
+opam-version: "2.0"
+lib: [
+  "_build/install/default/lib/hex/META"
+  "_build/install/default/lib/hex/dune-package"
+  "_build/install/default/lib/hex/hex.a"
+  "_build/install/default/lib/hex/hex.cma"
+  "_build/install/default/lib/hex/hex.cmi"
+  "_build/install/default/lib/hex/hex.cmt"
+  "_build/install/default/lib/hex/hex.cmti"
+  "_build/install/default/lib/hex/hex.cmx"
+  "_build/install/default/lib/hex/hex.cmxa"
+  "_build/install/default/lib/hex/hex.ml"
+  "_build/install/default/lib/hex/hex.mli"
+  "_build/install/default/lib/hex/opam"
+]
+doc: [
+  "_build/install/default/doc/hex/CHANGES.md"
+  "_build/install/default/doc/hex/LICENSE.md"
+  "_build/install/default/doc/hex/README.md"
+]
+libexec: "_build/install/default/lib/hex/hex.cmxs"

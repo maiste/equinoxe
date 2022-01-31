@@ -1,0 +1,25 @@
+opam-version: "2.0"
+added: [
+  "doc/ocamlformat-rpc-lib" {"D"}
+  "doc/ocamlformat-rpc-lib/CHANGES.md" {"F:S71092T1643367968.22"}
+  "doc/ocamlformat-rpc-lib/LICENSE.md" {"F:S1080T1643367968.22"}
+  "doc/ocamlformat-rpc-lib/README.md" {"F:S14533T1643367968.22"}
+  "lib/ocamlformat-rpc-lib" {"D"}
+  "lib/ocamlformat-rpc-lib/META" {"F:S235T1643367968.22"}
+  "lib/ocamlformat-rpc-lib/dune-package" {"F:S527T1643367968.22"}
+  "lib/ocamlformat-rpc-lib/ocamlformat_rpc_lib.a" {"F:S24508T1643367968.22"}
+  "lib/ocamlformat-rpc-lib/ocamlformat_rpc_lib.cma"
+    {"F:S39028T1643367968.22"}
+  "lib/ocamlformat-rpc-lib/ocamlformat_rpc_lib.cmi" {"F:S6234T1643367968.22"}
+  "lib/ocamlformat-rpc-lib/ocamlformat_rpc_lib.cmt"
+    {"F:S84591T1643367968.22"}
+  "lib/ocamlformat-rpc-lib/ocamlformat_rpc_lib.cmti"
+    {"F:S24013T1643367968.22"}
+  "lib/ocamlformat-rpc-lib/ocamlformat_rpc_lib.cmx" {"F:S4114T1643367968.22"}
+  "lib/ocamlformat-rpc-lib/ocamlformat_rpc_lib.cmxa" {"F:S729T1643367968.22"}
+  "lib/ocamlformat-rpc-lib/ocamlformat_rpc_lib.cmxs"
+    {"F:S41032T1643367968.22"}
+  "lib/ocamlformat-rpc-lib/ocamlformat_rpc_lib.ml" {"F:S5756T1643367968.22"}
+  "lib/ocamlformat-rpc-lib/ocamlformat_rpc_lib.mli" {"F:S2307T1643367968.22"}
+  "lib/ocamlformat-rpc-lib/opam" {"F:S871T1643367968.22"}
+]

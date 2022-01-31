@@ -1,0 +1,30 @@
+.\" Pipe this output to groff -Tutf8 | less
+.\"
+.mso an.tmac
+.TH "DUNE-FORMAT-DUNE-FILE" 1 "" "Dune 2.9.2" "Dune Manual"
+.\" Disable hyphenation and ragged-right
+.nh
+.ad l
+.SH NAME
+.P
+dune\N'45'format\N'45'dune\N'45'file \N'45' Format dune files
+.SH SYNOPSIS
+.P
+\fBdune format\N'45'dune\N'45'file\fR [\fIOPTION\fR]\N'46'\N'46'\N'46' [\fIFILE\fR]
+.SH DESCRIPTION
+.P
+\fBdune format\N'45'dune\N'45'file\fR reads a dune file and outputs a formatted version\N'46' This is a low\N'45'level command, meant to implement editor support for example\N'46' To reformat a dune project, see the "Automatic formatting" section in the manual\N'46'
+.SH ARGUMENTS
+.TP 4
+\fIFILE\fR
+Path to the dune file to parse\N'46'
+.SH OPTIONS
+.TP 4
+\fB\N'45'\N'45'dune\N'45'version\fR=\fIVERSION\fR (absent=2\N'46'9)
+Which version of Dune language to use\N'46'
+.TP 4
+\fB\N'45'\N'45'help\fR[=\fIFMT\fR] (default=auto)
+Show this help in format \fIFMT\fR\N'46' The value \fIFMT\fR must be one of `auto\N'39', `pager\N'39', `groff\N'39' or `plain\N'39'\N'46' With `auto\N'39', the format is `pager` or `plain\N'39' whenever the \fBTERM\fR env var is `dumb\N'39' or undefined\N'46'
+.TP 4
+\fB\N'45'\N'45'version\fR
+Show version information\N'46'

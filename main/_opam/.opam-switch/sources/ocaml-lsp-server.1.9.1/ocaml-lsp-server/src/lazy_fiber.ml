@@ -1,0 +1,16 @@
+type 'a t =
+  { value : 'a Fiber.Ivar.t
+  ; mutable f : (unit -> 'a Fiber.t) option
+  }
+
+let create f = { f = Some f; value = Fiber.Ivar.create () }
+
+let force t =
+  let open Fiber.O in
+  match t.f with
+  | None -> Fiber.Ivar.read t.value
+  | Some f ->
+    t.f <- None;
+    let* v = f () in
+    let+ () = Fiber.Ivar.fill t.value v in
+    v

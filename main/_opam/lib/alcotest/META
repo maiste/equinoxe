@@ -1,0 +1,30 @@
+version = "1.5.0"
+description = ""
+requires = "alcotest.engine astring fmt fmt.tty"
+archive(byte) = "alcotest.cma"
+archive(native) = "alcotest.cmxa"
+plugin(byte) = "alcotest.cma"
+plugin(native) = "alcotest.cmxs"
+linkopts(javascript) = "+alcotest/runtime.js"
+jsoo_runtime = "runtime.js"
+package "engine" (
+  directory = "engine"
+  version = "1.5.0"
+  description = ""
+  requires =
+  "alcotest.stdlib_ext astring cmdliner fmt fmt.cli re stdlib-shims uutf"
+  archive(byte) = "alcotest_engine.cma"
+  archive(native) = "alcotest_engine.cmxa"
+  plugin(byte) = "alcotest_engine.cma"
+  plugin(native) = "alcotest_engine.cmxs"
+)
+package "stdlib_ext" (
+  directory = "stdlib_ext"
+  version = "1.5.0"
+  description = ""
+  requires = "astring cmdliner uutf"
+  archive(byte) = "alcotest_stdlib_ext.cma"
+  archive(native) = "alcotest_stdlib_ext.cmxa"
+  plugin(byte) = "alcotest_stdlib_ext.cma"
+  plugin(native) = "alcotest_stdlib_ext.cmxs"
+)

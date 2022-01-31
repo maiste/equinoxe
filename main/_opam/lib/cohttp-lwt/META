@@ -1,0 +1,7 @@
+version = "5.0.0"
+description = "Lwt backend"
+requires = "cohttp logs logs.lwt lwt ppx_sexp_conv.runtime-lib uri"
+archive(byte) = "cohttp_lwt.cma"
+archive(native) = "cohttp_lwt.cmxa"
+plugin(byte) = "cohttp_lwt.cma"
+plugin(native) = "cohttp_lwt.cmxs"

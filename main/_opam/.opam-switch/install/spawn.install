@@ -1,0 +1,23 @@
+opam-version: "2.0"
+lib: [
+  "_build/install/default/lib/spawn/META"
+  "_build/install/default/lib/spawn/dune-package"
+  "_build/install/default/lib/spawn/libspawn_stubs.a"
+  "_build/install/default/lib/spawn/opam"
+  "_build/install/default/lib/spawn/spawn.a"
+  "_build/install/default/lib/spawn/spawn.cma"
+  "_build/install/default/lib/spawn/spawn.cmi"
+  "_build/install/default/lib/spawn/spawn.cmt"
+  "_build/install/default/lib/spawn/spawn.cmti"
+  "_build/install/default/lib/spawn/spawn.cmx"
+  "_build/install/default/lib/spawn/spawn.cmxa"
+  "_build/install/default/lib/spawn/spawn.ml"
+  "_build/install/default/lib/spawn/spawn.mli"
+]
+stublibs: "_build/install/default/lib/stublibs/dllspawn_stubs.so"
+doc: [
+  "_build/install/default/doc/spawn/CHANGES.md"
+  "_build/install/default/doc/spawn/LICENSE.md"
+  "_build/install/default/doc/spawn/README.md"
+]
+libexec: "_build/install/default/lib/spawn/spawn.cmxs"

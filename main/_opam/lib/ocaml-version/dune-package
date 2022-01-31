@@ -1,0 +1,18 @@
+(lang dune 2.9)
+(name ocaml-version)
+(version 3.4.0)
+(library
+ (name ocaml-version)
+ (kind normal)
+ (archives (byte ocaml_version.cma) (native ocaml_version.cmxa))
+ (plugins (byte ocaml_version.cma) (native ocaml_version.cmxs))
+ (native_archives ocaml_version.a)
+ (main_module_name Ocaml_version)
+ (modes byte native)
+ (modules
+  (singleton
+   (name Ocaml_version)
+   (obj_name ocaml_version)
+   (visibility public)
+   (impl)
+   (intf))))

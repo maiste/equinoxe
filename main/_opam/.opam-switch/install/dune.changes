@@ -1,0 +1,39 @@
+opam-version: "2.0"
+added: [
+  "bin/dune" {"F:S12796064T1643359342.77"}
+  "doc/dune" {"D"}
+  "doc/dune/CHANGES.md" {"F:S101949T1643359342.77"}
+  "doc/dune/LICENSE.md" {"F:S1111T1643359342.77"}
+  "doc/dune/README.md" {"F:S5398T1643359342.77"}
+  "lib/dune" {"D"}
+  "lib/dune/META" {"F:S108T1643359342.77"}
+  "lib/dune/dune-package" {"F:S144T1643359342.77"}
+  "lib/dune/opam" {"F:S1984T1643359342.77"}
+  "man/man1/dune-build.1" {"F:S9888T1643359342.77"}
+  "man/man1/dune-cache.1" {"F:S2990T1643359342.77"}
+  "man/man1/dune-clean.1" {"F:S9333T1643359342.77"}
+  "man/man1/dune-compute.1" {"F:S9590T1643359342.77"}
+  "man/man1/dune-describe.1" {"F:S10243T1643359342.77"}
+  "man/man1/dune-exec.1" {"F:S10426T1643359342.77"}
+  "man/man1/dune-external-lib-deps.1" {"F:S9874T1643359342.77"}
+  "man/man1/dune-format-dune-file.1" {"F:S1208T1643359342.77"}
+  "man/man1/dune-help.1" {"F:S1313T1643359342.77"}
+  "man/man1/dune-init.1" {"F:S11404T1643359342.77"}
+  "man/man1/dune-install.1" {"F:S11051T1643359342.77"}
+  "man/man1/dune-installed-libraries.1" {"F:S9215T1643359342.77"}
+  "man/man1/dune-ocaml-merlin.1" {"F:S9834T1643359342.77"}
+  "man/man1/dune-printenv.1" {"F:S9491T1643359342.77"}
+  "man/man1/dune-promote.1" {"F:S9712T1643359342.77"}
+  "man/man1/dune-rules.1" {"F:S10204T1643359342.77"}
+  "man/man1/dune-runtest.1" {"F:S9642T1643359342.77"}
+  "man/man1/dune-subst.1" {"F:S3142T1643359342.77"}
+  "man/man1/dune-test.1" {"F:S9418T1643359342.77"}
+  "man/man1/dune-top.1" {"F:S9646T1643359342.77"}
+  "man/man1/dune-uninstall.1" {"F:S11061T1643359342.77"}
+  "man/man1/dune-upgrade.1" {"F:S9344T1643359342.77"}
+  "man/man1/dune-utop.1" {"F:S9469T1643359342.77"}
+  "man/man1/dune.1" {"F:S11989T1643359342.77"}
+  "man/man5/dune-config.5" {"F:S3384T1643359342.77"}
+  "share/emacs/site-lisp/dune-flymake.el" {"F:S7989T1643359342.77"}
+  "share/emacs/site-lisp/dune.el" {"F:S14356T1643359342.77"}
+]

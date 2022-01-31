@@ -1,0 +1,13 @@
+(lang dune 2.9)
+(name pp)
+(version 1.1.2)
+(library
+ (name pp)
+ (kind normal)
+ (archives (byte pp.cma) (native pp.cmxa))
+ (plugins (byte pp.cma) (native pp.cmxs))
+ (native_archives pp.a)
+ (main_module_name Pp)
+ (modes byte native)
+ (modules
+  (singleton (name Pp) (obj_name pp) (visibility public) (impl) (intf))))

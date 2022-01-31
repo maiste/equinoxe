@@ -1,0 +1,91 @@
+(lang dune 2.9)
+(name mirage-crypto-rng)
+(version 0.10.5)
+(library
+ (name mirage-crypto-rng)
+ (kind normal)
+ (archives (byte mirage_crypto_rng.cma) (native mirage_crypto_rng.cmxa))
+ (plugins (byte mirage_crypto_rng.cma) (native mirage_crypto_rng.cmxs))
+ (native_archives mirage_crypto_rng.a)
+ (requires cstruct mirage-crypto)
+ (main_module_name Mirage_crypto_rng)
+ (modes byte native)
+ (obj_dir (private_dir .private))
+ (modules
+  (wrapped
+   (main_module_name Mirage_crypto_rng)
+   (modules
+    ((name Entropy)
+     (obj_name mirage_crypto_rng__Entropy)
+     (visibility private)
+     (impl))
+    ((name Fortuna)
+     (obj_name mirage_crypto_rng__Fortuna)
+     (visibility private)
+     (impl))
+    ((name Hmac_drbg)
+     (obj_name mirage_crypto_rng__Hmac_drbg)
+     (visibility private)
+     (impl))
+    ((name Mirage_crypto_rng)
+     (obj_name mirage_crypto_rng)
+     (visibility public)
+     (impl)
+     (intf))
+    ((name Rng) (obj_name mirage_crypto_rng__Rng) (visibility private) (impl)))
+   (alias_module
+    (name Mirage_crypto_rng__)
+    (obj_name mirage_crypto_rng__)
+    (visibility public)
+    (kind alias)
+    (impl))
+   (wrapped true))))
+(library
+ (name mirage-crypto-rng.lwt)
+ (kind normal)
+ (archives
+  (byte lwt/mirage_crypto_rng_lwt.cma)
+  (native lwt/mirage_crypto_rng_lwt.cmxa))
+ (plugins
+  (byte lwt/mirage_crypto_rng_lwt.cma)
+  (native lwt/mirage_crypto_rng_lwt.cmxs))
+ (native_archives lwt/mirage_crypto_rng_lwt.a)
+ (requires
+  lwt
+  lwt.unix
+  mirage-crypto-rng
+  mirage-crypto-rng.unix
+  duration
+  mtime.clock.os
+  logs)
+ (main_module_name Mirage_crypto_rng_lwt)
+ (modes byte native)
+ (modules
+  (singleton
+   (name Mirage_crypto_rng_lwt)
+   (obj_name mirage_crypto_rng_lwt)
+   (visibility public)
+   (impl)
+   (intf))))
+(library
+ (name mirage-crypto-rng.unix)
+ (kind normal)
+ (archives
+  (byte unix/mirage_crypto_rng_unix.cma)
+  (native unix/mirage_crypto_rng_unix.cmxa))
+ (plugins
+  (byte unix/mirage_crypto_rng_unix.cma)
+  (native unix/mirage_crypto_rng_unix.cmxs))
+ (foreign_objects unix/mc_getrandom_stubs.o)
+ (foreign_archives unix/libmirage_crypto_rng_unix_stubs.a)
+ (native_archives unix/mirage_crypto_rng_unix.a)
+ (requires mirage-crypto-rng unix logs)
+ (main_module_name Mirage_crypto_rng_unix)
+ (modes byte native)
+ (modules
+  (singleton
+   (name Mirage_crypto_rng_unix)
+   (obj_name mirage_crypto_rng_unix)
+   (visibility public)
+   (impl)
+   (intf))))

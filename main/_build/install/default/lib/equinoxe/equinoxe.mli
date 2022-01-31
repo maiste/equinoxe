@@ -1,0 +1,1 @@
+../../../../default/src/lib/equinoxe/equinoxe.mli

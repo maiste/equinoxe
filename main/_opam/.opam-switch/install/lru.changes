@@ -1,0 +1,21 @@
+opam-version: "2.0"
+added: [
+  "doc/lru" {"D"}
+  "doc/lru/CHANGES.md" {"F:S1430T1643359348.31"}
+  "doc/lru/LICENSE.md" {"F:S742T1643359348.31"}
+  "doc/lru/README.md" {"F:S418T1643359348.31"}
+  "lib/lru" {"D"}
+  "lib/lru/META" {"F:S178T1643359348.31"}
+  "lib/lru/dune-package" {"F:S350T1643359348.31"}
+  "lib/lru/lru.a" {"F:S62940T1643359348.31"}
+  "lib/lru/lru.cma" {"F:S95522T1643359348.31"}
+  "lib/lru/lru.cmi" {"F:S17729T1643359348.31"}
+  "lib/lru/lru.cmt" {"F:S244444T1643359348.31"}
+  "lib/lru/lru.cmti" {"F:S79344T1643359348.31"}
+  "lib/lru/lru.cmx" {"F:S6802T1643359348.31"}
+  "lib/lru/lru.cmxa" {"F:S640T1643359348.31"}
+  "lib/lru/lru.cmxs" {"F:S82696T1643359348.31"}
+  "lib/lru/lru.ml" {"F:S9543T1643359348.31"}
+  "lib/lru/lru.mli" {"F:S11823T1643359348.31"}
+  "lib/lru/opam" {"F:S852T1643359348.31"}
+]

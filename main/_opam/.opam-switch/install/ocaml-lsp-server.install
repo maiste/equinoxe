@@ -1,0 +1,12 @@
+opam-version: "2.0"
+lib: [
+  "_build/install/default/lib/ocaml-lsp-server/META"
+  "_build/install/default/lib/ocaml-lsp-server/dune-package"
+  "_build/install/default/lib/ocaml-lsp-server/opam"
+]
+bin: "_build/install/default/bin/ocamllsp"
+doc: [
+  "_build/install/default/doc/ocaml-lsp-server/CHANGES.md"
+  "_build/install/default/doc/ocaml-lsp-server/LICENSE.md"
+  "_build/install/default/doc/ocaml-lsp-server/README.md"
+]

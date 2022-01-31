@@ -1,0 +1,7 @@
+version = "2.9.1"
+description = ""
+requires = "csexp result unix"
+archive(byte) = "configurator.cma"
+archive(native) = "configurator.cmxa"
+plugin(byte) = "configurator.cma"
+plugin(native) = "configurator.cmxs"

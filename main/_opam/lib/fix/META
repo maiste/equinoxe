@@ -1,0 +1,6 @@
+description = "An on-demand, incremental fixed point computation algorithm"
+requires = ""
+archive(byte) = "fix.cma"
+archive(native) = "fix.cmxa"
+plugin(byte) = "fix.cma"
+plugin(native) = "fix.cmxs"

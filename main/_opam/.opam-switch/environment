@@ -1,0 +1,8 @@
+OPAM_SWITCH_PREFIX	=	/home/maiste/Documents/e/equinoxe/_opam	Prefix\ of\ the\ current\ opam\ switch
+CAML_LD_LIBRARY_PATH	=	/home/maiste/Documents/e/equinoxe/_opam/lib/stublibs	Updated\ by\ package\ ocaml-base-compiler
+CAML_LD_LIBRARY_PATH	=	/home/maiste/Documents/e/equinoxe/_opam/lib/ocaml/stublibs:/home/maiste/Documents/e/equinoxe/_opam/lib/ocaml	Updated\ by\ package\ ocaml
+CAML_LD_LIBRARY_PATH	+=	/home/maiste/Documents/e/equinoxe/_opam/lib/stublibs	Updated\ by\ package\ ocaml
+OCAML_TOPLEVEL_PATH	=	/home/maiste/Documents/e/equinoxe/_opam/lib/toplevel	Updated\ by\ package\ ocaml
+PKG_CONFIG_PATH	+=	/home/maiste/Documents/e/equinoxe/_opam/lib/pkgconfig	Updated\ by\ package\ conf-pkg-config
+MANPATH	=:	/home/maiste/Documents/e/equinoxe/_opam/man	Current\ opam\ switch\ man\ dir
+PATH	=+=	/home/maiste/Documents/e/equinoxe/_opam/bin	Binary\ dir\ for\ opam\ switch\ /home/maiste/Documents/e/equinoxe

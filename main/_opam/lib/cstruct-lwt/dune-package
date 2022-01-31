@@ -1,0 +1,18 @@
+(lang dune 2.9)
+(name cstruct-lwt)
+(version 6.0.1)
+(library
+ (name cstruct-lwt)
+ (kind normal)
+ (archives (byte cstruct_lwt.cma) (native cstruct_lwt.cmxa))
+ (plugins (byte cstruct_lwt.cma) (native cstruct_lwt.cmxs))
+ (native_archives cstruct_lwt.a)
+ (requires cstruct lwt.unix)
+ (modes byte native)
+ (modules
+  (singleton
+   (name Lwt_cstruct)
+   (obj_name lwt_cstruct)
+   (visibility public)
+   (impl)
+   (intf))))

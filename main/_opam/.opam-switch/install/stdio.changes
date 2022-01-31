@@ -1,0 +1,41 @@
+opam-version: "2.0"
+added: [
+  "doc/stdio" {"D"}
+  "doc/stdio/CHANGES.md" {"F:S291T1643367968.41"}
+  "doc/stdio/LICENSE.md" {"F:S1117T1643367968.41"}
+  "doc/stdio/README.org" {"F:S185T1643367968.41"}
+  "lib/stdio" {"D"}
+  "lib/stdio/META" {"F:S180T1643367968.41"}
+  "lib/stdio/dune-package" {"F:S836T1643367968.41"}
+  "lib/stdio/import.ml" {"F:S146T1643367968.41"}
+  "lib/stdio/in_channel.ml" {"F:S2526T1643367968.41"}
+  "lib/stdio/in_channel.mli" {"F:S4540T1643367968.41"}
+  "lib/stdio/opam" {"F:S766T1643367968.41"}
+  "lib/stdio/out_channel.ml" {"F:S2493T1643367968.41"}
+  "lib/stdio/out_channel.mli" {"F:S4836T1643367968.41"}
+  "lib/stdio/stdio.a" {"F:S42962T1643367968.41"}
+  "lib/stdio/stdio.cma" {"F:S64342T1643367968.41"}
+  "lib/stdio/stdio.cmi" {"F:S5602T1643367968.41"}
+  "lib/stdio/stdio.cmt" {"F:S12040T1643367968.41"}
+  "lib/stdio/stdio.cmti" {"F:S17183T1643367968.41"}
+  "lib/stdio/stdio.cmx" {"F:S5237T1643367968.41"}
+  "lib/stdio/stdio.cmxa" {"F:S17717T1643367968.41"}
+  "lib/stdio/stdio.cmxs" {"F:S76104T1643367968.41"}
+  "lib/stdio/stdio.ml" {"F:S483T1643367968.41"}
+  "lib/stdio/stdio.mli" {"F:S871T1643367968.41"}
+  "lib/stdio/stdio__.cmi" {"F:S376T1643367968.41"}
+  "lib/stdio/stdio__.cmt" {"F:S3231T1643367968.41"}
+  "lib/stdio/stdio__.cmx" {"F:S158T1643367968.41"}
+  "lib/stdio/stdio__.ml" {"F:S214T1643367968.41"}
+  "lib/stdio/stdio__Import.cmi" {"F:S4408T1643367968.41"}
+  "lib/stdio/stdio__Import.cmt" {"F:S11431T1643367968.41"}
+  "lib/stdio/stdio__Import.cmx" {"F:S4183T1643367968.41"}
+  "lib/stdio/stdio__In_channel.cmi" {"F:S8297T1643367968.41"}
+  "lib/stdio/stdio__In_channel.cmt" {"F:S47043T1643367968.41"}
+  "lib/stdio/stdio__In_channel.cmti" {"F:S34185T1643367968.41"}
+  "lib/stdio/stdio__In_channel.cmx" {"F:S7366T1643367968.41"}
+  "lib/stdio/stdio__Out_channel.cmi" {"F:S9602T1643367968.41"}
+  "lib/stdio/stdio__Out_channel.cmt" {"F:S44582T1643367968.41"}
+  "lib/stdio/stdio__Out_channel.cmti" {"F:S39253T1643367968.41"}
+  "lib/stdio/stdio__Out_channel.cmx" {"F:S8060T1643367968.41"}
+]

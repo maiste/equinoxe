@@ -1,0 +1,7 @@
+version = "1.1.2"
+description = ""
+requires = ""
+archive(byte) = "pp.cma"
+archive(native) = "pp.cmxa"
+plugin(byte) = "pp.cma"
+plugin(native) = "pp.cmxs"

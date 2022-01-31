@@ -1,0 +1,7 @@
+version = "4.0.0"
+description = ""
+requires = "cstruct fmt lwt macaddr"
+archive(byte) = "mirage_net.cma"
+archive(native) = "mirage_net.cmxa"
+plugin(byte) = "mirage_net.cma"
+plugin(native) = "mirage_net.cmxs"

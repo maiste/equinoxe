@@ -1,0 +1,44 @@
+opam-version: "2.0"
+lib: [
+  "_build/opam" {"opam"}
+  "_build/pkg/META" {"META"}
+  "_build/src/bos.a" {"bos.a"}
+  "_build/src/bos.cma" {"bos.cma"}
+  "_build/src/bos.cmi" {"bos.cmi"}
+  "?_build/src/bos.cmti" {"bos.cmti"}
+  "_build/src/bos.cmx" {"bos.cmx"}
+  "_build/src/bos.cmxa" {"bos.cmxa"}
+  "_build/src/bos.cmxs" {"bos.cmxs"}
+  "_build/src/bos.mli" {"bos.mli"}
+  "_build/src/bos_base.cmx" {"bos_base.cmx"}
+  "_build/src/bos_cmd.cmx" {"bos_cmd.cmx"}
+  "_build/src/bos_log.cmx" {"bos_log.cmx"}
+  "_build/src/bos_os_arg.cmx" {"bos_os_arg.cmx"}
+  "_build/src/bos_os_cmd.cmx" {"bos_os_cmd.cmx"}
+  "_build/src/bos_os_dir.cmx" {"bos_os_dir.cmx"}
+  "_build/src/bos_os_env.cmx" {"bos_os_env.cmx"}
+  "_build/src/bos_os_file.cmx" {"bos_os_file.cmx"}
+  "_build/src/bos_os_path.cmx" {"bos_os_path.cmx"}
+  "_build/src/bos_os_tmp.cmx" {"bos_os_tmp.cmx"}
+  "_build/src/bos_os_u.cmx" {"bos_os_u.cmx"}
+  "_build/src/bos_pat.cmx" {"bos_pat.cmx"}
+  "_build/src/bos_setup.a" {"bos_setup.a"}
+  "_build/src/bos_setup.cma" {"bos_setup.cma"}
+  "_build/src/bos_setup.cmi" {"bos_setup.cmi"}
+  "?_build/src/bos_setup.cmti" {"bos_setup.cmti"}
+  "_build/src/bos_setup.cmx" {"bos_setup.cmx"}
+  "_build/src/bos_setup.cmxa" {"bos_setup.cmxa"}
+  "_build/src/bos_setup.cmxs" {"bos_setup.cmxs"}
+  "_build/src/bos_setup.mli" {"bos_setup.mli"}
+  "_build/src/bos_top.a" {"bos_top.a"}
+  "_build/src/bos_top.cma" {"bos_top.cma"}
+  "_build/src/bos_top.cmx" {"bos_top.cmx"}
+  "_build/src/bos_top.cmxa" {"bos_top.cmxa"}
+  "_build/src/bos_top.cmxs" {"bos_top.cmxs"}
+  "_build/src/bos_top_init.ml" {"bos_top_init.ml"}
+]
+doc: [
+  "_build/CHANGES.md" {"CHANGES.md"}
+  "_build/LICENSE.md" {"LICENSE.md"}
+  "_build/README.md" {"README.md"}
+]

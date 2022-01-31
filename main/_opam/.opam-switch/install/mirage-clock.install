@@ -1,0 +1,19 @@
+opam-version: "2.0"
+lib: [
+  "_build/install/default/lib/mirage-clock/META"
+  "_build/install/default/lib/mirage-clock/dune-package"
+  "_build/install/default/lib/mirage-clock/mirage_clock.a"
+  "_build/install/default/lib/mirage-clock/mirage_clock.cma"
+  "_build/install/default/lib/mirage-clock/mirage_clock.cmi"
+  "_build/install/default/lib/mirage-clock/mirage_clock.cmt"
+  "_build/install/default/lib/mirage-clock/mirage_clock.cmx"
+  "_build/install/default/lib/mirage-clock/mirage_clock.cmxa"
+  "_build/install/default/lib/mirage-clock/mirage_clock.ml"
+  "_build/install/default/lib/mirage-clock/opam"
+]
+doc: [
+  "_build/install/default/doc/mirage-clock/CHANGES.md"
+  "_build/install/default/doc/mirage-clock/LICENSE.md"
+  "_build/install/default/doc/mirage-clock/README.md"
+]
+libexec: "_build/install/default/lib/mirage-clock/mirage_clock.cmxs"

@@ -1,0 +1,235 @@
+.\" Pipe this output to groff -Tutf8 | less
+.\"
+.mso an.tmac
+.TH "OCP-INDENT" 1 "" "Ocp-indent 1.8.1" "Ocp-indent Manual"
+.\" Disable hyphenation and ragged-right
+.nh
+.ad l
+.SH NAME
+.P
+ocp\N'45'indent \N'45' Automatic indentation of OCaml source files
+.SH SYNOPSIS
+.P
+\fBocp\N'45'indent\fR [\fIOPTION\fR]\N'46'\N'46'\N'46' [\fIFILE\fR]\N'46'\N'46'\N'46'
+.SH DESCRIPTION
+.P
+Indent OCaml source files according to the official conventions, with a small number of tunable parameters\N'46'
+.P
+Outputs the indented version of each FILE given in the command line to standard output, unless invoked with the `\N'45'\N'45'inplace\N'39' option (see \fBOPTIONS\fR below)\N'46' If no FILE is provided, reads from standard input\N'46'
+.SH CONFIGURATION
+.P
+Parameters can be defined on the command\N'45'line via the \fI\N'45'\N'45'config\fR option, or as a configuration definition in one of the following, searched in order: a file named `\N'46'ocp\N'45'indent\N'39' in the current directory or its parents (which allows for per\N'45'project indentation settings), the file `$XDG_CONFIG_HOME/ocp/ocp\N'45'indent\N'46'conf\N'39', the file `$HOME/\N'46'ocp/ocp\N'45'indent\N'46'conf\N'39', or the environment variable $OCP_INDENT_CONFIG\N'46'
+.P
+A configuration definition is a list of bindings in the form \fINAME=VALUE\fR or of \fIPRESET\fR, separated by commas or newlines
+.P
+Syntax: \fB[PRESET,]VAR=VALUE[,VAR=VALUE\N'46'\N'46'\N'46']\fR
+.TP 4
+\fBbase\fR=INT (default=2)
+Indentation used when none of the following options applies\N'46'
+.P
+        let foo =
+.sp -1
+.P
+        \fB\N'46'\N'46'\fRbar
+.TP 4
+\fBtype\fR=INT (default=2)
+Indentation for type definitions\N'46'
+.P
+        type t =
+.sp -1
+.P
+        \fB\N'46'\N'46'\fRint
+.TP 4
+\fBin\fR=INT (default=0)
+Indentation after `let \N'46'\N'46'\N'46' in\N'39', unless followed by another `let\N'39'\N'46'
+.P
+        let foo = () in
+.sp -1
+.P
+        \fB\N'46'\N'46'\fRbar
+.TP 4
+\fBwith\fR=INT (default=0)
+Indentation after `match \N'46'\N'46'\N'46' with\N'39', `try \N'46'\N'46'\N'46' with\N'39' or `function\N'39'\N'46'
+.P
+        match foo with
+.sp -1
+.P
+        \fB\N'46'\N'46'\fR| _ \N'45'> bar
+.TP 4
+\fBmatch_clause\fR=INT (default=2)
+Indentation for clauses inside a pattern\N'45'match (after arrows)\N'46'
+.P
+        match foo with
+.sp -1
+.P
+        | _ \N'45'>
+.sp -1
+.P
+        \fB\N'46'\N'46'\fRbar
+.TP 4
+\fBppx_stritem_ext\fR=INT (default=2)
+Indentation for items inside a [%%id \N'46'\N'46'\N'46' ] extension node)\N'46'
+.P
+        [%% id\N'46'id
+.sp -1
+.P
+        \fB\N'46'\N'46'\fRlet x = 3 ]
+.TP 4
+\fBmax_indent\fR=<INT|none> (default=4)
+When nesting expressions on the same line, their indentations are stacked in some cases so that they remain correct if you close them one per line\N'46' However, this can lead to large indentations in complex code, so this parameter sets a maximum indentation\N'46' Note that it only affects indentation after function arrows and opening parens at the ends of lines\N'46'
+.P
+        let f = g (h (i (fun x \N'45'>
+.sp -1
+.P
+        \fB\N'46'\N'46'\N'46'\N'46'\fRx)
+.sp -1
+.P
+          )
+.sp -1
+.P
+        )
+.TP 4
+\fBstrict_with\fR=<always|never|auto> (default=never)
+If `never\N'39', match bars are indented, superseding `with\N'39', whenever `match with\N'39' doesn\N'39't start its line\N'46' If `auto\N'39', there are exceptions for constructs like `begin match with\N'39'\N'46' If `always\N'39', `with\N'39' is always strictly respected, and additionally applies to variant types definition, for consistency\N'46'
+.P
+    Example with `strict_with=\fBnever\fR,with=0\N'39':
+.sp -1
+.P
+        begin match foo with
+.sp -1
+.P
+        \fB\N'46'\N'46'\fR| _ \N'45'> bar
+.sp -1
+.P
+        end
+.TP 4
+\fBstrict_else\fR=<always|never|auto> (default=always)
+If `always\N'39', indent after the `else\N'39' keyword normally, like after `then\N'39'\N'46' If `auto\N'39', indent after `else\N'39' unless in a few "unclosable" cases (`let \N'46'\N'46'\N'46'\N'46' in\N'39', `match\N'39', etc\N'46')\N'46' If `never\N'39', the `else\N'39' keyword won\N'39't indent when followed by a newline\N'46'
+.P
+    Example with `strict_else=\fBauto\fR\N'39':
+.sp -1
+.P
+        if cond then
+.sp -1
+.P
+          foo
+.sp -1
+.P
+        else
+.sp -1
+.P
+        \fBlet\fR x = bar in
+.sp -1
+.P
+        baz
+.TP 4
+\fBstrict_comments\fR=BOOL (default=false)
+In\N'45'comment indentation is normally preserved, as long as it respects the left margin or the comments starts with a newline\N'46' Setting this to `true\N'39' forces alignment within comments\N'46' Lines starting with `*\N'39' are always aligned
+.TP 4
+\fBalign_ops\fR=BOOL (default=true)
+Toggles preference of column\N'45'alignment over line indentation for most of the common operators and after mid\N'45'line opening parentheses\N'46'
+.P
+    Example with `align_ops=\fBtrue\fR\N'39':
+.sp -1
+.P
+        let f x = x
+.sp -1
+.P
+                  + y
+.sp -1
+.P
+ 
+.sp -1
+.P
+    Example with `align_ops=\fBfalse\fR\N'39':
+.sp -1
+.P
+        let f x = x
+.sp -1
+.P
+          + y
+.TP 4
+\fBalign_params\fR=<always|never|auto> (default=auto)
+If `never\N'39', function parameters are indented one level from the line of the function\N'46' If `always\N'39', they are aligned from the column of the function\N'46' if `auto\N'39', alignment is chosen over indentation in a few cases, e\N'46'g\N'46' after match arrows
+.P
+    Example with `align_params=\fBnever\fR\N'39':
+.sp -1
+.P
+        match foo with
+.sp -1
+.P
+        | _ \N'45'> some_fun
+.sp -1
+.P
+          \fB\N'46'\N'46'\fRparameter
+.sp -1
+.P
+ 
+.sp -1
+.P
+    Example with `align_params=\fBalways\fR\N'39' or `\fBauto\fR\N'39':
+.sp -1
+.P
+        match foo with
+.sp -1
+.P
+        | _ \N'45'> some_fun
+.sp -1
+.P
+               \fB\N'46'\N'46'\fRparameter
+.P
+Available presets are `normal\N'39', the default, `apprentice\N'39' which may make some aspects of the syntax more obvious for beginners, and `JaneStreet\N'39'\N'46'
+.SH OPTIONS
+.TP 4
+\fB\N'45'c\fR \fICONFIG\fR, \fB\N'45'\N'45'config\fR=\fICONFIG\fR
+Configure the indentation parameters\N'46' See section \fBCONFIGURATION\fR for more information\N'46'
+.TP 4
+\fB\N'45'd\fR, \fB\N'45'\N'45'debug\fR
+Enable debug output to stderr\N'46'
+.TP 4
+\fB\N'45'\N'45'help\fR[=\fIFMT\fR] (default=auto)
+Show this help in format \fIFMT\fR\N'46' The value \fIFMT\fR must be one of `auto\N'39', `pager\N'39', `groff\N'39' or `plain\N'39'\N'46' With `auto\N'39', the format is `pager` or `plain\N'39' whenever the \fBTERM\fR env var is `dumb\N'39' or undefined\N'46'
+.TP 4
+\fB\N'45'i\fR, \fB\N'45'\N'45'inplace\fR
+Re\N'45'indent files in\N'45'place\N'46'
+.TP 4
+\fB\N'45'\N'45'indent\N'45'empty\fR
+Return indent for empty lines, too\N'46' Especially usefull with \fB\N'45'\N'45'numeric\fR\N'46'
+.TP 4
+\fB\N'45'l\fR \fIRANGE\fR, \fB\N'45'\N'45'lines\fR=\fIRANGE\fR (absent=\N'45')
+Only re\N'45'indent the lines in \fIRANGE\fR (eg\N'46' 10\N'45'12), adapting to the current indentation of surrounding lines\N'46' Lines start at 1\N'46'
+.TP 4
+\fB\N'45'\N'45'load\N'45'mods\fR=\fIVAL\fR
+Load plugins\N'46'
+.TP 4
+\fB\N'45'\N'45'load\N'45'pkgs\fR=\fIVAL\fR
+Load plugins\N'46'
+.TP 4
+\fB\N'45'\N'45'numeric\fR
+Instead of re\N'45'indenting the file, output one integer per line representing the indentation value\N'46' When specified together with \fI\N'45'\N'45'lines\fR, only print as many values as lines in the range\N'46'
+.TP 4
+\fB\N'45'o\fR \fIFILE\fR, \fB\N'45'\N'45'output\fR=\fIFILE\fR
+Output to \fIFILE\fR\N'46' The default is to print to stdout\N'46'
+.TP 4
+\fB\N'45'\N'45'print\N'45'config\fR
+Print the current parameters to stdout and exit\N'46' (See section \fBCONFIGURATION\fR for more information\N'46')
+.TP 4
+\fB\N'45'\N'45'syntax\fR=\fIVAL\fR
+Extend the handled syntax for OCaml syntax extensions\N'46'
+.TP 4
+\fB\N'45'\N'45'version\fR
+Show version information\N'46'
+.SH BUGS
+.P
+Bugs are tracked on github at \fIhttps://github\N'46'com/OCamlPro/ocp\N'45'indent/issues\fR\N'46' The \fItests\fR directory of the source distribution is a good snapshot of the current status, and can be checked online at \fIhttp://htmlpreview\N'46'github\N'46'io/?https://github\N'46'com/OCamlPro/ocp\N'45'indent/blob/master/tests/failing\N'46'html\fR
+.SH SEE ALSO
+.P
+ocaml(1), ocp\N'45'index(1)
+.SH AUTHORS
+.P
+Louis Gesbert and Thomas Gazagnaire from OCamlPro, from an original prototype by Jun Furuse\N'46'
+.SH LICENSE
+.P
+Copyright (C) 2013 OCamlPro\N'46'
+.P
+ocp\N'45'indent is free software, released under the terms of the GNU General Public License version 3, the text of which can be found in the file `LICENSE\N'39' distributed with the sources\N'46'

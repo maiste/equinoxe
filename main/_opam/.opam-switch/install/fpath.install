@@ -1,0 +1,24 @@
+opam-version: "2.0"
+lib: [
+  "_build/opam" {"opam"}
+  "_build/pkg/META" {"META"}
+  "_build/src/fpath.a" {"fpath.a"}
+  "_build/src/fpath.cma" {"fpath.cma"}
+  "_build/src/fpath.cmi" {"fpath.cmi"}
+  "?_build/src/fpath.cmti" {"fpath.cmti"}
+  "_build/src/fpath.cmx" {"fpath.cmx"}
+  "_build/src/fpath.cmxa" {"fpath.cmxa"}
+  "_build/src/fpath.cmxs" {"fpath.cmxs"}
+  "_build/src/fpath.mli" {"fpath.mli"}
+  "_build/src/fpath_top.a" {"fpath_top.a"}
+  "_build/src/fpath_top.cma" {"fpath_top.cma"}
+  "_build/src/fpath_top.cmx" {"fpath_top.cmx"}
+  "_build/src/fpath_top.cmxa" {"fpath_top.cmxa"}
+  "_build/src/fpath_top.cmxs" {"fpath_top.cmxs"}
+  "_build/src/fpath_top_init.ml" {"fpath_top_init.ml"}
+]
+doc: [
+  "_build/CHANGES.md" {"CHANGES.md"}
+  "_build/LICENSE.md" {"LICENSE.md"}
+  "_build/README.md" {"README.md"}
+]

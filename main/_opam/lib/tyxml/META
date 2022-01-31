@@ -1,0 +1,17 @@
+version = "4.5.0"
+description = ""
+requires = "re tyxml.functor uutf"
+archive(byte) = "tyxml.cma"
+archive(native) = "tyxml.cmxa"
+plugin(byte) = "tyxml.cma"
+plugin(native) = "tyxml.cmxs"
+package "functor" (
+  directory = "functor"
+  version = "4.5.0"
+  description = "Statically correct HTML and SVG documents (Functor version)"
+  requires = "re seq uutf"
+  archive(byte) = "tyxml_f.cma"
+  archive(native) = "tyxml_f.cmxa"
+  plugin(byte) = "tyxml_f.cma"
+  plugin(native) = "tyxml_f.cmxs"
+)

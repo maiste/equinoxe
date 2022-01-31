@@ -1,0 +1,7 @@
+version = "3.0.0"
+description = ""
+requires = "lwt"
+archive(byte) = "mirage_time.cma"
+archive(native) = "mirage_time.cmxa"
+plugin(byte) = "mirage_time.cma"
+plugin(native) = "mirage_time.cmxs"

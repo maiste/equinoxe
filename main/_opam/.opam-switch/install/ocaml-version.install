@@ -1,0 +1,21 @@
+opam-version: "2.0"
+lib: [
+  "_build/install/default/lib/ocaml-version/META"
+  "_build/install/default/lib/ocaml-version/dune-package"
+  "_build/install/default/lib/ocaml-version/ocaml_version.a"
+  "_build/install/default/lib/ocaml-version/ocaml_version.cma"
+  "_build/install/default/lib/ocaml-version/ocaml_version.cmi"
+  "_build/install/default/lib/ocaml-version/ocaml_version.cmt"
+  "_build/install/default/lib/ocaml-version/ocaml_version.cmti"
+  "_build/install/default/lib/ocaml-version/ocaml_version.cmx"
+  "_build/install/default/lib/ocaml-version/ocaml_version.cmxa"
+  "_build/install/default/lib/ocaml-version/ocaml_version.ml"
+  "_build/install/default/lib/ocaml-version/ocaml_version.mli"
+  "_build/install/default/lib/ocaml-version/opam"
+]
+doc: [
+  "_build/install/default/doc/ocaml-version/CHANGES.md"
+  "_build/install/default/doc/ocaml-version/LICENSE.md"
+  "_build/install/default/doc/ocaml-version/README.md"
+]
+libexec: "_build/install/default/lib/ocaml-version/ocaml_version.cmxs"

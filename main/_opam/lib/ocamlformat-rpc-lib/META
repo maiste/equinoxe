@@ -1,0 +1,7 @@
+version = "0.19.0"
+description = ""
+requires = "csexp sexplib0"
+archive(byte) = "ocamlformat_rpc_lib.cma"
+archive(native) = "ocamlformat_rpc_lib.cmxa"
+plugin(byte) = "ocamlformat_rpc_lib.cma"
+plugin(native) = "ocamlformat_rpc_lib.cmxs"

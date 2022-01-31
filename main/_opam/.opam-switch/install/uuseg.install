@@ -1,0 +1,35 @@
+opam-version: "2.0"
+lib: [
+  "_build/opam" {"opam"}
+  "_build/pkg/META" {"META"}
+  "_build/src/uuseg.a" {"uuseg.a"}
+  "_build/src/uuseg.cma" {"uuseg.cma"}
+  "_build/src/uuseg.cmi" {"uuseg.cmi"}
+  "?_build/src/uuseg.cmti" {"uuseg.cmti"}
+  "_build/src/uuseg.cmx" {"uuseg.cmx"}
+  "_build/src/uuseg.cmxa" {"uuseg.cmxa"}
+  "_build/src/uuseg.cmxs" {"uuseg.cmxs"}
+  "_build/src/uuseg.mli" {"uuseg.mli"}
+  "_build/src/uuseg_base.cmx" {"uuseg_base.cmx"}
+  "_build/src/uuseg_buf.cmx" {"uuseg_buf.cmx"}
+  "_build/src/uuseg_grapheme_cluster.cmx" {"uuseg_grapheme_cluster.cmx"}
+  "_build/src/uuseg_line_break.cmx" {"uuseg_line_break.cmx"}
+  "_build/src/uuseg_sentence.cmx" {"uuseg_sentence.cmx"}
+  "_build/src/uuseg_string.a" {"string/uuseg_string.a"}
+  "_build/src/uuseg_string.cma" {"string/uuseg_string.cma"}
+  "_build/src/uuseg_string.cmi" {"string/uuseg_string.cmi"}
+  "?_build/src/uuseg_string.cmti" {"string/uuseg_string.cmti"}
+  "_build/src/uuseg_string.cmx" {"string/uuseg_string.cmx"}
+  "_build/src/uuseg_string.cmxa" {"string/uuseg_string.cmxa"}
+  "_build/src/uuseg_string.cmxs" {"string/uuseg_string.cmxs"}
+  "_build/src/uuseg_string.mli" {"string/uuseg_string.mli"}
+  "_build/src/uuseg_word.cmx" {"uuseg_word.cmx"}
+]
+bin: "_build/test/usegtrip.native" {"usegtrip"}
+doc: [
+  "_build/CHANGES.md" {"CHANGES.md"}
+  "_build/LICENSE.md" {"LICENSE.md"}
+  "_build/README.md" {"README.md"}
+  "_build/doc/index.mld" {"odoc-pages/index.mld"}
+  "_build/test/examples.ml" {"examples.ml"}
+]

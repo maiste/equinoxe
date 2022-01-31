@@ -1,0 +1,46 @@
+(lang dune 2.9)
+(name mirage-crypto-pk)
+(version 0.10.5)
+(library
+ (name mirage-crypto-pk)
+ (kind normal)
+ (archives (byte mirage_crypto_pk.cma) (native mirage_crypto_pk.cmxa))
+ (plugins (byte mirage_crypto_pk.cma) (native mirage_crypto_pk.cmxs))
+ (native_archives mirage_crypto_pk.a)
+ (requires
+  cstruct
+  zarith
+  mirage-crypto
+  mirage-crypto-rng
+  sexplib0
+  eqaf.cstruct)
+ (main_module_name Mirage_crypto_pk)
+ (modes byte native)
+ (obj_dir (private_dir .private))
+ (modules
+  (wrapped
+   (main_module_name Mirage_crypto_pk)
+   (modules
+    ((name Common)
+     (obj_name mirage_crypto_pk__Common)
+     (visibility private)
+     (impl))
+    ((name Dh) (obj_name mirage_crypto_pk__Dh) (visibility private) (impl))
+    ((name Dsa) (obj_name mirage_crypto_pk__Dsa) (visibility private) (impl))
+    ((name Mirage_crypto_pk)
+     (obj_name mirage_crypto_pk)
+     (visibility public)
+     (impl)
+     (intf))
+    ((name Rsa) (obj_name mirage_crypto_pk__Rsa) (visibility private) (impl))
+    ((name Z_extra)
+     (obj_name mirage_crypto_pk__Z_extra)
+     (visibility private)
+     (impl)))
+   (alias_module
+    (name Mirage_crypto_pk__)
+    (obj_name mirage_crypto_pk__)
+    (visibility public)
+    (kind alias)
+    (impl))
+   (wrapped true))))

@@ -1,0 +1,21 @@
+opam-version: "2.0"
+lib: [
+  "_build/install/default/lib/conduit-lwt/META"
+  "_build/install/default/lib/conduit-lwt/conduit_lwt.a"
+  "_build/install/default/lib/conduit-lwt/conduit_lwt.cma"
+  "_build/install/default/lib/conduit-lwt/conduit_lwt.cmxa"
+  "_build/install/default/lib/conduit-lwt/dune-package"
+  "_build/install/default/lib/conduit-lwt/opam"
+  "_build/install/default/lib/conduit-lwt/resolver_lwt.cmi"
+  "_build/install/default/lib/conduit-lwt/resolver_lwt.cmt"
+  "_build/install/default/lib/conduit-lwt/resolver_lwt.cmti"
+  "_build/install/default/lib/conduit-lwt/resolver_lwt.cmx"
+  "_build/install/default/lib/conduit-lwt/resolver_lwt.ml"
+  "_build/install/default/lib/conduit-lwt/resolver_lwt.mli"
+]
+doc: [
+  "_build/install/default/doc/conduit-lwt/CHANGES.md"
+  "_build/install/default/doc/conduit-lwt/LICENSE.md"
+  "_build/install/default/doc/conduit-lwt/README.md"
+]
+libexec: "_build/install/default/lib/conduit-lwt/conduit_lwt.cmxs"

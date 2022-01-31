@@ -1,0 +1,31 @@
+opam-version: "2.0"
+lib: [
+  "_build/opam" {"opam"}
+  "_build/pkg/META" {"META"}
+  "_build/src/astring.a" {"astring.a"}
+  "_build/src/astring.cma" {"astring.cma"}
+  "_build/src/astring.cmi" {"astring.cmi"}
+  "?_build/src/astring.cmti" {"astring.cmti"}
+  "_build/src/astring.cmx" {"astring.cmx"}
+  "_build/src/astring.cmxa" {"astring.cmxa"}
+  "_build/src/astring.cmxs" {"astring.cmxs"}
+  "_build/src/astring.mli" {"astring.mli"}
+  "_build/src/astring_base.cmx" {"astring_base.cmx"}
+  "_build/src/astring_char.cmx" {"astring_char.cmx"}
+  "_build/src/astring_escape.cmx" {"astring_escape.cmx"}
+  "_build/src/astring_string.cmx" {"astring_string.cmx"}
+  "_build/src/astring_sub.cmx" {"astring_sub.cmx"}
+  "_build/src/astring_top.a" {"astring_top.a"}
+  "_build/src/astring_top.cma" {"astring_top.cma"}
+  "_build/src/astring_top.cmx" {"astring_top.cmx"}
+  "_build/src/astring_top.cmxa" {"astring_top.cmxa"}
+  "_build/src/astring_top.cmxs" {"astring_top.cmxs"}
+  "_build/src/astring_top_init.ml" {"astring_top_init.ml"}
+  "_build/src/astring_unsafe.cmx" {"astring_unsafe.cmx"}
+]
+doc: [
+  "_build/CHANGES.md" {"CHANGES.md"}
+  "_build/LICENSE.md" {"LICENSE.md"}
+  "_build/README.md" {"README.md"}
+  "_build/test/examples.ml" {"examples.ml"}
+]

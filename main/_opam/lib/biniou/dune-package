@@ -1,0 +1,22 @@
+(lang dune 2.9)
+(name biniou)
+(version 1.2.1)
+(library
+ (name biniou)
+ (kind normal)
+ (synopsis "Extensible binary serialization format")
+ (archives (byte biniou.cma) (native biniou.cmxa))
+ (plugins (byte biniou.cma) (native biniou.cmxs))
+ (native_archives biniou.a)
+ (requires easy-format)
+ (modes byte native)
+ (modules
+  (unwrapped
+   ((name Bi_dump) (obj_name bi_dump) (visibility public) (impl))
+   ((name Bi_inbuf) (obj_name bi_inbuf) (visibility public) (impl) (intf))
+   ((name Bi_io) (obj_name bi_io) (visibility public) (impl) (intf))
+   ((name Bi_outbuf) (obj_name bi_outbuf) (visibility public) (impl) (intf))
+   ((name Bi_share) (obj_name bi_share) (visibility public) (impl) (intf))
+   ((name Bi_stream) (obj_name bi_stream) (visibility public) (impl) (intf))
+   ((name Bi_util) (obj_name bi_util) (visibility public) (impl) (intf))
+   ((name Bi_vint) (obj_name bi_vint) (visibility public) (impl) (intf)))))

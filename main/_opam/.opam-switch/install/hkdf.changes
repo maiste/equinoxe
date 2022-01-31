@@ -1,0 +1,21 @@
+opam-version: "2.0"
+added: [
+  "doc/hkdf" {"D"}
+  "doc/hkdf/CHANGES.md" {"F:S231T1643359366.14"}
+  "doc/hkdf/LICENSE.md" {"F:S1298T1643359366.14"}
+  "doc/hkdf/README.md" {"F:S519T1643359366.14"}
+  "lib/hkdf" {"D"}
+  "lib/hkdf/META" {"F:S181T1643359366.14"}
+  "lib/hkdf/dune-package" {"F:S368T1643359366.14"}
+  "lib/hkdf/hkdf.a" {"F:S8532T1643359366.14"}
+  "lib/hkdf/hkdf.cma" {"F:S9642T1643359366.14"}
+  "lib/hkdf/hkdf.cmi" {"F:S1546T1643359366.14"}
+  "lib/hkdf/hkdf.cmt" {"F:S22557T1643359366.14"}
+  "lib/hkdf/hkdf.cmti" {"F:S9106T1643359366.14"}
+  "lib/hkdf/hkdf.cmx" {"F:S1482T1643359366.14"}
+  "lib/hkdf/hkdf.cmxa" {"F:S714T1643359366.14"}
+  "lib/hkdf/hkdf.cmxs" {"F:S24808T1643359366.14"}
+  "lib/hkdf/hkdf.ml" {"F:S1261T1643359366.14"}
+  "lib/hkdf/hkdf.mli" {"F:S1228T1643359366.14"}
+  "lib/hkdf/opam" {"F:S847T1643359366.14"}
+]

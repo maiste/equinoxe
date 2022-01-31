@@ -1,0 +1,22 @@
+(lang dune 2.9)
+(name cstruct)
+(version 6.0.1)
+(library
+ (name cstruct)
+ (kind normal)
+ (archives (byte cstruct.cma) (native cstruct.cmxa))
+ (plugins (byte cstruct.cma) (native cstruct.cmxs))
+ (foreign_objects cstruct_stubs.o)
+ (foreign_archives libcstruct_stubs.a)
+ (native_archives cstruct.a)
+ (jsoo_runtime cstruct.js)
+ (requires bigarray-compat)
+ (modes byte native)
+ (modules
+  (unwrapped
+   ((name Cstruct) (obj_name cstruct) (visibility public) (impl) (intf))
+   ((name Cstruct_cap)
+    (obj_name cstruct_cap)
+    (visibility public)
+    (impl)
+    (intf)))))

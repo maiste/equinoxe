@@ -1,0 +1,7 @@
+version = "0.1.3"
+description = ""
+requires = "dns-client.lwt happy-eyeballs logs lwt lwt.unix"
+archive(byte) = "happy_eyeballs_lwt.cma"
+archive(native) = "happy_eyeballs_lwt.cmxa"
+plugin(byte) = "happy_eyeballs_lwt.cma"
+plugin(native) = "happy_eyeballs_lwt.cmxs"

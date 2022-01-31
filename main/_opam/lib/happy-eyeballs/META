@@ -1,0 +1,7 @@
+version = "0.1.3"
+description = ""
+requires = "domain-name duration fmt ipaddr logs"
+archive(byte) = "happy_eyeballs.cma"
+archive(native) = "happy_eyeballs.cmxa"
+plugin(byte) = "happy_eyeballs.cma"
+plugin(native) = "happy_eyeballs.cmxs"

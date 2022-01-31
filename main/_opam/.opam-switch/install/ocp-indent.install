@@ -1,0 +1,158 @@
+opam-version: "2.0"
+lib: [
+  "_build/install/default/lib/ocp-indent/META"
+  "_build/install/default/lib/ocp-indent/dune-package"
+  "_build/install/default/lib/ocp-indent/dynlink/indentLoader.cmi"
+    {"dynlink/indentLoader.cmi"}
+  "_build/install/default/lib/ocp-indent/dynlink/indentLoader.cmt"
+    {"dynlink/indentLoader.cmt"}
+  "_build/install/default/lib/ocp-indent/dynlink/indentLoader.cmti"
+    {"dynlink/indentLoader.cmti"}
+  "_build/install/default/lib/ocp-indent/dynlink/indentLoader.cmx"
+    {"dynlink/indentLoader.cmx"}
+  "_build/install/default/lib/ocp-indent/dynlink/indentLoader.ml"
+    {"dynlink/indentLoader.ml"}
+  "_build/install/default/lib/ocp-indent/dynlink/indentLoader.mli"
+    {"dynlink/indentLoader.mli"}
+  "_build/install/default/lib/ocp-indent/dynlink/ocp_indent_dynlink.a"
+    {"dynlink/ocp_indent_dynlink.a"}
+  "_build/install/default/lib/ocp-indent/dynlink/ocp_indent_dynlink.cma"
+    {"dynlink/ocp_indent_dynlink.cma"}
+  "_build/install/default/lib/ocp-indent/dynlink/ocp_indent_dynlink.cmxa"
+    {"dynlink/ocp_indent_dynlink.cmxa"}
+  "_build/install/default/lib/ocp-indent/lexer/approx_lexer.cmi"
+    {"lexer/approx_lexer.cmi"}
+  "_build/install/default/lib/ocp-indent/lexer/approx_lexer.cmt"
+    {"lexer/approx_lexer.cmt"}
+  "_build/install/default/lib/ocp-indent/lexer/approx_lexer.cmx"
+    {"lexer/approx_lexer.cmx"}
+  "_build/install/default/lib/ocp-indent/lexer/approx_lexer.ml"
+    {"lexer/approx_lexer.ml"}
+  "_build/install/default/lib/ocp-indent/lexer/approx_tokens.cmi"
+    {"lexer/approx_tokens.cmi"}
+  "_build/install/default/lib/ocp-indent/lexer/approx_tokens.cmt"
+    {"lexer/approx_tokens.cmt"}
+  "_build/install/default/lib/ocp-indent/lexer/approx_tokens.cmx"
+    {"lexer/approx_tokens.cmx"}
+  "_build/install/default/lib/ocp-indent/lexer/approx_tokens.ml"
+    {"lexer/approx_tokens.ml"}
+  "_build/install/default/lib/ocp-indent/lexer/indentExtend.cmi"
+    {"lexer/indentExtend.cmi"}
+  "_build/install/default/lib/ocp-indent/lexer/indentExtend.cmt"
+    {"lexer/indentExtend.cmt"}
+  "_build/install/default/lib/ocp-indent/lexer/indentExtend.cmti"
+    {"lexer/indentExtend.cmti"}
+  "_build/install/default/lib/ocp-indent/lexer/indentExtend.cmx"
+    {"lexer/indentExtend.cmx"}
+  "_build/install/default/lib/ocp-indent/lexer/indentExtend.ml"
+    {"lexer/indentExtend.ml"}
+  "_build/install/default/lib/ocp-indent/lexer/indentExtend.mli"
+    {"lexer/indentExtend.mli"}
+  "_build/install/default/lib/ocp-indent/lexer/ocp_indent_lexer.a"
+    {"lexer/ocp_indent_lexer.a"}
+  "_build/install/default/lib/ocp-indent/lexer/ocp_indent_lexer.cma"
+    {"lexer/ocp_indent_lexer.cma"}
+  "_build/install/default/lib/ocp-indent/lexer/ocp_indent_lexer.cmxa"
+    {"lexer/ocp_indent_lexer.cmxa"}
+  "_build/install/default/lib/ocp-indent/lib/indentBlock.cmi"
+    {"lib/indentBlock.cmi"}
+  "_build/install/default/lib/ocp-indent/lib/indentBlock.cmt"
+    {"lib/indentBlock.cmt"}
+  "_build/install/default/lib/ocp-indent/lib/indentBlock.cmti"
+    {"lib/indentBlock.cmti"}
+  "_build/install/default/lib/ocp-indent/lib/indentBlock.cmx"
+    {"lib/indentBlock.cmx"}
+  "_build/install/default/lib/ocp-indent/lib/indentBlock.ml"
+    {"lib/indentBlock.ml"}
+  "_build/install/default/lib/ocp-indent/lib/indentBlock.mli"
+    {"lib/indentBlock.mli"}
+  "_build/install/default/lib/ocp-indent/lib/indentConfig.cmi"
+    {"lib/indentConfig.cmi"}
+  "_build/install/default/lib/ocp-indent/lib/indentConfig.cmt"
+    {"lib/indentConfig.cmt"}
+  "_build/install/default/lib/ocp-indent/lib/indentConfig.cmti"
+    {"lib/indentConfig.cmti"}
+  "_build/install/default/lib/ocp-indent/lib/indentConfig.cmx"
+    {"lib/indentConfig.cmx"}
+  "_build/install/default/lib/ocp-indent/lib/indentConfig.ml"
+    {"lib/indentConfig.ml"}
+  "_build/install/default/lib/ocp-indent/lib/indentConfig.mli"
+    {"lib/indentConfig.mli"}
+  "_build/install/default/lib/ocp-indent/lib/indentPrinter.cmi"
+    {"lib/indentPrinter.cmi"}
+  "_build/install/default/lib/ocp-indent/lib/indentPrinter.cmt"
+    {"lib/indentPrinter.cmt"}
+  "_build/install/default/lib/ocp-indent/lib/indentPrinter.cmti"
+    {"lib/indentPrinter.cmti"}
+  "_build/install/default/lib/ocp-indent/lib/indentPrinter.cmx"
+    {"lib/indentPrinter.cmx"}
+  "_build/install/default/lib/ocp-indent/lib/indentPrinter.ml"
+    {"lib/indentPrinter.ml"}
+  "_build/install/default/lib/ocp-indent/lib/indentPrinter.mli"
+    {"lib/indentPrinter.mli"}
+  "_build/install/default/lib/ocp-indent/lib/ocp_indent_lib.a"
+    {"lib/ocp_indent_lib.a"}
+  "_build/install/default/lib/ocp-indent/lib/ocp_indent_lib.cma"
+    {"lib/ocp_indent_lib.cma"}
+  "_build/install/default/lib/ocp-indent/lib/ocp_indent_lib.cmxa"
+    {"lib/ocp_indent_lib.cmxa"}
+  "_build/install/default/lib/ocp-indent/opam"
+  "_build/install/default/lib/ocp-indent/utils/compat.cmi"
+    {"utils/compat.cmi"}
+  "_build/install/default/lib/ocp-indent/utils/compat.cmt"
+    {"utils/compat.cmt"}
+  "_build/install/default/lib/ocp-indent/utils/compat.cmx"
+    {"utils/compat.cmx"}
+  "_build/install/default/lib/ocp-indent/utils/compat.ml" {"utils/compat.ml"}
+  "_build/install/default/lib/ocp-indent/utils/nstream.cmi"
+    {"utils/nstream.cmi"}
+  "_build/install/default/lib/ocp-indent/utils/nstream.cmt"
+    {"utils/nstream.cmt"}
+  "_build/install/default/lib/ocp-indent/utils/nstream.cmti"
+    {"utils/nstream.cmti"}
+  "_build/install/default/lib/ocp-indent/utils/nstream.cmx"
+    {"utils/nstream.cmx"}
+  "_build/install/default/lib/ocp-indent/utils/nstream.ml"
+    {"utils/nstream.ml"}
+  "_build/install/default/lib/ocp-indent/utils/nstream.mli"
+    {"utils/nstream.mli"}
+  "_build/install/default/lib/ocp-indent/utils/ocp_indent_utils.a"
+    {"utils/ocp_indent_utils.a"}
+  "_build/install/default/lib/ocp-indent/utils/ocp_indent_utils.cma"
+    {"utils/ocp_indent_utils.cma"}
+  "_build/install/default/lib/ocp-indent/utils/ocp_indent_utils.cmxa"
+    {"utils/ocp_indent_utils.cmxa"}
+  "_build/install/default/lib/ocp-indent/utils/pos.cmi" {"utils/pos.cmi"}
+  "_build/install/default/lib/ocp-indent/utils/pos.cmt" {"utils/pos.cmt"}
+  "_build/install/default/lib/ocp-indent/utils/pos.cmti" {"utils/pos.cmti"}
+  "_build/install/default/lib/ocp-indent/utils/pos.cmx" {"utils/pos.cmx"}
+  "_build/install/default/lib/ocp-indent/utils/pos.ml" {"utils/pos.ml"}
+  "_build/install/default/lib/ocp-indent/utils/pos.mli" {"utils/pos.mli"}
+  "_build/install/default/lib/ocp-indent/utils/util.cmi" {"utils/util.cmi"}
+  "_build/install/default/lib/ocp-indent/utils/util.cmt" {"utils/util.cmt"}
+  "_build/install/default/lib/ocp-indent/utils/util.cmx" {"utils/util.cmx"}
+  "_build/install/default/lib/ocp-indent/utils/util.ml" {"utils/util.ml"}
+]
+bin: "_build/install/default/bin/ocp-indent"
+share_root: [
+  "_build/install/default/share/emacs/site-lisp/ocp-indent.el"
+    {"emacs/site-lisp/ocp-indent.el"}
+  "_build/install/default/share/ocp-indent/vim/indent/ocaml.vim"
+    {"ocp-indent/vim/indent/ocaml.vim"}
+]
+doc: [
+  "_build/install/default/doc/ocp-indent/CHANGELOG"
+  "_build/install/default/doc/ocp-indent/LICENSE"
+  "_build/install/default/doc/ocp-indent/README.md"
+]
+man: "_build/install/default/man/man1/ocp-indent.1"
+libexec: [
+  "_build/install/default/lib/ocp-indent/dynlink/ocp_indent_dynlink.cmxs"
+    {"dynlink/ocp_indent_dynlink.cmxs"}
+  "_build/install/default/lib/ocp-indent/lexer/ocp_indent_lexer.cmxs"
+    {"lexer/ocp_indent_lexer.cmxs"}
+  "_build/install/default/lib/ocp-indent/lib/ocp_indent_lib.cmxs"
+    {"lib/ocp_indent_lib.cmxs"}
+  "_build/install/default/lib/ocp-indent/utils/ocp_indent_utils.cmxs"
+    {"utils/ocp_indent_utils.cmxs"}
+]

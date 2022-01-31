@@ -1,0 +1,21 @@
+opam-version: "2.0"
+added: [
+  "doc/lwt-dllist" {"D"}
+  "doc/lwt-dllist/CHANGES.md" {"F:S282T1643359343.65"}
+  "doc/lwt-dllist/LICENSE.md" {"F:S1023T1643359343.65"}
+  "doc/lwt-dllist/README.md" {"F:S1042T1643359343.65"}
+  "lib/lwt-dllist" {"D"}
+  "lib/lwt-dllist/META" {"F:S210T1643359343.65"}
+  "lib/lwt-dllist/dune-package" {"F:S450T1643359343.65"}
+  "lib/lwt-dllist/lwt_dllist.a" {"F:S20942T1643359343.65"}
+  "lib/lwt-dllist/lwt_dllist.cma" {"F:S26013T1643359343.65"}
+  "lib/lwt-dllist/lwt_dllist.cmi" {"F:S3566T1643359343.65"}
+  "lib/lwt-dllist/lwt_dllist.cmt" {"F:S56079T1643359343.65"}
+  "lib/lwt-dllist/lwt_dllist.cmti" {"F:S25908T1643359343.65"}
+  "lib/lwt-dllist/lwt_dllist.cmx" {"F:S1417T1643359343.65"}
+  "lib/lwt-dllist/lwt_dllist.cmxa" {"F:S212T1643359343.65"}
+  "lib/lwt-dllist/lwt_dllist.cmxs" {"F:S32584T1643359343.65"}
+  "lib/lwt-dllist/lwt_dllist.ml" {"F:S4975T1643359343.65"}
+  "lib/lwt-dllist/lwt_dllist.mli" {"F:S4628T1643359343.65"}
+  "lib/lwt-dllist/opam" {"F:S1008T1643359343.65"}
+]

@@ -1,0 +1,22 @@
+version = "0.8.1"
+description = ""
+requires = "bigstringaf"
+archive(byte) = "faraday.cma"
+archive(native) = "faraday.cmxa"
+plugin(byte) = "faraday.cma"
+plugin(native) = "faraday.cmxs"
+
+package "lwt" (
+  description = "Deprecated. Use faraday-lwt directly"
+  requires = "faraday-lwt"
+)
+
+package "lwt-unix" (
+  description = "Deprecated. Use faraday-lwt-unix directly"
+  requires = "faraday-lwt-unix"
+)
+
+package "async" (
+  description = "Deprecated. Use faraday-async directly"
+  requires = "faraday-async"
+)

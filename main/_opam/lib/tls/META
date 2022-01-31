@@ -1,0 +1,33 @@
+version = "0.15.2"
+description = ""
+requires =
+"cstruct
+ cstruct-sexp
+ domain-name
+ fmt
+ hkdf
+ ipaddr
+ ipaddr-sexp
+ logs
+ mirage-crypto
+ mirage-crypto-ec
+ mirage-crypto-pk
+ mirage-crypto-rng
+ ppx_sexp_conv.runtime-lib
+ sexplib
+ stdlib-shims
+ x509"
+archive(byte) = "tls.cma"
+archive(native) = "tls.cmxa"
+plugin(byte) = "tls.cma"
+plugin(native) = "tls.cmxs"
+package "lwt" (
+  directory = "lwt"
+  version = "0.15.2"
+  description = ""
+  requires = "lwt lwt.unix mirage-crypto-rng.lwt ptime.clock.os tls"
+  archive(byte) = "tls_lwt.cma"
+  archive(native) = "tls_lwt.cmxa"
+  plugin(byte) = "tls_lwt.cma"
+  plugin(native) = "tls_lwt.cmxs"
+)

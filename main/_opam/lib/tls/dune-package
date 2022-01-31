@@ -1,0 +1,97 @@
+(lang dune 2.9)
+(name tls)
+(version 0.15.2)
+(library
+ (name tls)
+ (kind normal)
+ (archives (byte tls.cma) (native tls.cmxa))
+ (plugins (byte tls.cma) (native tls.cmxs))
+ (native_archives tls.a)
+ (requires
+  cstruct
+  cstruct-sexp
+  logs
+  hkdf
+  mirage-crypto
+  mirage-crypto-rng
+  mirage-crypto-pk
+  x509
+  sexplib
+  domain-name
+  fmt
+  mirage-crypto-ec
+  ipaddr
+  ipaddr-sexp
+  ppx_sexp_conv.runtime-lib
+  stdlib-shims)
+ (main_module_name Tls)
+ (modes byte native)
+ (modules
+  (wrapped
+   (main_module_name Tls)
+   (modules
+    ((name Ciphersuite)
+     (obj_name tls__Ciphersuite)
+     (visibility public)
+     (impl))
+    ((name Config) (obj_name tls__Config) (visibility public) (impl) (intf))
+    ((name Core) (obj_name tls__Core) (visibility public) (impl))
+    ((name Crypto) (obj_name tls__Crypto) (visibility public) (impl))
+    ((name Engine) (obj_name tls__Engine) (visibility public) (impl) (intf))
+    ((name Explorator) (obj_name tls__Explorator) (visibility public) (impl))
+    ((name Handshake_client)
+     (obj_name tls__Handshake_client)
+     (visibility public)
+     (impl)
+     (intf))
+    ((name Handshake_client13)
+     (obj_name tls__Handshake_client13)
+     (visibility public)
+     (impl))
+    ((name Handshake_common)
+     (obj_name tls__Handshake_common)
+     (visibility public)
+     (impl))
+    ((name Handshake_crypto)
+     (obj_name tls__Handshake_crypto)
+     (visibility public)
+     (impl)
+     (intf))
+    ((name Handshake_crypto13)
+     (obj_name tls__Handshake_crypto13)
+     (visibility public)
+     (impl))
+    ((name Handshake_server)
+     (obj_name tls__Handshake_server)
+     (visibility public)
+     (impl)
+     (intf))
+    ((name Handshake_server13)
+     (obj_name tls__Handshake_server13)
+     (visibility public)
+     (impl))
+    ((name Packet) (obj_name tls__Packet) (visibility public) (impl))
+    ((name Reader) (obj_name tls__Reader) (visibility public) (impl) (intf))
+    ((name State) (obj_name tls__State) (visibility public) (impl))
+    ((name Tracing) (obj_name tls__Tracing) (visibility public) (impl) (intf))
+    ((name Utils) (obj_name tls__Utils) (visibility public) (impl))
+    ((name Writer) (obj_name tls__Writer) (visibility public) (impl) (intf)))
+   (alias_module
+    (name Tls)
+    (obj_name tls)
+    (visibility public)
+    (kind alias)
+    (impl))
+   (wrapped true))))
+(library
+ (name tls.lwt)
+ (kind normal)
+ (archives (byte lwt/tls_lwt.cma) (native lwt/tls_lwt.cmxa))
+ (plugins (byte lwt/tls_lwt.cma) (native lwt/tls_lwt.cmxs))
+ (native_archives lwt/tls_lwt.a)
+ (requires tls lwt lwt.unix ptime.clock.os mirage-crypto-rng.lwt)
+ (modes byte native)
+ (modules
+  (unwrapped
+   ((name Tls_lwt) (obj_name tls_lwt) (visibility public) (impl) (intf))
+   ((name X509_lwt) (obj_name x509_lwt) (visibility public) (impl) (intf)))))

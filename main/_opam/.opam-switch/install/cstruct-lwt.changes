@@ -1,0 +1,21 @@
+opam-version: "2.0"
+added: [
+  "doc/cstruct-lwt" {"D"}
+  "doc/cstruct-lwt/CHANGES.md" {"F:S20406T1643359369.88"}
+  "doc/cstruct-lwt/LICENSE.md" {"F:S1457T1643359369.88"}
+  "doc/cstruct-lwt/README.md" {"F:S7126T1643359369.88"}
+  "lib/cstruct-lwt" {"D"}
+  "lib/cstruct-lwt/META" {"F:S204T1643359369.87"}
+  "lib/cstruct-lwt/cstruct_lwt.a" {"F:S7280T1643359369.87"}
+  "lib/cstruct-lwt/cstruct_lwt.cma" {"F:S7026T1643359369.88"}
+  "lib/cstruct-lwt/cstruct_lwt.cmxa" {"F:S865T1643359369.88"}
+  "lib/cstruct-lwt/cstruct_lwt.cmxs" {"F:S24528T1643359369.88"}
+  "lib/cstruct-lwt/dune-package" {"F:S416T1643359369.88"}
+  "lib/cstruct-lwt/lwt_cstruct.cmi" {"F:S1853T1643359369.88"}
+  "lib/cstruct-lwt/lwt_cstruct.cmt" {"F:S16370T1643359369.88"}
+  "lib/cstruct-lwt/lwt_cstruct.cmti" {"F:S11007T1643359369.88"}
+  "lib/cstruct-lwt/lwt_cstruct.cmx" {"F:S2338T1643359369.88"}
+  "lib/cstruct-lwt/lwt_cstruct.ml" {"F:S1400T1643359369.88"}
+  "lib/cstruct-lwt/lwt_cstruct.mli" {"F:S2026T1643359369.88"}
+  "lib/cstruct-lwt/opam" {"F:S1113T1643359369.88"}
+]

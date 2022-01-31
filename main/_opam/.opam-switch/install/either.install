@@ -1,0 +1,27 @@
+opam-version: "2.0"
+lib: [
+  "_build/install/default/lib/either/META"
+  "_build/install/default/lib/either/dune-package"
+  "_build/install/default/lib/either/either.a"
+  "_build/install/default/lib/either/either.cma"
+  "_build/install/default/lib/either/either.cmi"
+  "_build/install/default/lib/either/either.cmt"
+  "_build/install/default/lib/either/either.cmx"
+  "_build/install/default/lib/either/either.cmxa"
+  "_build/install/default/lib/either/either.ml"
+  "_build/install/default/lib/either/either__.cmi"
+  "_build/install/default/lib/either/either__.cmt"
+  "_build/install/default/lib/either/either__.cmx"
+  "_build/install/default/lib/either/either__.ml"
+  "_build/install/default/lib/either/either__Either_intf.cmi"
+  "_build/install/default/lib/either/either__Either_intf.cmt"
+  "_build/install/default/lib/either/either__Either_intf.cmx"
+  "_build/install/default/lib/either/either_intf.ml"
+  "_build/install/default/lib/either/opam"
+]
+doc: [
+  "_build/install/default/doc/either/CHANGES.md"
+  "_build/install/default/doc/either/LICENSE"
+  "_build/install/default/doc/either/README.md"
+]
+libexec: "_build/install/default/lib/either/either.cmxs"

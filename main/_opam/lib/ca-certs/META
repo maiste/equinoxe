@@ -1,0 +1,7 @@
+version = "v0.2.2"
+description = ""
+requires = "astring bos fpath logs mirage-crypto ptime.clock.os x509"
+archive(byte) = "ca_certs.cma"
+archive(native) = "ca_certs.cmxa"
+plugin(byte) = "ca_certs.cma"
+plugin(native) = "ca_certs.cmxs"

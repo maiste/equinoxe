@@ -1,0 +1,7 @@
+version = "4.0.0"
+description = ""
+requires = "fmt lwt"
+archive(byte) = "mirage_kv.cma"
+archive(native) = "mirage_kv.cmxa"
+plugin(byte) = "mirage_kv.cma"
+plugin(native) = "mirage_kv.cmxs"

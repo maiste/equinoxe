@@ -1,0 +1,7 @@
+version = "0.9.1"
+description = ""
+requires = "cstruct lwt ocplib-endian ocplib-endian.bigstring stdlib-shims"
+archive(byte) = "mirage_profile.cma"
+archive(native) = "mirage_profile.cmxa"
+plugin(byte) = "mirage_profile.cma"
+plugin(native) = "mirage_profile.cmxs"

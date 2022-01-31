@@ -1,0 +1,35 @@
+.\" Pipe this output to groff -Tutf8 | less
+.\"
+.mso an.tmac
+.TH "DUNE-HELP" 1 "" "Dune 2.9.2" "Dune Manual"
+.\" Disable hyphenation and ragged-right
+.nh
+.ad l
+.SH NAME
+.P
+dune\N'45'help \N'45' Additional Dune help
+.SH SYNOPSIS
+.P
+\fBdune help\fR [\fIOPTION\fR]\N'46'\N'46'\N'46' [\fITOPIC\fR]
+.SH DESCRIPTION
+.P
+\fBdune help TOPIC\fR provides additional help on the given topic\N'46' The following topics are available:
+.TP 4
+\fBconfig\fR
+dune\N'45'config
+.SH OPTIONS
+.TP 4
+\fB\N'45'\N'45'build\N'45'info\fR
+Show build information\N'46'
+.TP 4
+\fB\N'45'\N'45'help\fR[=\fIFMT\fR] (default=auto)
+Show this help in format \fIFMT\fR\N'46' The value \fIFMT\fR must be one of `auto\N'39', `pager\N'39', `groff\N'39' or `plain\N'39'\N'46' With `auto\N'39', the format is `pager` or `plain\N'39' whenever the \fBTERM\fR env var is `dumb\N'39' or undefined\N'46'
+.TP 4
+\fB\N'45'\N'45'man\N'45'format\fR=\fIFMT\fR (absent=pager)
+Show output in format \fIFMT\fR\N'46' The value \fIFMT\fR must be one of `auto\N'39', `pager\N'39', `groff\N'39' or `plain\N'39'\N'46' With `auto\N'39', the format is `pager` or `plain\N'39' whenever the \fBTERM\fR env var is `dumb\N'39' or undefined\N'46'
+.TP 4
+\fB\N'45'\N'45'version\fR
+Show version information\N'46'
+.SH BUGS
+.P
+Check bug reports at https://github\N'46'com/ocaml/dune/issues
