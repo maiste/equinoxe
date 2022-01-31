@@ -18,6 +18,7 @@
     (ocaml (>= 4.08.0))
     (ezjsonm (>= 1.3.0))
     (lwt (>= 5.3.0))
+    (odate (>= 0.6))
     (alcotest :with-test)
     (alcotest-lwt :with-test)
     (odoc :with-doc))

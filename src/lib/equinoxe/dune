@@ -1,4 +1,4 @@
 (library
  (name equinoxe)
  (public_name equinoxe)
- (libraries ezjsonm unix lwt))
+ (libraries ezjsonm odate unix lwt))

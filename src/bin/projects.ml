@@ -23,10 +23,10 @@
 (*****************************************************************************)
 
 module Conf = Utils.Conf
-module Json = Utils.Json
 module Equinoxe = Utils.Equinoxe
 open Cmdliner
 open Utils.Term
+open Utils.Monad
 
 (* Helpers *)
 
@@ -38,13 +38,9 @@ let config hostname location plan os =
     && has_requiered os
   then
     Some
-      Equinoxe.Devices.
-        {
-          hostname = Option.get hostname;
-          location = Option.get location;
-          plan = Option.get plan;
-          os = Option.get os;
-        }
+      Equinoxe.Device.(
+        build ~hostname:(Option.get hostname) ~location:(Option.get location)
+          ~plan:(Option.get plan) ~os:(Option.get os) ())
   else None
 
 (* Actions *)
@@ -53,7 +49,9 @@ let projects token = function
   | GET ->
       let address = Conf.address in
       let e = Equinoxe.create ~address ~token () in
-      Equinoxe.Projects.get_projects e |> Json.pp_r
+      let* projects = Equinoxe.Project.get_all e in
+      List.iter Equinoxe.Project.pp projects;
+      return ()
   | meth -> not_supported_r meth "/projects"
 
 let projects_id token meth id =
@@ -61,9 +59,11 @@ let projects_id token meth id =
   let e = Equinoxe.create ~address ~token () in
   match meth with
   | GET ->
-      if has_requiered id then
-        let id = Option.get id in
-        Equinoxe.Projects.get_projects_id e ~id () |> Json.pp_r
+      if has_requiered id then (
+        let id = Option.get id |> Equinoxe.Project.id_of_string in
+        let* project = Equinoxe.Project.get_from e ~id in
+        Equinoxe.Project.pp project;
+        return ())
       else not_all_requiered_r [ "id" ]
   | meth -> not_supported_r meth "/projects/{id}"
 
@@ -72,15 +72,19 @@ let projects_id_devices token meth id config =
   let e = Equinoxe.create ~address ~token () in
   match meth with
   | GET ->
-      if has_requiered id then
-        let id = Option.get id in
-        Equinoxe.Projects.get_projects_id_devices e ~id () |> Json.pp_r
+      if has_requiered id then (
+        let id = Option.get id |> Equinoxe.Project.id_of_string in
+        let* devices = Equinoxe.Device.get_all_from_project e ~id in
+        List.iter (fun device -> Equinoxe.Device.pp device) devices;
+        return ())
       else not_all_requiered_r [ "id" ]
   | POST ->
-      if has_requiered id && has_requiered config then
-        let id = Option.get id in
-        let config = Option.get config in
-        Equinoxe.Projects.post_projects_id_devices e ~id ~config () |> Json.pp_r
+      if has_requiered id && has_requiered config then (
+        let id = Option.get id |> Equinoxe.Project.id_of_string in
+        let builder = Option.get config in
+        let* device = Equinoxe.Device.create e ~id builder in
+        Equinoxe.Device.pp device;
+        return ())
       else not_all_requiered_r [ "id"; "hostname"; "plan"; "facility"; "os" ]
   | meth -> not_supported_r meth "/projects/{id}/devices"
 
@@ -122,7 +126,7 @@ let config_t =
   let plan_t =
     let doc = "The type of server needed" in
     let plan =
-      Equinoxe.Devices.(
+      Equinoxe.Device.(
         Arg.enum
           [
             (plan_to_string C3_small_x86, C3_small_x86);
@@ -134,7 +138,7 @@ let config_t =
   let location_t =
     let doc = "The location where to run the server" in
     let location =
-      Equinoxe.Devices.(
+      Equinoxe.Device.(
         Arg.enum
           [
             (location_to_string Washington, Washington);
@@ -152,7 +156,7 @@ let config_t =
   let os_t =
     let doc = "The operating system of the server" in
     let os =
-      Equinoxe.Devices.(
+      Equinoxe.Device.(
         Arg.enum
           [
             (os_to_string Debian_9, Debian_9);

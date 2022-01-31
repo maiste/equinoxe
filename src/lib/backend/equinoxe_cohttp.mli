@@ -27,8 +27,5 @@
 module Backend : Equinoxe.Backend with type 'a io = 'a Lwt.t
 (** @inline *)
 
-module Api : Equinoxe.API with type 'a io = 'a Lwt.t
-(** @inline *)
-
-module Friendly_api : Equinoxe.FRIENDLY_API with type 'a io = 'a Lwt.t
+include Equinoxe.API with type 'a io = 'a Lwt.t
 (** @inline *)

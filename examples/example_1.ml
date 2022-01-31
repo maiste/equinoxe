@@ -22,71 +22,55 @@
 (*                                                                           *)
 (*****************************************************************************)
 
-module E = Equinoxe_cohttp.Api
-module J = Ezjsonm
+module E = Equinoxe_cohttp
 open Lwt.Syntax
 
-let token = "YOUR TOKEN"
+let token = "Your token"
 let api = E.create ~token ()
 
 let get_project_id_from name =
-  let* json = E.Projects.get_projects api in
-  let projects =
-    J.find json [ "projects" ]
-    |> J.get_list (fun p ->
-           let name = J.find p [ "name" ] |> J.get_string
-           and id = J.find p [ "id" ] |> J.get_string in
-           (name, id))
-  in
-  match List.find_opt (fun (name', _) -> name = name') projects with
-  | Some (_, id) -> Lwt.return id
+  let* projects = E.Project.get_all api in
+  match
+    List.find_opt (fun E.Project.{ name = name'; _ } -> name = name') projects
+  with
+  | Some project -> Lwt.return project.id
   | None -> Lwt.fail_with (Format.sprintf "get_project_id: %S not found" name)
 
 let get_project_device_id project_id =
-  E.Projects.get_projects_id_devices api ~id:project_id ()
+  E.Device.get_all_from_project api ~id:project_id
 
 let create_device project_id =
-  let config =
-    E.Devices.
-      {
-        hostname = "exp-1";
-        location = Amsterdam;
-        plan = C3_small_x86;
-        os = Debian_10;
-      }
+  let open E.Device in
+  let builder =
+    build ~hostname:"friendly-api-test" ~plan:C3_small_x86 ~location:Amsterdam
+      ~os:Debian_10 ()
   in
-  let* json =
-    E.Projects.post_projects_id_devices api ~id:project_id ~config ()
-  in
-  Lwt.return (J.find json [ "id" ] |> J.get_string)
+  let* config = create api ~id:project_id builder in
+  Lwt.return config.id
 
-let wait_for_ready machine_id =
+let wait_for state machine_id =
   let rec check () =
-    let* json = E.Devices.get_devices_id api ~id:machine_id () in
-    let state = J.find json [ "state" ] |> J.get_string in
-    match state with
-    | "active" ->
-        Format.printf "\nMachine is up!@.";
-        Lwt.return state
-    | state ->
-        Format.printf "\rCheck status (%s) after sleeping 10 sec." state;
-        Format.print_flush ();
-        Unix.sleep 10;
-        check ()
+    let* device = E.Device.get_from api ~id:machine_id in
+    if device.state = state then Lwt.return ()
+    else
+      match device.state with
+      | E.State.Active ->
+          Format.printf "\nMachine is up!@.";
+          check ()
+      | s ->
+          Format.printf "\rCheck status (%s) after sleeping 10 sec."
+            (E.State.to_string s);
+          Format.print_flush ();
+          Unix.sleep 10;
+          check ()
   in
   check ()
 
 let get_ip machine_id =
-  let* json = E.Devices.get_devices_id api ~id:machine_id () in
-  let ips =
-    J.find json [ "ip_addresses" ]
-    |> J.get_list (fun x -> J.find x [ "address" ] |> J.get_string)
-  in
-  Lwt.return (List.nth ips 0)
+  let* config = E.Device.get_from api ~id:machine_id in
+  Lwt.return E.Device.(config.ips)
 
-let destroy_machine machine_id =
-  let* _ = E.Devices.delete_devices_id api ~id:machine_id () in
-  Lwt.return ()
+let destroy_machine machine_id = E.Device.delete api ~id:machine_id ()
 
 let deploy_wait_stop () =
   let* id = get_project_id_from "testing" in
@@ -94,9 +78,28 @@ let deploy_wait_stop () =
   Lwt.finalize
     (fun () ->
       let () = Format.printf "Machine created.@." in
-      let* _state = wait_for_ready machine_id in
-      let* address = get_ip machine_id in
-      let () = Format.printf "Ip is [%s]. Sleep for 60 sec.@." address in
+      let* _state = wait_for E.State.Active machine_id in
+      let* ips = get_ip machine_id in
+      let () =
+        match ips with
+        | ip :: _ -> Format.printf "Ip is [%s]. Sleep for 60 sec.@." ip.address
+        | _ -> Format.printf "IP not found.@."
+      in
+      let* () =
+        Format.printf "Turn machine off@.";
+        E.Device.execute_action_on api ~id:machine_id ~action:E.Device.Power_off
+      in
+      let* () = wait_for E.State.Inactive machine_id in
+      let* () =
+        Format.printf "Turn machine on.@.";
+        E.Device.execute_action_on api ~id:machine_id ~action:E.Device.Power_on
+      in
+      let* () = wait_for E.State.Active machine_id in
+      let* () =
+        Format.printf "Reboot@.";
+        E.Device.execute_action_on api ~id:machine_id ~action:E.Device.Reboot
+      in
+      let* () = wait_for E.State.Active machine_id in
       Lwt_unix.sleep 60.0)
     (fun () -> destroy_machine machine_id)
 

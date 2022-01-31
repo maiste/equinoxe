@@ -23,10 +23,10 @@
 (*****************************************************************************)
 
 module Conf = Utils.Conf
-module Json = Utils.Json
 module Equinoxe = Utils.Equinoxe
 open Cmdliner
 open Utils.Term
+open Utils.Monad
 
 (* Actions *)
 
@@ -36,13 +36,14 @@ let devices_id token meth id =
   match meth with
   | GET ->
       if has_requiered id then
-        let id = Option.get id in
-        Equinoxe.Devices.get_devices_id e ~id () |> Json.pp_r
+        let id = Option.get id |> Equinoxe.Device.id_of_string in
+        let* config = Equinoxe.Device.get_from e ~id in
+        return (Equinoxe.Device.pp config)
       else not_all_requiered_r [ "id" ]
   | DELETE ->
       if has_requiered id then
-        let id = Option.get id in
-        Equinoxe.Devices.delete_devices_id e ~id () |> Json.pp_r
+        let id = Option.get id |> Equinoxe.Device.id_of_string in
+        Equinoxe.Device.delete e ~id ()
       else not_all_requiered_r [ "id" ]
   | meth -> not_supported_r meth "/devices/{id}"
 
@@ -52,8 +53,8 @@ let devices_id_actions token meth id action =
   match meth with
   | POST ->
       if has_requiered id then
-        let id = Option.get id in
-        Equinoxe.Devices.post_devices_id_actions e ~id ~action () |> Json.pp_r
+        let id = Option.get id |> Equinoxe.Device.id_of_string in
+        Equinoxe.Device.execute_action_on e ~id ~action
       else not_all_requiered_r [ "id"; "actions" ]
   | meth -> not_supported_r meth "/devices/{id}/actions"
 
@@ -62,22 +63,13 @@ let devices_id_events token meth id =
   let e = Equinoxe.create ~address ~token () in
   match meth with
   | GET ->
-      if has_requiered id then
-        let id = Option.get id in
-        Equinoxe.Devices.get_devices_id_events e ~id () |> Json.pp_r
+      if has_requiered id then (
+        let id = Option.get id |> Equinoxe.Device.id_of_string in
+        let* events = Equinoxe.Device.get_events_from e ~id in
+        List.iter (fun event -> Equinoxe.Event.pp event) events;
+        return ())
       else not_all_requiered_r [ "id" ]
   | meth -> not_supported_r meth "/devices/{id}/events"
-
-let devices_id_ips token meth id =
-  let address = Conf.address in
-  let e = Equinoxe.create ~address ~token () in
-  match meth with
-  | GET ->
-      if has_requiered id then
-        let id = Option.get id in
-        Equinoxe.Devices.get_devices_id_ips e ~id () |> Json.pp_r
-      else not_all_requiered_r [ "id" ]
-  | meth -> not_supported_r meth "/devices/{id}/ips"
 
 (* Terms *)
 
@@ -116,11 +108,11 @@ let devices_id_actions_t =
     let action =
       Arg.enum
         [
-          ("power_on", Equinoxe.Devices.Power_on);
-          ("power_off", Equinoxe.Devices.Power_off);
-          ("reboot", Equinoxe.Devices.Reboot);
-          ("reinstall", Equinoxe.Devices.Reinstall);
-          ("rescue", Equinoxe.Devices.Rescue);
+          ("power_on", Equinoxe.Device.Power_on);
+          ("power_off", Equinoxe.Device.Power_off);
+          ("reboot", Equinoxe.Device.Reboot);
+          ("reinstall", Equinoxe.Device.Reinstall);
+          ("rescue", Equinoxe.Device.Rescue);
         ]
     in
     Arg.(required & opt (some action) None & info [ "a"; "actions" ] ~doc)
@@ -143,19 +135,4 @@ let devices_id_events_t =
     ( lwt_result (const devices_id_events $ token_t $ meth_t $ id_t),
       info "/devices/id/events" ~doc ~exits ~man )
 
-let devices_id_ips_t =
-  let doc = "Show ips on a specific device" in
-  let exits = default_exits in
-  let man =
-    man_meth ~get:("Retrieve ips on a specific device", [ "id" ], []) ()
-  in
-  let id_t =
-    let doc = "The device id" in
-    Arg.(value & opt (some string) None & info [ "id" ] ~doc)
-  in
-  Term.
-    ( lwt_result (const devices_id_ips $ token_t $ meth_t $ id_t),
-      info "/devices/id/ips" ~doc ~exits ~man )
-
-let t =
-  [ devices_id_t; devices_id_events_t; devices_id_actions_t; devices_id_ips_t ]
+let t = [ devices_id_t; devices_id_events_t; devices_id_actions_t ]
