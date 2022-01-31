@@ -61,12 +61,15 @@ module Make (B : Backend) : API with type 'a io = 'a B.io = struct
     in
     fail msg
 
-  let raise_wrong_date ~name json =
-    raise
-      (Ezjsonm.Parse_error
-         (json, Format.sprintf "%s: Date.Parser.from_iso can't parse date" name))
-
   let replace_empty s = if s = "" then "<empty>" else s
+
+  let get_date ~name parsable_string =
+    try Date.Parser.from_iso parsable_string
+    with Failure _ ->
+      raise
+        (Ezjsonm.Parse_error
+           ( `String parsable_string,
+             Format.sprintf "%s: Date.Parser.from_iso can't parse date" name ))
 
   module Http = struct
     let url ~t ~path = Filename.concat t.address path
@@ -189,22 +192,20 @@ module Make (B : Backend) : API with type 'a io = 'a B.io = struct
     let id_of_string id = id
 
     let config_of_json json =
-      try
-        {
-          id = access "id" json |> Ezjsonm.get_string;
-          first_name = access "first_name" json |> Ezjsonm.get_string;
-          last_name = access "last_name" json |> Ezjsonm.get_string;
-          email = access "email" json |> Ezjsonm.get_string;
-          created_at =
-            access "create_at" json
-            |> Ezjsonm.get_string
-            |> Date.Parser.from_iso;
-          last_login_at =
-            access "last_login_at" json
-            |> Ezjsonm.get_string
-            |> Date.Parser.from_iso;
-        }
-      with Failure _ -> raise_wrong_date ~name:"User.config_of_json" json
+      {
+        id = access "id" json |> Ezjsonm.get_string;
+        first_name = access "first_name" json |> Ezjsonm.get_string;
+        last_name = access "last_name" json |> Ezjsonm.get_string;
+        email = access "email" json |> Ezjsonm.get_string;
+        created_at =
+          access "create_at" json
+          |> Ezjsonm.get_string
+          |> get_date ~name:"User.config_of_json";
+        last_login_at =
+          access "last_login_at" json
+          |> Ezjsonm.get_string
+          |> get_date ~name:"User.config_of_json";
+      }
 
     let to_string config =
       let created_at = Date.Printer.to_iso config.created_at in
@@ -247,18 +248,16 @@ module Make (B : Backend) : API with type 'a io = 'a B.io = struct
     let id_of_string id = id
 
     let config_of_json json =
-      try
-        {
-          id = access "id" json |> Ezjsonm.get_string;
-          token = access "token" json |> Ezjsonm.get_string;
-          read_only = access "read_only" json |> Ezjsonm.get_bool;
-          created_at =
-            access "created_at" json
-            |> Ezjsonm.get_string
-            |> Date.Parser.from_iso;
-          description = access "description" json |> Ezjsonm.get_string;
-        }
-      with Failure _ -> raise_wrong_date ~name:"Auth.config_of_json" json
+      {
+        id = access "id" json |> Ezjsonm.get_string;
+        token = access "token" json |> Ezjsonm.get_string;
+        read_only = access "read_only" json |> Ezjsonm.get_bool;
+        created_at =
+          access "created_at" json
+          |> Ezjsonm.get_string
+          |> get_date ~name:"Auth.config_of_json";
+        description = access "description" json |> Ezjsonm.get_string;
+      }
 
     let to_string config =
       let created_at = Date.Printer.to_iso config.created_at in
@@ -340,21 +339,19 @@ module Make (B : Backend) : API with type 'a io = 'a B.io = struct
         config.public config.enabled created_at
 
     let config_of_json json =
-      try
-        {
-          id = access "id" json |> Ezjsonm.get_string;
-          netmask = access "netmask" json |> Ezjsonm.get_string;
-          network = access "network" json |> Ezjsonm.get_string;
-          address = access "address" json |> Ezjsonm.get_string;
-          gateway = access "gateway" json |> Ezjsonm.get_string;
-          public = access "public" json |> Ezjsonm.get_bool;
-          enabled = access "enabled" json |> Ezjsonm.get_bool;
-          created_at =
-            access "created_at" json
-            |> Ezjsonm.get_string
-            |> Date.Parser.from_iso;
-        }
-      with Failure _ -> raise_wrong_date ~name:"Ip.config_of_json" json
+      {
+        id = access "id" json |> Ezjsonm.get_string;
+        netmask = access "netmask" json |> Ezjsonm.get_string;
+        network = access "network" json |> Ezjsonm.get_string;
+        address = access "address" json |> Ezjsonm.get_string;
+        gateway = access "gateway" json |> Ezjsonm.get_string;
+        public = access "public" json |> Ezjsonm.get_bool;
+        enabled = access "enabled" json |> Ezjsonm.get_bool;
+        created_at =
+          access "created_at" json
+          |> Ezjsonm.get_string
+          |> get_date ~name:"Ip.config_of_json";
+      }
 
     let get_from t ~id =
       let path = Filename.concat "ips" id in
@@ -380,20 +377,18 @@ module Make (B : Backend) : API with type 'a io = 'a B.io = struct
     let string_of_id id = id
 
     let config_of_json json =
-      try
-        {
-          id = access "id" json |> Ezjsonm.get_string;
-          name = access "name" json |> Ezjsonm.get_string;
-          created_at =
-            access "created_at" json
-            |> Ezjsonm.get_string
-            |> Date.Parser.from_iso;
-          updated_at =
-            access "updated_at" json
-            |> Ezjsonm.get_string
-            |> Date.Parser.from_iso;
-        }
-      with Failure _ -> raise_wrong_date ~name:"Project.config_of_json" json
+      {
+        id = access "id" json |> Ezjsonm.get_string;
+        name = access "name" json |> Ezjsonm.get_string;
+        created_at =
+          access "created_at" json
+          |> Ezjsonm.get_string
+          |> get_date ~name:"Project.config_of_json";
+        updated_at =
+          access "updated_at" json
+          |> Ezjsonm.get_string
+          |> get_date ~name:"Project.config_of_json";
+      }
 
     let to_string config =
       let created_at = Date.Printer.to_iso config.created_at in
@@ -466,18 +461,16 @@ module Make (B : Backend) : API with type 'a io = 'a B.io = struct
     }
 
     let t_of_json json =
-      try
-        {
-          id = access "id" json |> Ezjsonm.get_string;
-          state = access "state" json |> Ezjsonm.get_string |> State.of_string;
-          event_type = access "type" json |> Ezjsonm.get_string;
-          body = access "body" json |> Ezjsonm.get_string;
-          created_at =
-            access "created_at" json
-            |> Ezjsonm.get_string
-            |> Date.Parser.from_iso;
-        }
-      with Failure _ -> raise_wrong_date ~name:"Event.t_of_json" json
+      {
+        id = access "id" json |> Ezjsonm.get_string;
+        state = access "state" json |> Ezjsonm.get_string |> State.of_string;
+        event_type = access "type" json |> Ezjsonm.get_string;
+        body = access "body" json |> Ezjsonm.get_string;
+        created_at =
+          access "created_at" json
+          |> Ezjsonm.get_string
+          |> get_date ~name:"Event.t_of_json";
+      }
 
     let to_string t =
       let created_at = Date.Printer.to_iso t.created_at in
@@ -626,36 +619,34 @@ module Make (B : Backend) : API with type 'a io = 'a B.io = struct
         try access "ip_addresses" json |> Ezjsonm.get_list Ip.config_of_json
         with _ -> []
       in
-      try
-        {
-          id = access "id" json |> Ezjsonm.get_string;
-          hostname = access "hostname" json |> Ezjsonm.get_string;
-          location =
-            access "metro" json
-            |> access "code"
-            |> Ezjsonm.get_string
-            |> String.uppercase_ascii
-            |> location_of_string;
-          plan =
-            access "plan" json
-            |> access "slug"
-            |> Ezjsonm.get_string
-            |> plan_of_string;
-          os =
-            access "operating_system" json
-            |> access "slug"
-            |> Ezjsonm.get_string
-            |> os_of_string;
-          state = access "state" json |> Ezjsonm.get_string |> State.of_string;
-          tags = access "tags" json |> Ezjsonm.get_list Ezjsonm.get_string;
-          user = access "user" json |> Ezjsonm.get_string;
-          created_at =
-            access "created_at" json
-            |> Ezjsonm.get_string
-            |> Date.Parser.from_iso;
-          ips;
-        }
-      with Failure _ -> raise_wrong_date ~name:"Device.config_of_json" json
+      {
+        id = access "id" json |> Ezjsonm.get_string;
+        hostname = access "hostname" json |> Ezjsonm.get_string;
+        location =
+          access "metro" json
+          |> access "code"
+          |> Ezjsonm.get_string
+          |> String.uppercase_ascii
+          |> location_of_string;
+        plan =
+          access "plan" json
+          |> access "slug"
+          |> Ezjsonm.get_string
+          |> plan_of_string;
+        os =
+          access "operating_system" json
+          |> access "slug"
+          |> Ezjsonm.get_string
+          |> os_of_string;
+        state = access "state" json |> Ezjsonm.get_string |> State.of_string;
+        tags = access "tags" json |> Ezjsonm.get_list Ezjsonm.get_string;
+        user = access "user" json |> Ezjsonm.get_string;
+        created_at =
+          access "created_at" json
+          |> Ezjsonm.get_string
+          |> get_date ~name:"Device.config_of_json";
+        ips;
+      }
 
     let to_string config =
       let location = location_to_string config.location in
