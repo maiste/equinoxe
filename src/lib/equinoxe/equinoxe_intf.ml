@@ -39,14 +39,14 @@ module type API = sig
       [https://api.equinix.com/metal/v1/] and default [token] is empty. *)
 
   exception Unknown_value of string * string
-  (** This exception represent an error when the parsing works but the value
+  (** This exception represents an error when parsing works but the value
       received is unknown. *)
 
   module Orga : sig
     (** A module to interact with Equinix organization. *)
 
     type id
-    (** The unique indentifier for the an organization. *)
+    (** The unique identifier for the an organization. *)
 
     type config = {
       id : id;
@@ -78,7 +78,7 @@ module type API = sig
   end
 
   module User : sig
-    (** A module to interact with Equinix users. *)
+    (** A module to interact with Equinix user. *)
 
     type id
     (** A unique identifier for a user. *)
@@ -110,7 +110,7 @@ module type API = sig
     (** This module manages API parts related to authentification. *)
 
     type id
-    (** Unique identifier to represent a key in the Equinix API *)
+    (** Unique identifier to represent a key in the Equinix API. *)
 
     type config = {
       id : id;
@@ -119,10 +119,10 @@ module type API = sig
       created_at : Date.t;
       description : string;
     }
-    (** Representation of an API key *)
+    (** Representation of an API key config. *)
 
     val id_of_string : string -> id
-    (** [id_of_string str] returns a unique identifier from the Equinix API *)
+    (** [id_of_string str] returns a unique identifier from the Equinix API. *)
 
     val to_string : config -> string
     (** [to_string config] returns a string representating an API key. *)
@@ -136,7 +136,7 @@ module type API = sig
         Equinix. Default value to read_only is true. *)
 
     val delete_key : t -> id:id -> unit io
-    (** [delete_key t ~id ] deletes the key referenced by [id] from the user
+    (** [delete_key t ~id] deletes the key referenced by [id] from the user
         keys. *)
 
     val pp : config -> unit
@@ -147,7 +147,8 @@ module type API = sig
     (** This module manages API parts related to ips. *)
 
     type id
-    (** Abstract to represent a unique identifier in the Equinix API. *)
+    (** Abstract type to represent a unique identifier in the Equinix API for
+        ip. *)
 
     type config = {
       id : id;
@@ -229,14 +230,14 @@ module type API = sig
 
     val of_string : string -> t
     (** [of_string str] returns a state in function of a string. If the state is
-        not known, it returns Unknown_state. *)
+        not known, it raises an {!Unknown_value} exception. *)
 
     val to_string : t -> string
     (** [to_string t] returns a string representation of the state. *)
   end
 
   module Event : sig
-    (** This module deals with events that occures in Equinix. *)
+    (** This module deals with events that occure in Equinix. *)
 
     type id
     (** Unique identifier. *)
@@ -257,13 +258,14 @@ module type API = sig
     (** A representation of an event. *)
 
     val t_of_json : Ezjsonm.value -> t
-    (** [t_of_json json] extracts information about event from [json]. *)
+    (** [t_of_json json] extracts information about event from [json]. If the
+        parsing fails, it raises an {!Ezjsonm.Parse_error} exception. *)
 
     val to_string : t -> string
     (** [to_string t] returns a string representation of [t]. *)
 
     val pp : t -> unit
-    (** [pp t] print in human readable way the [t] value. *)
+    (** [pp t] prints in a human readable way the [t] value. *)
   end
 
   module Device : sig
@@ -309,8 +311,8 @@ module type API = sig
       | Sydney
 
     val location_to_string : location -> string
-    (** [location_to_string facility] converts a facility into a string
-        understandable by the API. *)
+    (** [location_to_string metro] converts a metro into a string understandable
+        by the API. *)
 
     (** Server type when deploying a new device. *)
     type plan = C3_small_x86 | C3_medium_x86
@@ -329,7 +331,7 @@ module type API = sig
       location:location ->
       unit ->
       builder
-    (* [build plan os locatation] returns a build with the minimal configuration required. *)
+    (* [build ~hostname ~plan ~os ~locatation ()] returns a build with the minimal configuration required. *)
 
     type config = {
       id : id;
@@ -350,30 +352,29 @@ module type API = sig
     (** [to_string config] returns a readable string containing the config. *)
 
     val get_from : t -> id:id -> config io
-    (** [get_devices_id t ~id ()] returns a {!config} that contains information
-        about the device specified by [id]. *)
+    (** [get_from t t ~id] returns a {!config} that contains information about
+        the device specified by [id]. *)
 
     val get_events_from : t -> id:id -> Event.t list io
-    (** [get_device_id_events t ~id ()] retrieves information about the device
-        events. *)
+    (** [get_events_from t ~id] retrieves information about the device events. *)
 
     val execute_action_on : t -> id:id -> action:action -> unit io
-    (** [post_devices_id_actions t ~id ~action ()] executes an action on the
-        device specified by its id. *)
+    (** [execute_action_on t ~id ~action] executes an action on the device
+        specified by its id. *)
 
     val delete : t -> id:id -> ?force:bool -> unit -> unit io
-    (** [delete_devices_id t ~id ~force ()] deletes a device on Equinix and
-        returns a {!json} with the result. [?force] defaults to [false], if
-        [true] then it forces the deletion of the device by detaching any
-        storage volume still active. *)
+    (** [delete t ~id ~force ()] deletes a device on Equinix and returns a
+        {!json} with the result. [?force] defaults to [false], if [true] then it
+        forces the deletion of the device by detaching any storage volume still
+        active. *)
 
     val create : t -> id:Project.id -> builder -> config io
-    (** [post_projects_id_devicest ~id ~config ()] creates a machine on the
-        Equinix with the {!Devices.config} specification. *)
+    (** [create t ~id builder] creates a machine on the Equinix with the
+        {!Devices.builder} specification. *)
 
     val get_all_from_project : t -> id:Project.id -> config list io
-    (** [get_projects_id_devices t ~id] returns the {!json} that contains all
-        the devices related to the project [id]. *)
+    (** [get_all_from_project t ~id] returns the {!config} list that contains
+        all the devices related to the project [id]. *)
 
     val pp : config -> unit
     (** [pp config] prints a readable string representing the config. *)
