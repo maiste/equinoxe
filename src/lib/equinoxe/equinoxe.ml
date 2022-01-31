@@ -593,14 +593,8 @@ module Make (B : Backend) : API with type 'a io = 'a B.io = struct
       location : location;
     }
 
-    type setter = Hostname of string
-
-    let build ~plan ~os ~location = { hostname = None; plan; os; location }
-
-    let set_builder builder = function
-      | Hostname hostname -> { builder with hostname = Some hostname }
-
-    let ( |+ ) = set_builder
+    let build ?hostname ~plan ~os ~location () =
+      { hostname; plan; os; location }
 
     let builder_to_json builder =
       `O

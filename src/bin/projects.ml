@@ -39,9 +39,8 @@ let config hostname location plan os =
   then
     Some
       Equinoxe.Device.(
-        build ~location:(Option.get location) ~plan:(Option.get plan)
-          ~os:(Option.get os)
-        |+ Hostname (Option.get hostname))
+        build ~hostname:(Option.get hostname) ~location:(Option.get location)
+          ~plan:(Option.get plan) ~os:(Option.get os) ())
   else None
 
 (* Actions *)

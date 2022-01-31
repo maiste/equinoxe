@@ -322,15 +322,13 @@ module type API = sig
     type builder
     (** This type represents the configuration wanted for a device. *)
 
-    type setter = Hostname of string  (** Option to extend the builder. *)
-
-    val set_builder : builder -> setter -> builder
-    (** [set_builder builder setter] extends the builder with the option. *)
-
-    val ( |+ ) : builder -> setter -> builder
-    (** [builder |+ setter] is an infix operator for {!set_builder}. *)
-
-    val build : plan:plan -> os:os -> location:location -> builder
+    val build :
+      ?hostname:string ->
+      plan:plan ->
+      os:os ->
+      location:location ->
+      unit ->
+      builder
     (* [build plan os locatation] returns a build with the minimal configuration required. *)
 
     type config = {

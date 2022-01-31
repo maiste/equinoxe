@@ -42,8 +42,8 @@ let get_project_device_id project_id =
 let create_device project_id =
   let open E.Device in
   let builder =
-    build ~plan:C3_small_x86 ~location:Amsterdam ~os:Debian_10
-    |+ Hostname "friendly-api-test"
+    build ~hostname:"friendly-api-test" ~plan:C3_small_x86 ~location:Amsterdam
+      ~os:Debian_10 ()
   in
   let* config = create api ~id:project_id builder in
   Lwt.return config.id
