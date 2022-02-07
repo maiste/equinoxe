@@ -15,9 +15,15 @@ let test_auth_get_user_api_keys =
   in
   let module E = (val mock [ (Get "user/api-keys", raw_json) ]) in
   let t = E.create ~address ~token () in
-  let json = E.Auth.get_user_api_keys t in
-  let expected_json = Ezjsonm.from_string raw_json in
-  Alcotest.(check ezjsonm) "json" expected_json json
+  let open E.Auth in
+  let keys = get_keys t in
+  match keys with
+  | [ single ] ->
+      Alcotest.(check string) "token" single.token "mock token";
+      Alcotest.(check bool) "read_only" single.read_only false;
+      Alcotest.(check string) "description" single.description "mock descr";
+      assert (single.id = id_of_string "mock id")
+  | _ -> Alcotest.fail "expected one Auth.config"
 
 let test_auth_post_user_api_keys =
   Alcotest.test_case "Auth.post_user_api_keys" `Quick @@ fun () ->
@@ -27,7 +33,7 @@ let test_auth_post_user_api_keys =
         "token": "string",
         "created_at": "2019-08-24T14:15:22Z",
         "updated_at": "2019-08-24T14:15:22Z",
-        "description": "string",
+        "description": "Hello World!",
         "read_only": true,
         "user": {
           "id": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
@@ -108,16 +114,18 @@ let test_auth_post_user_api_keys =
   in
   let t = E.create ~address ~token () in
   let description = "Hello World!" in
-  let json = E.Auth.post_user_api_keys t ~description () in
-  let expected_json = Ezjsonm.from_string raw_json in
-  Alcotest.(check ezjsonm) "json" expected_json json
+  let open E.Auth in
+  let config = create_key t ~description () in
+  Alcotest.(check string) "token" config.token "string";
+  Alcotest.(check bool) "read_only" config.read_only true;
+  Alcotest.(check string) "description" config.description description;
+  assert (config.id = id_of_string "497f6eca-6276-4993-bfeb-53cbbbba6f08")
 
 let test_auth_delete_user_api_keys_id =
   Alcotest.test_case "Auth.delete_user_api_keys_id" `Quick @@ fun () ->
   let module E = (val mock [ (Delete "user/api-keys/id54321", "") ]) in
   let t = E.create ~address ~token () in
-  let json = E.Auth.delete_user_api_keys_id t ~id:"id54321" () in
-  Alcotest.(check ezjsonm) "json" (`O []) json
+  E.Auth.delete_key t ~id:(E.Auth.id_of_string "id54321")
 
 let tests =
   [

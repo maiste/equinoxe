@@ -198,7 +198,7 @@ module Make (B : Backend) : API with type 'a io = 'a B.io = struct
         last_name = access "last_name" json |> Ezjsonm.get_string;
         email = access "email" json |> Ezjsonm.get_string;
         created_at =
-          access "create_at" json
+          access "created_at" json
           |> Ezjsonm.get_string
           |> get_date ~name:"User.config_of_json";
         last_login_at =

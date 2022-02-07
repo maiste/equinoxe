@@ -76,14 +76,6 @@ let mock expect =
   end) in
   (module Equinoxe.Make (H) : MOCK_API)
 
-module type MOCK_FRIENDLY_API = Equinoxe.FRIENDLY_API with type 'a io = 'a
-
-let mock_friendly expect =
-  let module H = Http_mock (struct
-    let expect = expect
-  end) in
-  (module Equinoxe.MakeFriendly (H) : MOCK_FRIENDLY_API)
-
 module Json_test = struct
   type t = Ezjsonm.value
 

@@ -137,7 +137,7 @@ let test_orga_get_all =
       }
     |}
   in
-  let module E = (val mock_friendly [ (Get "organizations", raw_json) ]) in
+  let module E = (val mock [ (Get "organizations", raw_json) ]) in
   let t = E.create ~address ~token () in
   let open E.Orga in
   let orgas = get_all t in
@@ -233,9 +233,7 @@ let test_orga_get_from =
         "href": "/metal/v1/organizations/mock-href-1"
       }|}
   in
-  let module E =
-  (val mock_friendly [ (Get "organizations/mock-id-1", raw_json) ])
-  in
+  let module E = (val mock [ (Get "organizations/mock-id-1", raw_json) ]) in
   let t = E.create ~address ~token () in
   let open E.Orga in
   let requested_id = id_of_string "mock-id-1" in

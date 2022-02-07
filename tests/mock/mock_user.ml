@@ -6,10 +6,10 @@ let test_get_user =
     {|{
         "id": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
         "short_id": "string",
-        "first_name": "string",
-        "last_name": "string",
+        "first_name": "mock first",
+        "last_name": "mock last",
         "full_name": "string",
-        "email": "string",
+        "email": "mock@mock.com",
         "avatar_url": "string",
         "avatar_thumb_url": "string",
         "two_factor_auth": "string",
@@ -32,8 +32,10 @@ let test_get_user =
   in
   let module E = (val mock [ (Get "user", raw_json) ]) in
   let t = E.create ~address ~token () in
-  let json = E.Users.get_user t in
-  let expected_json = Ezjsonm.from_string raw_json in
-  Alcotest.(check ezjsonm) "json" expected_json json
+  let open E.User in
+  let user = get_current_user t in
+  Alcotest.(check string) "first_name" user.first_name "mock first";
+  Alcotest.(check string) "last_name" user.last_name "mock last";
+  Alcotest.(check string) "email" user.email "mock@mock.com"
 
 let tests = [ test_get_user ]
