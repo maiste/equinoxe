@@ -1,7 +1,0 @@
-version = "0.8.1"
-description = ""
-requires = "faraday lwt"
-archive(byte) = "faraday_lwt.cma"
-archive(native) = "faraday_lwt.cmxa"
-plugin(byte) = "faraday_lwt.cma"
-plugin(native) = "faraday_lwt.cmxs"

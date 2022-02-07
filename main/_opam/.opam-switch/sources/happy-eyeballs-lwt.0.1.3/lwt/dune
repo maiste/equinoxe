@@ -1,4 +1,0 @@
-(library
- (name happy_eyeballs_lwt)
- (public_name happy-eyeballs-lwt)
- (libraries logs dns-client.lwt lwt lwt.unix happy-eyeballs))

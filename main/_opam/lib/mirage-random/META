@@ -1,7 +1,0 @@
-version = "3.0.0"
-description = ""
-requires = "cstruct"
-archive(byte) = "mirage_random.cma"
-archive(native) = "mirage_random.cmxa"
-plugin(byte) = "mirage_random.cma"
-plugin(native) = "mirage_random.cmxs"

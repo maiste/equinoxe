@@ -1,6 +1,0 @@
-description = ""
-requires = "unix"
-archive(byte) = "odate.cma"
-archive(native) = "odate.cmxa"
-plugin(byte) = "odate.cma"
-plugin(native) = "odate.cmxs"

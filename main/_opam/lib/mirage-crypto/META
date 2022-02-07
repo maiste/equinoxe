@@ -1,9 +1,0 @@
-version = "0.10.5"
-description = ""
-requires = "cstruct eqaf.cstruct"
-archive(byte) = "mirage_crypto.cma"
-archive(native) = "mirage_crypto.cmxa"
-plugin(byte) = "mirage_crypto.cma"
-plugin(native) = "mirage_crypto.cmxs"
-
-freestanding_linkopts = "-l:libmirage_crypto_freestanding_stubs.a"

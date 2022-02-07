@@ -1,6 +1,0 @@
-(library
-  (public_name lru)
-  (synopsis "Scalable LRU caches")
-  (libraries psq)
-  (wrapped false))
-

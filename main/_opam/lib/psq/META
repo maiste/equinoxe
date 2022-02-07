@@ -1,7 +1,0 @@
-version = "0.2.0"
-description = "Functional Priority Search Queues"
-requires = "seq"
-archive(byte) = "psq.cma"
-archive(native) = "psq.cmxa"
-plugin(byte) = "psq.cma"
-plugin(native) = "psq.cmxs"

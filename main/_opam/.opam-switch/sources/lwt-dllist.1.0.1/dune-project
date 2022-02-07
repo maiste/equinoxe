@@ -1,3 +1,0 @@
-(lang dune 1.0)
-(name lwt-dllist)
-(version v1.0.1)

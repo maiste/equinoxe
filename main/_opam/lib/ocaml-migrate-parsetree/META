@@ -1,7 +1,0 @@
-version = "2.3.0"
-description = ""
-requires = "compiler-libs.common"
-archive(byte) = "migrate_parsetree.cma"
-archive(native) = "migrate_parsetree.cmxa"
-plugin(byte) = "migrate_parsetree.cma"
-plugin(native) = "migrate_parsetree.cmxs"

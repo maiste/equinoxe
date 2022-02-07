@@ -1,5 +1,0 @@
-(library
- (name        faraday)
- (public_name faraday)
- (libraries   bigstringaf)
- (flags (:standard -safe-string)))

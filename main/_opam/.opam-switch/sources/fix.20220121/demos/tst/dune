@@ -1,4 +1,0 @@
-(test
-  (name Test)
-  (libraries fix)
-)

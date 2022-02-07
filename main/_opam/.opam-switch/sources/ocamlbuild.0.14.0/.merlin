@@ -1,5 +1,0 @@
-S src
-S bootstrap
-B .
-FLG -strict-sequence
-FLG -safe-string

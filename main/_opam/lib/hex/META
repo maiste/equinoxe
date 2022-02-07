@@ -1,7 +1,0 @@
-version = "1.4.0"
-description = ""
-requires = "bigarray-compat cstruct"
-archive(byte) = "hex.cma"
-archive(native) = "hex.cmxa"
-plugin(byte) = "hex.cma"
-plugin(native) = "hex.cmxs"

@@ -1,8 +1,0 @@
-(library
- (name      RFC7159)
- (modules   RFC7159)
- (libraries faraday))
-
-(alias
- (name examples)
- (deps RFC7159.cmxa))

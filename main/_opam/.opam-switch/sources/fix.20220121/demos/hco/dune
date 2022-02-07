@@ -1,4 +1,0 @@
-(test
-  (name HashConsDemo)
-  (libraries fix)
-)

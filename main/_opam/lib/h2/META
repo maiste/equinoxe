@@ -1,7 +1,0 @@
-version = "0.8.0"
-description = ""
-requires = "angstrom base64 bigstringaf faraday hpack httpaf psq result"
-archive(byte) = "h2.cma"
-archive(native) = "h2.cmxa"
-plugin(byte) = "h2.cma"
-plugin(native) = "h2.cmxs"

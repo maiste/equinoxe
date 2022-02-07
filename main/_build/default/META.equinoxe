@@ -1,6 +1,0 @@
-description = ""
-requires = "ezjsonm lwt odate unix"
-archive(byte) = "equinoxe.cma"
-archive(native) = "equinoxe.cmxa"
-plugin(byte) = "equinoxe.cma"
-plugin(native) = "equinoxe.cmxs"

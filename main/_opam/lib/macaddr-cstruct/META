@@ -1,7 +1,0 @@
-version = "5.2.0"
-description = ""
-requires = "cstruct macaddr"
-archive(byte) = "macaddr_cstruct.cma"
-archive(native) = "macaddr_cstruct.cmxa"
-plugin(byte) = "macaddr_cstruct.cma"
-plugin(native) = "macaddr_cstruct.cmxs"

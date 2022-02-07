@@ -1,7 +1,0 @@
-version = "3.0.0"
-description = ""
-requires = "cstruct fmt lwt"
-archive(byte) = "mirage_flow.cma"
-archive(native) = "mirage_flow.cmxa"
-plugin(byte) = "mirage_flow.cma"
-plugin(native) = "mirage_flow.cmxs"

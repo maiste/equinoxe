@@ -1,4 +1,0 @@
-(library
- (name lwt_dllist)
- (synopsis "Mutable doubly-linked list")
- (public_name lwt-dllist))

@@ -1,7 +1,0 @@
-version = "0.7.1"
-description = ""
-requires = "faraday-lwt-unix httpaf lwt.unix"
-archive(byte) = "httpaf_lwt_unix.cma"
-archive(native) = "httpaf_lwt_unix.cmxa"
-plugin(byte) = "httpaf_lwt_unix.cma"
-plugin(native) = "httpaf_lwt_unix.cmxs"

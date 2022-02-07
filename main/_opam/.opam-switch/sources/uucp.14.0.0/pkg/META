@@ -1,7 +1,0 @@
-description = "Unicode character properties"
-version = "14.0.0"
-requires = ""
-archive(byte) = "uucp.cma"
-archive(native) = "uucp.cmxa"
-plugin(byte) = "uucp.cma"
-plugin(native) = "uucp.cmxs"

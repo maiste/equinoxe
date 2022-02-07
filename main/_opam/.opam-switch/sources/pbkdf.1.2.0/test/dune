@@ -1,3 +1,0 @@
-(test
- (name pbkdf_tests)
- (libraries pbkdf alcotest))

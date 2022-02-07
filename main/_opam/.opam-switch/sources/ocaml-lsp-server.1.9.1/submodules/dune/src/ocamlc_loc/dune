@@ -1,3 +1,0 @@
-(library
- (name ocamlc_loc)
- (libraries dune_re dyn))

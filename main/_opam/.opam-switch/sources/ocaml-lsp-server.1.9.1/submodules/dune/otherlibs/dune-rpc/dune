@@ -1,9 +1,0 @@
-(library
- (name dune_rpc)
- (public_name dune-rpc)
- (synopsis "dune rpc client and protocol")
- (libraries
-  stdune
-  csexp
-  xdg
-  (re_export dune_rpc_private)))

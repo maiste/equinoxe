@@ -1,7 +1,0 @@
-version = "0.9.0"
-description = ""
-requires = "astring result"
-archive(byte) = "odoc_parser.cma"
-archive(native) = "odoc_parser.cmxa"
-plugin(byte) = "odoc_parser.cma"
-plugin(native) = "odoc_parser.cmxs"

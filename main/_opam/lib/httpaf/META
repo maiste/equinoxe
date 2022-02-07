@@ -1,7 +1,0 @@
-version = "0.7.1"
-description = ""
-requires = "angstrom bigstringaf faraday result"
-archive(byte) = "httpaf.cma"
-archive(native) = "httpaf.cmxa"
-plugin(byte) = "httpaf.cma"
-plugin(native) = "httpaf.cmxs"

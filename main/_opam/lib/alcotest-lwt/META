@@ -1,7 +1,0 @@
-version = "1.5.0"
-description = ""
-requires = "alcotest alcotest.engine fmt logs lwt lwt.unix"
-archive(byte) = "alcotest_lwt.cma"
-archive(native) = "alcotest_lwt.cmxa"
-plugin(byte) = "alcotest_lwt.cma"
-plugin(native) = "alcotest_lwt.cmxs"

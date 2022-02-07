@@ -1,7 +1,0 @@
-version = "5.2.0"
-description = ""
-requires = "ipaddr ppx_sexp_conv.runtime-lib sexplib0"
-archive(byte) = "ipaddr_sexp.cma"
-archive(native) = "ipaddr_sexp.cmxa"
-plugin(byte) = "ipaddr_sexp.cma"
-plugin(native) = "ipaddr_sexp.cmxs"

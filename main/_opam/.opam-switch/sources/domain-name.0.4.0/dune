@@ -1,9 +1,0 @@
-(library
-  (name domain_name)
-  (public_name domain-name)
-  (modules domain_name))
-
-(test
-  (name tests)
-  (modules tests)
-  (libraries alcotest domain-name))

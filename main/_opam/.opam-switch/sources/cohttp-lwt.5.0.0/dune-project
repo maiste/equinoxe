@@ -1,3 +1,0 @@
-(lang dune 2.0)
-(name cohttp)
-(version v5.0.0)

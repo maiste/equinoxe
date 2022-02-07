@@ -1,6 +1,0 @@
-(lang dune 2.9)
-(name dune)
-(version 2.9.2)
-(deprecated_library_name
- (old_public_name dune.configurator)
- (new_public_name dune-configurator))

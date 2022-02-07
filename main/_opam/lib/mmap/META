@@ -1,7 +1,0 @@
-version = "1.1.0"
-description = ""
-requires = "bigarray unix"
-archive(byte) = "mmap.cma"
-archive(native) = "mmap.cmxa"
-plugin(byte) = "mmap.cma"
-plugin(native) = "mmap.cmxs"

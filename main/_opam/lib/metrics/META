@@ -1,7 +1,0 @@
-version = "0.3.0"
-description = ""
-requires = "fmt"
-archive(byte) = "metrics.cma"
-archive(native) = "metrics.cmxa"
-plugin(byte) = "metrics.cma"
-plugin(native) = "metrics.cmxs"

@@ -1,7 +1,0 @@
-version = "4.0.0"
-description = ""
-requires = ""
-archive(byte) = "mirage_clock.cma"
-archive(native) = "mirage_clock.cmxa"
-plugin(byte) = "mirage_clock.cma"
-plugin(native) = "mirage_clock.cmxs"

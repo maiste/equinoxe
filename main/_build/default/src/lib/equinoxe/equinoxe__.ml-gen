@@ -1,6 +1,0 @@
-(** @canonical Equinoxe.Backend *)
-module Backend = Equinoxe__Backend
-
-
-(** @canonical Equinoxe.Equinoxe_intf *)
-module Equinoxe_intf = Equinoxe__Equinoxe_intf

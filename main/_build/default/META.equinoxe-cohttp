@@ -1,6 +1,0 @@
-description = ""
-requires = "cohttp-lwt-unix equinoxe"
-archive(byte) = "equinoxe_cohttp.cma"
-archive(native) = "equinoxe_cohttp.cmxa"
-plugin(byte) = "equinoxe_cohttp.cma"
-plugin(native) = "equinoxe_cohttp.cmxs"

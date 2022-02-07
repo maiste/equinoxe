@@ -1,4 +1,0 @@
-(library
- (name equinoxe)
- (public_name equinoxe)
- (libraries ezjsonm odate unix lwt))
