@@ -17,6 +17,7 @@
 - Remove `JSON` module and use `Ezjsonm` directly (#63, @art-w)
 - Remove timeout support from Cohttp (#69, @art-w)
 - Remove old API with JSON from `Equinoxe`, `Equinoxe-cohttp` and `Equinoxe-hlc` (#68, #71, @maiste)
+- Remove `bin` directory (#70, @maiste)
 
 ## 0.1.0
 
