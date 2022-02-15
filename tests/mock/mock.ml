@@ -46,8 +46,6 @@ struct
       String.sub url address_length (String.length url - address_length)
     else raise (Wrong_url url)
 
-  exception Mock_not_found of query
-
   let find key =
     try Mocks.find key mocks
     with Not_found ->
@@ -75,12 +73,3 @@ let mock expect =
     let expect = expect
   end) in
   (module Equinoxe.Make (H) : MOCK_API)
-
-module Json_test = struct
-  type t = Ezjsonm.value
-
-  let pp h t = Format.fprintf h "%s" (Ezjsonm.value_to_string t)
-  let equal = Stdlib.( = )
-end
-
-let ezjsonm : Ezjsonm.value Alcotest.testable = (module Json_test)
