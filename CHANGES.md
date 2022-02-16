@@ -4,6 +4,7 @@
 
 - Add a Cohttp client version, with a specific package (#60, @maiste)
 - Add a statically-typed API (#68, #71, @maiste)
+- Add unit tests to mock Equinix api (#70, @art-w)
 
 ### Changed
 
@@ -16,6 +17,7 @@
 - Remove `JSON` module and use `Ezjsonm` directly (#63, @art-w)
 - Remove timeout support from Cohttp (#69, @art-w)
 - Remove old API with JSON from `Equinoxe`, `Equinoxe-cohttp` and `Equinoxe-hlc` (#68, #71, @maiste)
+- Remove `bin` directory (#70, @maiste)
 
 ## 0.1.0
 

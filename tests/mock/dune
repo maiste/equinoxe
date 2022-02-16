@@ -1,0 +1,6 @@
+(test
+ (package equinoxe)
+ (name equinoxe_mock)
+ (libraries equinoxe alcotest)
+ (preprocess
+  (pps ppx_deriving.show)))
