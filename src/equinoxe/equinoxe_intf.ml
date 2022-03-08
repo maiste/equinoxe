@@ -326,12 +326,13 @@ module type API = sig
 
     val build :
       ?hostname:string ->
+      ?tags:string list ->
       plan:plan ->
       os:os ->
       location:location ->
       unit ->
       builder
-    (* [build ~hostname ~plan ~os ~locatation ()] returns a build with the minimal configuration required. *)
+    (* [build ~hostname ~tags ~plan ~os ~locatation ()] returns a build with the minimal configuration required. *)
 
     type config = {
       id : id;
@@ -371,6 +372,10 @@ module type API = sig
     val create : t -> id:Project.id -> builder -> config io
     (** [create t ~id builder] creates a machine on the Equinix with the
         {!Devices.builder} specification. *)
+
+    val update :
+      t -> id:id -> ?hostname:string -> ?tags:string list -> unit -> config io
+    (** [update t ~id ~hostname ~tags ()] updates the value of the device. *)
 
     val get_all_from_project : t -> id:Project.id -> config list io
     (** [get_all_from_project t ~id] returns the {!config} list that contains

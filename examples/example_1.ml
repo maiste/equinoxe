@@ -25,7 +25,7 @@
 module E = Equinoxe_cohttp
 open Lwt.Syntax
 
-let token = "Your token"
+let token = "YOUR TOKEN"
 let api = E.create ~token ()
 
 let get_project_id_from name =
@@ -42,8 +42,9 @@ let get_project_device_id project_id =
 let create_device project_id =
   let open E.Device in
   let builder =
-    build ~hostname:"friendly-api-test" ~plan:C3_small_x86 ~location:Amsterdam
-      ~os:Debian_10 ()
+    build ~hostname:"test-machine"
+      ~tags:[ "check"; "bench"; "equinoxe" ]
+      ~plan:C3_small_x86 ~location:Amsterdam ~os:Debian_10 ()
   in
   let* config = create api ~id:project_id builder in
   Lwt.return config.id
@@ -82,9 +83,10 @@ let deploy_wait_stop () =
       let* ips = get_ip machine_id in
       let () =
         match ips with
-        | ip :: _ -> Format.printf "Ip is [%s]. Sleep for 60 sec.@." ip.address
+        | ip :: _ -> Format.printf "Ip is [%s]. Sleep for 20 sec.@." ip.address
         | _ -> Format.printf "IP not found.@."
       in
+      let* () = Lwt_unix.sleep 20.0 in
       let* () =
         Format.printf "Turn machine off@.";
         E.Device.execute_action_on api ~id:machine_id ~action:E.Device.Power_off
@@ -95,11 +97,17 @@ let deploy_wait_stop () =
         E.Device.execute_action_on api ~id:machine_id ~action:E.Device.Power_on
       in
       let* () = wait_for E.State.Active machine_id in
+      let* _config =
+        Format.printf "Update machine hostname and tags@.";
+        E.Device.update api ~id:machine_id ~hostname:"test-machine-rename"
+          ~tags:[ "new" ] ()
+      in
       let* () =
         Format.printf "Reboot@.";
         E.Device.execute_action_on api ~id:machine_id ~action:E.Device.Reboot
       in
       let* () = wait_for E.State.Active machine_id in
+      Format.printf "Sleep for 60sec.@.";
       Lwt_unix.sleep 60.0)
     (fun () -> destroy_machine machine_id)
 

@@ -110,6 +110,7 @@ module Make (B : Backend) : API with type 'a io = 'a B.io = struct
     let get = run B.get
     let post_empty = run_with_body B.post ""
     let post json = run_with_body B.post (Ezjsonm.value_to_string json)
+    let put json = run_with_body B.put (Ezjsonm.value_to_string json)
     let delete = run B.delete
   end
 
@@ -581,13 +582,23 @@ module Make (B : Backend) : API with type 'a io = 'a B.io = struct
 
     type builder = {
       hostname : string option;
+      tags : string list option;
       plan : plan;
       os : os;
       location : location;
     }
 
-    let build ?hostname ~plan ~os ~location () =
-      { hostname; plan; os; location }
+    let build ?hostname ?tags ~plan ~os ~location () =
+      { hostname; tags; plan; os; location }
+
+    let opt_to_list :
+          'a.
+          string ->
+          ('a -> Ezjsonm.value) ->
+          'a option ->
+          (string * Ezjsonm.value) list =
+     fun name fn v ->
+      match v with Some value -> [ (name, fn value) ] | None -> []
 
     let builder_to_json builder =
       `O
@@ -596,10 +607,10 @@ module Make (B : Backend) : API with type 'a io = 'a B.io = struct
            ("plan", `String (plan_to_string builder.plan));
            ("operating_system", `String (os_to_string builder.os));
          ]
-        @
-        match builder.hostname with
-        | Some hostname -> [ ("hostname", `String hostname) ]
-        | None -> [])
+        @ opt_to_list "hostname" Ezjsonm.string builder.hostname
+        @ opt_to_list "tags"
+            (fun tags -> `A (List.map Ezjsonm.string tags))
+            builder.tags)
 
     type config = {
       id : id;
@@ -716,6 +727,20 @@ module Make (B : Backend) : API with type 'a io = 'a B.io = struct
       try return (config_of_json json)
       with Ezjsonm.Parse_error (v, err) ->
         fail_with_parsing ~name:"Device.create" ~err ~json v
+
+    let update t ~id ?hostname ?tags () =
+      let path = Format.sprintf "devices/%s" id in
+      let fields =
+        opt_to_list "hostname" Ezjsonm.string hostname
+        @ opt_to_list "tags"
+            (fun tags -> `A (List.map Ezjsonm.string tags))
+            tags
+      in
+      let json = `O fields in
+      let* json = Http.put ~t ~path json in
+      try return (config_of_json json)
+      with Ezjsonm.Parse_error (v, err) ->
+        fail_with_parsing ~name:"Device.update" ~err ~json v
 
     let pp config = Format.printf "%s\n" (to_string config)
   end

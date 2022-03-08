@@ -63,7 +63,7 @@ struct
     compute ~headers ~url (fun ~path -> Post (path, body))
 
   let put ~headers ~url body =
-    compute ~headers ~url (fun ~path -> Post (path, body))
+    compute ~headers ~url (fun ~path -> Put (path, body))
 end
 
 module type MOCK_API = Equinoxe.API with type 'a io = 'a
