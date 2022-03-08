@@ -678,7 +678,7 @@ let test_create =
       }|}
   in
   let device1 =
-    {|{"metro":"DC","plan":"c3.small.x86","operating_system":"debian_10","hostname":"device1"}|}
+    {|{"metro":"DC","plan":"c3.small.x86","operating_system":"debian_10","hostname":"device1","tags":["tag"]}|}
   in
   let device2 =
     {|{"metro":"AM","plan":"c3.medium.x86","operating_system":"ubuntu_21_04","hostname":"device2"}|}
@@ -693,8 +693,8 @@ let test_create =
   let t = E.create ~address ~token () in
   let open E.Device in
   let config1 =
-    build ~hostname:"device1" ~location:Washington ~plan:C3_small_x86
-      ~os:Debian_10 ()
+    build ~hostname:"device1" ~tags:[ "tag" ] ~location:Washington
+      ~plan:C3_small_x86 ~os:Debian_10 ()
   in
   let config = create t ~id:(E.Project.id_of_string "aze") config1 in
   Alcotest.(check string) "hostname" config.hostname "string";
@@ -715,6 +715,199 @@ let test_create =
   assert (config.os = Ubuntu_21_04);
   assert (config.state = Queued)
 
+let test_update =
+  Alcotest.test_case "Device.update" `Quick @@ fun () ->
+  let raw_json =
+    {|{
+        "id": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
+        "short_id": "string",
+        "hostname": "string",
+        "description": "string",
+        "state": "queued",
+        "tags": [
+          "string"
+        ],
+        "image_url": "string",
+        "billing_cycle": "string",
+        "user": "string",
+        "iqn": "string",
+        "locked": true,
+        "bonding_mode": 0,
+        "created_at": "2019-08-24T14:15:22Z",
+        "updated_at": "2019-08-24T14:15:22Z",
+        "spot_instance": true,
+        "spot_price_max": 0,
+        "termination_time": "2019-08-24T14:15:22Z",
+        "customdata": {},
+        "provisioning_percentage": 0,
+        "operating_system": {
+          "id": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
+          "slug": "ubuntu_21_04",
+          "name": "string",
+          "distro": "string",
+          "version": "string",
+          "preinstallable": true,
+          "provisionable_on": [
+            "string"
+          ],
+          "pricing": {},
+          "licensed": true
+        },
+        "always_pxe": true,
+        "ipxe_script_url": "string",
+        "facility": {
+          "id": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
+          "name": "string",
+          "code": "string",
+          "features": [
+            "baremetal",
+            "backend_transfer",
+            "global_ipv4"
+          ],
+          "ip_ranges": [
+            "2604:1380::/36",
+            "147.75.192.0/21"
+          ],
+          "address": {
+            "address": "string",
+            "address2": "string",
+            "city": "string",
+            "state": "string",
+            "zip_code": "string",
+            "country": "string",
+            "coordinates": {
+              "latitude": "string",
+              "longitude": "string"
+            }
+          },
+          "metro": {
+            "id": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
+            "name": "string",
+            "code": "string",
+            "country": "string"
+          }
+        },
+        "metro": {
+          "id": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
+          "name": "string",
+          "code": "FR",
+          "country": "string"
+        },
+        "plan": {
+          "id": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
+          "slug": "c3.small.x86",
+          "name": "string",
+          "description": "string",
+          "line": "string",
+          "specs": {},
+          "pricing": {},
+          "legacy": true,
+          "class": "string",
+          "available_in": [
+            {
+              "href": "string"
+            }
+          ]
+        },
+        "userdata": "string",
+        "root_password": "string",
+        "switch_uuid": "string",
+        "network_ports": {
+          "id": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
+          "type": "string",
+          "name": "string",
+          "data": {},
+          "disbond_operation_supported": true,
+          "virtual_networks": [
+            {
+              "href": "string"
+            }
+          ],
+          "href": "string"
+        },
+        "href": "string",
+        "project": {
+          "href": "string"
+        },
+        "project_lite": {
+          "href": "string"
+        },
+        "volumes": [
+          {
+            "href": "string"
+          }
+        ],
+        "hardware_reservation": {
+          "href": "string"
+        },
+        "ssh_keys": [
+          {
+            "href": "string"
+          }
+        ],
+        "ip_addresses": [
+          {
+            "id": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
+            "address_family": 0,
+            "netmask": "string",
+            "public": true,
+            "enabled": true,
+            "cidr": 0,
+            "management": true,
+            "manageable": true,
+            "global_ip": true,
+            "assigned_to": {
+              "href": "string"
+            },
+            "network": "string",
+            "address": "string",
+            "gateway": "string",
+            "href": "string",
+            "created_at": "2019-08-24T14:15:22Z",
+            "metro": {
+              "id": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
+              "name": "string",
+              "code": "string",
+              "country": "string"
+            },
+            "parent_block": {
+              "network": "string",
+              "netmask": "string",
+              "cidr": 0,
+              "href": "string"
+            }
+          }
+        ],
+        "provisioning_events": [
+          {
+            "id": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
+            "state": "string",
+            "type": "string",
+            "body": "string",
+            "relationships": [
+              {
+                "href": "string"
+              }
+            ],
+            "interpolated": "string",
+            "created_at": "2019-08-24T14:15:22Z",
+            "href": "string"
+          }
+        ]
+      }|}
+  in
+  let device = {|{"hostname":"device","tags":["tag"]}|} in
+  let module E = (val mock [ (Put ("devices/foo", device), raw_json) ]) in
+  let t = E.create ~address ~token () in
+  let open E.Device in
+  let config =
+    update t ~id:(id_of_string "foo") ~hostname:"device" ~tags:[ "tag" ] ()
+  in
+  Alcotest.(check string) "hostname" config.hostname "string";
+  Alcotest.(check (list string)) "tags" config.tags [ "string" ];
+  assert (config.os = Ubuntu_21_04);
+  assert (config.state = Queued)
+
 let tests =
   [
     test_get_devices_id;
@@ -723,4 +916,5 @@ let tests =
     test_post_devices_id_actions;
     test_delete_devices_id;
     test_create;
+    test_update;
   ]
