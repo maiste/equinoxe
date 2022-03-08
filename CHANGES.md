@@ -1,3 +1,13 @@
+## Unreleased
+
+### Added
+
+- Introduce the `Device.update` function (#76, @maiste)
+
+### Changed
+
+- Update the `Device.build` function to support `tags` (#76, @maiste)
+
 ## 0.2.0
 
 ### Added
