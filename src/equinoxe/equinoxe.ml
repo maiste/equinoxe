@@ -591,6 +591,15 @@ module Make (B : Backend) : API with type 'a io = 'a B.io = struct
     let build ?hostname ?tags ~plan ~os ~location () =
       { hostname; tags; plan; os; location }
 
+    let opt_to_list :
+          'a.
+          string ->
+          ('a -> Ezjsonm.value) ->
+          'a option ->
+          (string * Ezjsonm.value) list =
+     fun name fn v ->
+      match v with Some value -> [ (name, fn value) ] | None -> []
+
     let builder_to_json builder =
       `O
         ([
@@ -598,15 +607,10 @@ module Make (B : Backend) : API with type 'a io = 'a B.io = struct
            ("plan", `String (plan_to_string builder.plan));
            ("operating_system", `String (os_to_string builder.os));
          ]
-        @ (match builder.hostname with
-          | Some hostname -> [ ("hostname", `String hostname) ]
-          | None -> [])
-        @
-        match builder.tags with
-        | Some tags ->
-            let tags = List.map (fun tag -> `String tag) tags in
-            [ ("tags", `A tags) ]
-        | None -> [])
+        @ opt_to_list "hostname" Ezjsonm.string builder.hostname
+        @ opt_to_list "tags"
+            (fun tags -> `A (List.map Ezjsonm.string tags))
+            builder.tags)
 
     type config = {
       id : id;
@@ -727,15 +731,10 @@ module Make (B : Backend) : API with type 'a io = 'a B.io = struct
     let update t ~id ?hostname ?tags () =
       let path = Format.sprintf "devices/%s" id in
       let fields =
-        (match hostname with
-        | Some hostname -> [ ("hostname", `String hostname) ]
-        | None -> [])
-        @
-        match tags with
-        | Some tags ->
-            let tags = List.map (fun tag -> `String tag) tags in
-            [ ("tags", `A tags) ]
-        | None -> []
+        opt_to_list "hostname" Ezjsonm.string hostname
+        @ opt_to_list "tags"
+            (fun tags -> `A (List.map Ezjsonm.string tags))
+            tags
       in
       let json = `O fields in
       let* json = Http.put ~t ~path json in
