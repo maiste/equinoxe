@@ -110,6 +110,7 @@ module Make (B : Backend) : API with type 'a io = 'a B.io = struct
     let get = run B.get
     let post_empty = run_with_body B.post ""
     let post json = run_with_body B.post (Ezjsonm.value_to_string json)
+    let put json = run_with_body B.put (Ezjsonm.value_to_string json)
     let delete = run B.delete
   end
 
@@ -722,6 +723,25 @@ module Make (B : Backend) : API with type 'a io = 'a B.io = struct
       try return (config_of_json json)
       with Ezjsonm.Parse_error (v, err) ->
         fail_with_parsing ~name:"Device.create" ~err ~json v
+
+    let update t ~id ?hostname ?tags () =
+      let path = Format.sprintf "devices/%s" id in
+      let fields =
+        (match hostname with
+        | Some hostname -> [ ("hostname", `String hostname) ]
+        | None -> [])
+        @
+        match tags with
+        | Some tags ->
+            let tags = List.map (fun tag -> `String tag) tags in
+            [ ("tags", `A tags) ]
+        | None -> []
+      in
+      let json = `O fields in
+      let* json = Http.put ~t ~path json in
+      try return (config_of_json json)
+      with Ezjsonm.Parse_error (v, err) ->
+        fail_with_parsing ~name:"Device.update" ~err ~json v
 
     let pp config = Format.printf "%s\n" (to_string config)
   end
