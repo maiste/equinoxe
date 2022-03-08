@@ -326,12 +326,13 @@ module type API = sig
 
     val build :
       ?hostname:string ->
+      ?tags:string list ->
       plan:plan ->
       os:os ->
       location:location ->
       unit ->
       builder
-    (* [build ~hostname ~plan ~os ~locatation ()] returns a build with the minimal configuration required. *)
+    (* [build ~hostname ~tags ~plan ~os ~locatation ()] returns a build with the minimal configuration required. *)
 
     type config = {
       id : id;

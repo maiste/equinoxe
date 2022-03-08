@@ -581,13 +581,14 @@ module Make (B : Backend) : API with type 'a io = 'a B.io = struct
 
     type builder = {
       hostname : string option;
+      tags : string list option;
       plan : plan;
       os : os;
       location : location;
     }
 
-    let build ?hostname ~plan ~os ~location () =
-      { hostname; plan; os; location }
+    let build ?hostname ?tags ~plan ~os ~location () =
+      { hostname; tags; plan; os; location }
 
     let builder_to_json builder =
       `O
@@ -596,9 +597,14 @@ module Make (B : Backend) : API with type 'a io = 'a B.io = struct
            ("plan", `String (plan_to_string builder.plan));
            ("operating_system", `String (os_to_string builder.os));
          ]
+        @ (match builder.hostname with
+          | Some hostname -> [ ("hostname", `String hostname) ]
+          | None -> [])
         @
-        match builder.hostname with
-        | Some hostname -> [ ("hostname", `String hostname) ]
+        match builder.tags with
+        | Some tags ->
+            let tags = List.map (fun tag -> `String tag) tags in
+            [ ("tags", `A tags) ]
         | None -> [])
 
     type config = {
