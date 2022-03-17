@@ -46,6 +46,9 @@ let create_device project_id =
       ~tags:[ "check"; "bench"; "equinoxe" ]
       ~plan:C3_small_x86 ~location:Amsterdam ~os:Debian_10 ()
   in
+  let* available = is_available api builder in
+  Format.printf "Is machine available: %b\n" available;
+  assert available;
   let* config = create api ~id:project_id builder in
   Lwt.return config.id
 
