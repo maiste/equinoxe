@@ -612,6 +612,27 @@ module Make (B : Backend) : API with type 'a io = 'a B.io = struct
             (fun tags -> `A (List.map Ezjsonm.string tags))
             builder.tags)
 
+    let builder_to_server builder =
+      `O
+        [
+          ( "servers",
+            `A
+              [
+                `O
+                  [
+                    ("metro", `String (location_to_string builder.location));
+                    ("plan", `String (plan_to_string builder.plan));
+                    ("quantity", `Float 1.0);
+                  ];
+              ] );
+        ]
+
+    let available_of_json json =
+      access "servers" json
+      |> Ezjsonm.get_list (fun json ->
+             access "available" json |> Ezjsonm.get_bool)
+      |> List.for_all Fun.id
+
     type config = {
       id : id;
       hostname : string;
@@ -719,6 +740,14 @@ module Make (B : Backend) : API with type 'a io = 'a B.io = struct
       try access "devices" json |> Ezjsonm.get_list config_of_json |> return
       with Ezjsonm.Parse_error (v, err) ->
         fail_with_parsing ~name:"Devices.get_all_from_project" ~err ~json v
+
+    let is_available t builder =
+      let path = "capacity/metros" in
+      let json = builder_to_server builder in
+      let* json = Http.post ~t ~path json in
+      try return (available_of_json json)
+      with Ezjsonm.Parse_error (v, err) ->
+        fail_with_parsing ~name:"Device.is_available" ~err ~json v
 
     let create t ~id builder =
       let path = Format.sprintf "projects/%s/devices" id in
