@@ -378,6 +378,12 @@ module type API = sig
     (** [create t ~id builder] creates a machine on the Equinix with the
         {!Devices.builder} specification. *)
 
+    val safe_create : t -> id:Project.id -> builder -> config option io
+    (** [safe_create t ~id builder] creates a machine but uses [is_available] to
+        check if the data center can provide the machine. As a result, it calls
+        the API twice. It returns the [Some configuration] if it works.
+        Otherwise it returns [None]. *)
+
     val update :
       t -> id:id -> ?hostname:string -> ?tags:string list -> unit -> config io
     (** [update t ~id ~hostname ~tags ()] updates the value of the device. *)

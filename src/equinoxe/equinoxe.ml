@@ -757,6 +757,13 @@ module Make (B : Backend) : API with type 'a io = 'a B.io = struct
       with Ezjsonm.Parse_error (v, err) ->
         fail_with_parsing ~name:"Device.create" ~err ~json v
 
+    let safe_create t ~id builder =
+      let* available = is_available t builder in
+      if available then
+        let* device = create t ~id builder in
+        return (Some device)
+      else return None
+
     let update t ~id ?hostname ?tags () =
       let path = Format.sprintf "devices/%s" id in
       let fields =
