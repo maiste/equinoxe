@@ -514,6 +514,7 @@ module Make (B : Backend) : API with type 'a io = 'a B.io = struct
       | FreeBSD_11_2
       | Centos_8
       | Alpine_3
+      | Custom_ipxe of string
 
     let os_of_string = function
       | "debian_9" -> Debian_9
@@ -525,6 +526,7 @@ module Make (B : Backend) : API with type 'a io = 'a B.io = struct
       | "freebsd_11_2" -> FreeBSD_11_2
       | "centos_8" -> Centos_8
       | "alpine_3" -> Alpine_3
+      | "custom_ipxe" -> Custom_ipxe ""
       | s -> raise (Unknown_value ("Device.os_of_string", s))
 
     let os_to_string = function
@@ -537,6 +539,7 @@ module Make (B : Backend) : API with type 'a io = 'a B.io = struct
       | FreeBSD_11_2 -> "freebsd_11_2"
       | Centos_8 -> "centos_8"
       | Alpine_3 -> "alpine_3"
+      | Custom_ipxe _ -> "custom_ipxe"
 
     type location =
       | Washington
@@ -591,14 +594,13 @@ module Make (B : Backend) : API with type 'a io = 'a B.io = struct
     let build ?hostname ?tags ~plan ~os ~location () =
       { hostname; tags; plan; os; location }
 
-    let opt_to_list :
-          'a.
-          string ->
-          ('a -> Ezjsonm.value) ->
-          'a option ->
-          (string * Ezjsonm.value) list =
-     fun name fn v ->
-      match v with Some value -> [ (name, fn value) ] | None -> []
+    let opt_to_list name fn = function
+      | Some value -> [ (name, fn value) ]
+      | None -> []
+
+    let custom_to_list = function
+      | Custom_ipxe url -> [ ("ipxe_script_url", `String url) ]
+      | _ -> []
 
     let builder_to_json builder =
       `O
@@ -610,7 +612,8 @@ module Make (B : Backend) : API with type 'a io = 'a B.io = struct
         @ opt_to_list "hostname" Ezjsonm.string builder.hostname
         @ opt_to_list "tags"
             (fun tags -> `A (List.map Ezjsonm.string tags))
-            builder.tags)
+            builder.tags
+        @ custom_to_list builder.os)
 
     type config = {
       id : id;
