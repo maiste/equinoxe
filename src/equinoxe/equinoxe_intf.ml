@@ -369,9 +369,20 @@ module type API = sig
         forces the deletion of the device by detaching any storage volume still
         active. *)
 
+    val is_available : t -> builder -> bool io
+    (** [is_available t builder] returns true if the device is available in the
+        datacenter you specify. As it is asynchronous, it gives a hint about the
+        situation but does not prevent from device starvation. *)
+
     val create : t -> id:Project.id -> builder -> config io
     (** [create t ~id builder] creates a machine on the Equinix with the
         {!Devices.builder} specification. *)
+
+    val safe_create : t -> id:Project.id -> builder -> config option io
+    (** [safe_create t ~id builder] creates a machine but uses [is_available] to
+        check if the data center can provide the machine. As a result, it calls
+        the API twice. It returns the [Some configuration] if it works.
+        Otherwise it returns [None]. *)
 
     val update :
       t -> id:id -> ?hostname:string -> ?tags:string list -> unit -> config io

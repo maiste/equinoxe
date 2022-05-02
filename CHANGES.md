@@ -3,6 +3,8 @@
 ### Added
 
 - Introduce the `Device.update` function (#76, @maiste)
+- Introduce the `Device.is_available` function (#77, @maiste)
+- Introduce the `Device.safe_create` function (#77, @maiste)
 
 ### Changed
 
