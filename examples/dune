@@ -1,9 +1,11 @@
 (executable
  (name example_1)
  (libraries cmdliner equinoxe-cohttp)
- (modules example_1))
+ (modules example_1)
+ (package equinoxe-cohttp))
 
 (executable
  (name example_2)
  (libraries cmdliner equinoxe-cohttp)
- (modules example_2))
+ (modules example_2)
+ (package equinoxe-cohttp))
