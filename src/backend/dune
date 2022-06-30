@@ -1,11 +1,11 @@
 (library
  (name equinoxe_hlc)
  (public_name equinoxe-hlc)
- (libraries equinoxe http-lwt-client)
+ (libraries equinoxe terminus-hlc)
  (modules equinoxe_hlc))
 
 (library
  (name equinoxe_cohttp)
  (public_name equinoxe-cohttp)
- (libraries equinoxe cohttp-lwt-unix)
+ (libraries equinoxe terminus-cohttp)
  (modules equinoxe_cohttp))
