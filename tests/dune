@@ -1,0 +1,7 @@
+(test
+ (package equinoxe)
+ (name equinoxe_mock)
+ (libraries
+   equinoxe
+   terminus
+   alcotest))

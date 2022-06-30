@@ -22,41 +22,8 @@
 (*                                                                           *)
 (*****************************************************************************)
 
-module Client = Cohttp_lwt_unix.Client
+module Backend = Terminus_cohttp
+(* This module is just a linking to the new package.
+   It is depracated and will be removed at some point. *)
 
-module Backend = struct
-  type 'a io = 'a Lwt.t
-
-  let return = Lwt.return
-  let map = Lwt.map
-  let bind f m = Lwt.bind m f
-  let fail (`Msg e) = Lwt.fail_with e
-
-  (***** Helper *****)
-
-  let compute fn ~headers ~url =
-    let headers = Cohttp.Header.of_list headers in
-    let url = Uri.of_string url in
-    Lwt.bind (fn ~headers ~url) (fun (_, body) ->
-        Cohttp_lwt.Body.to_string body)
-
-  (**** Http methods ****)
-
-  let get ~headers ~url =
-    compute ~headers ~url @@ fun ~headers ~url -> Client.get ~headers url
-
-  let post ~headers ~url body =
-    compute ~headers ~url @@ fun ~headers ~url ->
-    let body = Cohttp_lwt.Body.of_string body in
-    Client.post ~headers ~body url
-
-  let put ~headers ~url body =
-    compute ~headers ~url @@ fun ~headers ~url ->
-    let body = Cohttp_lwt.Body.of_string body in
-    Client.put ~headers ~body url
-
-  let delete ~headers ~url =
-    compute ~headers ~url @@ fun ~headers ~url -> Client.delete ~headers url
-end
-
-include Equinoxe.Make (Backend)
+include Equinoxe.Make (Terminus_cohttp)

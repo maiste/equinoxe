@@ -397,8 +397,6 @@ module type API = sig
   end
 end
 
-module type Backend = Backend.S
-
 module type Sigs = sig
   (** Equinoxe library interface. *)
 
@@ -406,9 +404,7 @@ module type Sigs = sig
 
   (** {1 Build your own API} *)
 
-  module type Backend = Backend
-
   (** Factory to build a system to communicate with Equinix API in a
-      strongly-typed way using the {!Backend} gathering system. *)
-  module Make (B : Backend) : API with type 'a io = 'a B.io
+      strongly-typed way using the {!Terminus} gathering system. *)
+  module Make (T : Terminus.S) : API with type 'a io = 'a T.io
 end

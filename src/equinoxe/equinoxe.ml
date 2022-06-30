@@ -25,8 +25,8 @@
 include Equinoxe_intf
 
 (* Functor to build API using a specific call API system. *)
-module Make (B : Backend) : API with type 'a io = 'a B.io = struct
-  type 'a io = 'a B.io
+module Make (T : Terminus.S) : API with type 'a io = 'a T.io = struct
+  type 'a io = 'a T.io
   type t = { address : string; token : string }
 
   exception Unknown_value of string * string
@@ -42,9 +42,9 @@ module Make (B : Backend) : API with type 'a io = 'a B.io = struct
   let create ?(address = "https://api.equinix.com/metal/v1/") ?(token = "") () =
     { address; token }
 
-  let return x = B.return x
-  let ( let* ) m f = B.bind f m
-  let fail msg = B.fail (`Msg msg)
+  let return x = T.return x
+  let ( let* ) m f = T.bind f m
+  let fail msg = T.fail (`Msg msg)
 
   let access field json =
     try Ezjsonm.find json [ field ]
@@ -107,11 +107,11 @@ module Make (B : Backend) : API with type 'a io = 'a B.io = struct
       let* body = request ~t ~path http_request body in
       get_json body
 
-    let get = run B.get
-    let post_empty = run_with_body B.post ""
-    let post json = run_with_body B.post (Ezjsonm.value_to_string json)
-    let put json = run_with_body B.put (Ezjsonm.value_to_string json)
-    let delete = run B.delete
+    let get = run T.get
+    let post_empty = run_with_body T.post ""
+    let post json = run_with_body T.post (Ezjsonm.value_to_string json)
+    let put json = run_with_body T.put (Ezjsonm.value_to_string json)
+    let delete = run T.delete
   end
 
   module Orga = struct

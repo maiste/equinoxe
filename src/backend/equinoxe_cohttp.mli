@@ -24,8 +24,8 @@
 
 (** It provides an API call system relying on Cohttp. *)
 
-module Backend : Equinoxe.Backend with type 'a io = 'a Lwt.t
-(** @inline *)
+module Backend : Terminus.S with type 'a io = 'a Lwt.t
+(** @deprecated *)
 
 include Equinoxe.API with type 'a io = 'a Lwt.t
 (** @inline *)

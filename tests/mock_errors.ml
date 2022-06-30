@@ -8,7 +8,7 @@ let test_wrong_address =
   try
     let _ = E.Auth.get_keys t in
     Alcotest.fail "wrong address was not detected as invalid"
-  with Wrong_url wrong_address' ->
+  with Terminus.Mock.Wrong_url wrong_address' ->
     let wrong_address' =
       String.sub wrong_address' 0 (String.length wrong_address)
     in
@@ -22,8 +22,11 @@ let test_wrong_token =
   try
     let _ = E.Auth.get_keys t in
     Alcotest.fail "wrong token was not detected as invalid"
-  with Wrong_token wrong_token' ->
-    Alcotest.(check string) "wrong token" wrong_token wrong_token'
+  with Terminus.Mock.Wrong_header wrong_token' ->
+    Alcotest.(check string)
+      "wrong token"
+      "Values mismatches mock token <> wrong token for field X-Auth-Token"
+      wrong_token'
 
 let test_expected_error =
   Alcotest.test_case "Auth.get_keys: expected error" `Quick @@ fun () ->

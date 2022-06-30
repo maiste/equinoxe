@@ -12,8 +12,7 @@ bug-reports: "https://github.com/maiste/equinoxe/issues"
 depends: [
   "dune" {>= "2.9"}
   "equinoxe" {= version}
-  "cohttp-lwt-unix"
-  "httpaf-lwt-unix" {with-test}
+  "terminus-cohttp"
   "alcotest" {with-test}
   "alcotest-lwt" {with-test}
   "odoc" {with-doc}
