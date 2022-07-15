@@ -56,3 +56,14 @@
   (conflicts
     (result (< 1.5))))
 
+(package
+ (name equinoxe-async)
+ (synopsis "Equinoxe with the cohttp-async request handler")
+ (description
+   "Equinoxe-async is an implementation of the Equinoxe library using cohttp-async.")
+ (depends
+  (equinoxe (= :version))
+   cohttp-async
+  (odoc :with-doc))
+ (conflicts
+  (result (< 1.5))))

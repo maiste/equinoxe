@@ -7,3 +7,10 @@
  (name example_2)
  (libraries cmdliner equinoxe-cohttp)
  (modules example_2))
+
+(executable
+ (name example_3)
+ (libraries core core_unix equinoxe-async)
+ (modules example_3)
+ (preprocess
+  (pps ppx_jane)))
