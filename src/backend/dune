@@ -9,3 +9,9 @@
  (public_name equinoxe-cohttp)
  (libraries equinoxe cohttp-lwt-unix)
  (modules equinoxe_cohttp))
+
+(library
+ (name equinoxe_async)
+ (public_name equinoxe-async)
+ (libraries equinoxe cohttp-async)
+ (modules equinoxe_async))
