@@ -51,7 +51,7 @@ module Make (T : Terminus.S) : API with type 'a io = 'a T.io = struct
     with Not_found ->
       raise
         (Ezjsonm.Parse_error
-           (`String field, Format.sprintf "access: field %s not found" field))
+           (json, Format.sprintf "access: field %s not found" field))
 
   let fail_with_parsing ~name ~err ~json v =
     let msg =
