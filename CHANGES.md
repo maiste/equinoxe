@@ -8,6 +8,7 @@
 
 ### Changed
 
+- Extracted `Backend` as a package name `Terminus` and update the codebase to support it (#81, @maiste)
 - Update the `Device.build` function to support `tags` (#76, @maiste)
 
 ## 0.2.0

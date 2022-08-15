@@ -33,8 +33,7 @@
     "Equinoxe-hlc is an implementation of the Equinoxe library using http-lwt-client.")
   (depends
     (equinoxe (= :version))
-    http-lwt-client
-    (httpaf-lwt-unix :with-test)
+    terminus-hlc
     (alcotest :with-test)
     (alcotest-lwt :with-test)
     (odoc :with-doc))
@@ -48,8 +47,7 @@
     "Equinoxe-cohttp is an implementation of the Equinoxe library using cohttp-lwt-unix.")
   (depends
     (equinoxe (= :version))
-    cohttp-lwt-unix
-    (httpaf-lwt-unix :with-test)
+    terminus-cohttp
     (alcotest :with-test)
     (alcotest-lwt :with-test)
     (odoc :with-doc))
