@@ -294,6 +294,7 @@ module type API = sig
       | FreeBSD_11_2
       | Centos_8
       | Alpine_3
+      | Custom_ipxe of string
 
     val os_to_string : os -> string
     (** [os_to_string os] converts an os into a string understandable by the
