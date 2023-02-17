@@ -21,5 +21,5 @@
     (alcotest :with-test)
     (alcotest-lwt :with-test)
     (httpaf-lwt-unix :with-test)
-    cmdliner
-    http-lwt-client))
+    (cmdliner (< 1.1.0))
+    (http-lwt-client (<= 0.0.8))))
