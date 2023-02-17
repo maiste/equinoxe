@@ -33,7 +33,7 @@
     "Equinoxe-hlc is an implementation of the Equinoxe library using http-lwt-client.")
   (depends
     (equinoxe (= :version))
-    http-lwt-client
+    (http-lwt-client (< 0.1.0))
     (httpaf-lwt-unix :with-test)
     (alcotest :with-test)
     (alcotest-lwt :with-test)
