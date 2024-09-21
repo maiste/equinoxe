@@ -10,22 +10,28 @@
 [![Documentation](https://img.shields.io/badge/documentation-online-blue?style=flat-square)](https://maiste.github.io/equinoxe)
 </div>
 
+## Deprecation ❄
+
+As I can't recreate an individual account on Equinix to improve this library, I have archived the repository. Feel free to fork it if you want to keep working on it and, you have access to their infrastructure.
+
 ## About
 
-**Equinoxe** is a library to interact with the Equinix [API](https://metal.equinix.com/developers/api/) (formerly known as Packet) in *OCaml*. Users can use it to gather information, deploy machines or manage your organization within an *OCaml* program. It comes with a CLI, `equinoxe-cli`, that packs most of the functionalities of the API.
+**Equinoxe** is a library to interact with the Equinix [API](https://metal.equinix.com/developers/api/) (formerly known as Packet) in _OCaml_. Users can use it to gather information, deploy machines or manage your organization within an _OCaml_ program. It comes with a CLI, `equinoxe-cli`, that packs most of the functionalities of the API.
 
- :warning: This repository is based on the official API but is not an official work from Equinix. This work is still in active development so the API **might not be stable**.
+:warning: This repository is based on the official API but is not an official work from Equinix. This work is still in active development so the API **might not be stable**.
 
 ## Getting started
 
 ### Installation
 
 To install the **Equinoxe** via `opam`:
+
 ```sh
 $ opam install equinoxe
 ```
 
 To install the `dev` version of **Equinoxe**, you have to install it via pinning:
+
 ```sh
 $ opam pin add equinoxe.dev git@github.com:maiste/equinoxe
 $ opam install equinoxe
@@ -34,6 +40,7 @@ $ opam install equinoxe
 ### Usage
 
 The goal is to provide a minimal set of functions to interact with Equinix API. To run the the actions available with `Equinoxe` you have to install a specific backend (http request client). There are currently two backends: `equinoxe-hlc` which relies on `Httpaf` and `equinoxe-cohttp` which relies on `Cohttp`. You can also provide your own custom backend:
+
 ```OCaml
 module My_Backend : Equinoxe.Backend
 
