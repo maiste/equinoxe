@@ -10,6 +10,10 @@
 [![Documentation](https://img.shields.io/badge/documentation-online-blue?style=flat-square)](https://maiste.github.io/equinoxe)
 </div>
 
+## Depracation ❄
+
+As Equinix does not let me recreate an individual account to finish the work (my demand has been rejected), this repository is archived now. Feel free to fork it if you want to keep working on it and you have an access to their infrastructure. I will move on with another provider.
+
 ## About
 
 **Equinoxe** is a library to interact with the Equinix [API](https://metal.equinix.com/developers/api/) (formerly known as Packet) in *OCaml*. Users can use it to gather information, deploy machines or manage your organization within an *OCaml* program. It comes with a CLI, `equinoxe-cli`, that packs most of the functionalities of the API.
